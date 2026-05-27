@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void Guide • Premium</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<div class="brand-header">
+    <div class="brand-logo">
+        <h1 id="page-title">ФАРМ BP</h1>
+        <span id="page-subtitle">Premium Guid</span>
+    </div>
+</div>
+
+<div id="farm-section">
+    <div class="dashboard">
+        <div class="dash-grid">
+            <div class="dash-item"><span class="lbl">Нафармлено BP</span><span class="val cyan" id="stat-bp">0</span></div>
+            <div class="dash-item"><span class="lbl">Активных часов</span><span class="val" id="stat-hours">0</span></div>
+            <div class="dash-item" style="grid-column: span 2;"><span class="lbl">Текущий тип множителя</span><span class="val orange" id="stat-mult-text">Базовый (х1)</span></div>
+        </div>  
+        <div class="mult-selector-wrapper">
+            <button class="mult-toggle-btn server-btn" id="toggle-server" onclick="toggleModifier('server')">х2 Сервер</button>
+            <button class="mult-toggle-btn vip-btn" id="toggle-vip" onclick="toggleModifier('vip')">VIP Gold/Platinum</button>
+        </div>
+        
+    </div>
+
+    <button class="system-reset" onclick="hardReset()">🔄 Сбросить текущую сессию</button>
+
+    <div class="online-hub">
+        <div class="radial-timer" id="timer-ring">
+            <div class="time-digits" id="time-display">03:00:00</div>
+            <div class="time-state" id="time-status">Система выкл</div>
+        </div>
+        <div class="bar-container"><div class="bar-fill" id="time-bar"></div></div>
+        <button class="btn-trigger" id="time-btn" onclick="controlOnline()">Старт</button>
+    </div>
+
+    <div class="category-scroller">
+        <button class="cat-tab active" id="tab-easy" onclick="selectCategory('easy')">🟢 Простые</button>
+        <button class="cat-tab" id="tab-medium" onclick="selectCategory('medium')">🟡 Средние</button>
+        <button class="cat-tab" id="tab-hard" onclick="selectCategory('hard')">🔴 Сложные</button>
+        <button class="cat-tab" id="tab-pairs" onclick="selectCategory('pairs')">👥 Парные</button>
+        <button class="cat-tab" id="tab-fraction" onclick="selectCategory('fraction')">🏛️ Фракция</button>
+    </div>
+
+    <div class="feed-container" id="feed-box"></div>
+</div>
+
+<div id="skills-section" style="display: none;">
+    <div class="feed-container" id="skills-container" style="padding: 16px;"></div>
+</div>
+
+<div class="nav-dock">
+    <button class="nav-node active" id="nav-farm" onclick="switchMainView('farm')"><span class="ico">🌌</span>Фарм</button>
+    <button class="nav-node" id="nav-skills" onclick="switchMainView('skills')"><span class="ico">⏳</span>Навыки</button>
+<button class="nav-node" id="nav-reseller" onclick="switchMainView('reseller')">
+    <span class="ico">💰</span>Калькулятор
+</button>
+</div>
+<section id="reseller-section" style="display: none;">
+    <div class="sub-nav" style="justify-content: center; width: 100%;">
+        <button class="sub-tab active" onclick="selectResellTab('reseller', this)">Перекуп</button>
+        <button class="sub-tab" onclick="selectResellTab('rent', this)">Аренда</button>
+        <button class="sub-tab" onclick="selectResellTab('realty', this)">Недвижимость</button>
+        <button class="sub-tab" onclick="selectResellTab('spank', this)">SPANK</button>
+        <button class="sub-tab" onclick="selectResellTab('crafts', this)">Крафты</button>
+    </div>
+
+    <div id="resell-content-container">
+        <div id="tab-reseller" class="tab-content">
+            <div class="card">
+                <h3 class="section-title">➕ Добавить товар</h3>
+                <input type="text" id="item-name" placeholder="Название товара" class="full-input">
+                
+                <div class="custom-dropdown">
+                    <div class="dropdown-selected" onclick="toggleInvDropdown()">
+                        <span id="selected-text">Выберите категорию</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="dropdown-options" id="dropdown-options">
+                        <div onclick="selectInvCategory('Предметы', '📦')">📦 Предметы</div>
+                        <div onclick="selectInvCategory('Одежда и аксессуары', '👕')">👕 Одежда</div>
+                        <div onclick="selectInvCategory('Сумки и рюкзаки', '🎒')">🎒 Сумки</div>
+                        <div onclick="selectInvCategory('Транспорт', '🚗')">🚗 Транспорт</div>
+                        <div onclick="selectInvCategory('Квартиры', '🏠')">🏠 Квартиры</div>
+                        <div onclick="selectInvCategory('Дома', '🏠')">🏠 Дома</div>
+                        <div onclick="selectInvCategory('Бизнесы', '🏟️')">🏟️ Бизнесы</div>
+                        <div onclick="selectInvCategory('Другое', '...')">... Другое</div>
+                    </div>
+                </div>
+                <input type="number" id="item-price" placeholder="$ Цена" class="full-input">
+                <input type="text" id="item-comment" placeholder="Комментарий к товару" class="full-input">
+                <button class="add-main-btn" onclick="addNewItem()">+ Добавить</button>
+            </div>
+
+            <div class="card" id="finance-section">
+                <h3 class="section-title">💰 Финансы</h3>
+<div class="period-tabs">
+    <button class="sub-tab" onclick="setPeriod('today')">Сегодня</button>
+    <button class="sub-tab" onclick="setPeriod('week')">Неделя</button>
+    <button class="sub-tab" onclick="setPeriod('month')">Месяц</button>
+    <button class="sub-tab" onclick="setPeriod('all')">Все время</button>
+</div>
+                <div class="stats-grid">
+                    <div class="stat-box green"><span class="label">ДОХОД</span><span class="value" id="stat-income">$ 0</span></div>
+                    <div class="stat-box red"><span class="label">РАСХОД</span><span class="value" id="stat-expense">$ 0</span></div>
+                </div>
+                <button class="add-main-btn" style="background:#444" onclick="resetFinance()">🗑️ Сбросить</button>
+            </div>
+
+            <div class="card">
+                <h3>📜 Инвентарь <small id="inv-count">(0)</small></h3>
+                <div id="inventory-list"></div>
+            </div>
+        </div>
+
+        <div id="tab-rent" class="tab-content" style="display:none;">ЖДИ</div>
+    </div>
+</section>
+</section>
+<script src="script.js"></script>
+</body>
+</html>
