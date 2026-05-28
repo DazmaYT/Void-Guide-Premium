@@ -108,6 +108,10 @@ const defaultTimers = [
     { id: 15, name: "Эпсилон", duration: 7200, remaining: 7200, running: false, icon: "🧘" },
     { id: 16, name: "Дрессировка", duration: 930, remaining: 930, running: false, icon: "🐕" }
 ];
+        let h = 3, m = 0, s = 0;
+        let totalTime = 10800; // 3 часа в секундах
+        let currentTime = 10800;
+        let timerInterval = null;
         let timers = [];
         let totalBP = 0;
         let activeCat = 'easy';
@@ -124,13 +128,8 @@ const defaultTimers = [
         let lastTickTime = null;
 
 function vibrate(type) {
-    // Добавляем проверку поддержки
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-        try {
-            window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
-        } catch (e) {
-            console.warn("Вибрация не сработала:", e);
-        }
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+        Telegram.WebApp.HapticFeedback.impactOccurred('medium');
     }
 }
 
@@ -427,58 +426,55 @@ function toggleModifier(type) {
             vibrate('light');
         }
 
-        function controlOnline() {
-            const btn = document.getElementById('time-btn');
-            const ring = document.getElementById('timer-ring');
-            const status = document.getElementById('time-status');
+function controlOnline() {
+    const btn = document.getElementById('time-btn');
+    const status = document.getElementById('time-status');
+    const ring = document.getElementById('timer-ring');
 
-            if (!runningOnline) {
-                runningOnline = true;
-                btn.innerText = "Пауза";
-                status.innerText = "Активен";
-                status.classList.add('on');
-                ring.classList.add('running');
-
-                lastTickTime = Date.now();
-                clockInterval = setInterval(() => {
-                    if (timeClock > 0) {
-                        const now = Date.now();
-                        const delta = Math.floor((now - lastTickTime) / 1000);
-                        
-                        if (delta >= 1) {
-                            timeClock -= delta;
-                            if (timeClock < 0) timeClock = 0;
-                            lastTickTime = now;
-                            
-                            let past = TOTAL_TIME - timeClock;
-                            document.getElementById('stat-hours').innerText = Math.floor(past / 3600);
-                            document.getElementById('time-bar').style.width = `${(past / TOTAL_TIME) * 100}%`;
-
-                            let h = Math.floor(timeClock / 3600).toString().padStart(2, '0');
-                            let m = Math.floor((timeClock % 3600) / 60).toString().padStart(2, '0');
-                            let s = (timeClock % 60).toString().padStart(2, '0');
-                            document.getElementById('time-display').innerText = `${h}:${m}:${s}`;
-                        }
-                    } else {
-                        clearInterval(clockInterval);
-                        btn.innerText = "Финиш";
-                        btn.disabled = true;
-                        status.innerText = "Завершено";
-                        status.classList.remove('on');
-                        ring.classList.remove('running');
-                    }
-                }, 500);
+    if (timerInterval) {
+        // ОСТАНОВКА
+        clearInterval(timerInterval);
+        timerInterval = null;
+        btn.innerText = "СТАРТ";
+        status.innerText = "ПАУЗА";
+    } else {
+        // СТАРТ
+        if (currentTime <= 0) return; // Не стартуем, если время вышло
+        
+        ring.classList.remove('pulsing');
+        btn.innerText = "СТОП";
+        status.innerText = "РАБОТА";
+        
+        timerInterval = setInterval(() => {
+            if (currentTime > 0) {
+                currentTime--;
+                updateDisplay();
             } else {
-                runningOnline = false;
-                clearInterval(clockInterval);
-                btn.innerText = "Старт";
-                status.innerText = "Пауза";
-                status.classList.remove('on');
-                ring.classList.remove('running');
+                // ЗАВЕРШЕНИЕ
+                clearInterval(timerInterval);
+                timerInterval = null;
+                ring.classList.add('pulsing');
+                status.innerText = "ЗАВЕРШЕНО";
+                btn.innerText = "СТАРТ";
             }
-            vibrate('light');
-        }
+        }, 1000);
+    }
+}
 
+function resetSession() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    currentTime = 0; // Или установи на дефолтное значение
+    h = 0; m = 0; s = 0;
+    
+    // Обновляем визуальные цифры настроек
+    document.getElementById('val-h').innerText = "00";
+    document.getElementById('val-m').innerText = "00";
+    document.getElementById('val-s').innerText = "00";
+    
+    applyCustomTime(); // Сбрасываем дисплей
+    document.getElementById('timer-ring').classList.remove('pulsing');
+}
 function hardReset() {
     // 1. Очистка данных из памяти браузера (самое важное)
     localStorage.removeItem('voidGuideData');
@@ -540,30 +536,38 @@ function hardReset() {
 
 // --- Функция добавления ---
 function addNewItem() {
-    const name = document.getElementById('item-name').value;
-    const price = document.getElementById('item-price').value;
-    const comment = document.getElementById('item-comment').value; // Теперь считываем комментарий
+    const nameInput = document.getElementById('item-name');
+    const priceInput = document.getElementById('item-price');
+    const commentInput = document.getElementById('item-comment');
     const catText = document.getElementById('selected-text').innerText;
     
-    if (!name || price === '') { alert("Заполните поля!"); return; }
+    // Проверка с красивой логикой
+    if (!nameInput.value || priceInput.value === '') {
+        showToast("Заполните все обязательные поля!", "#ff6b6b"); 
+        return;
+    }
 
     const item = { 
         id: Date.now(), 
-        name, 
-        price: Number(price), 
+        name: nameInput.value, 
+        price: Number(priceInput.value), 
         cat: catText, 
-        comment 
+        comment: commentInput.value 
     };
 
     inventory.push(item);
-    saveData(); // Используем вашу централизованную функцию
+    saveData();
     renderInventory();
     
-    // Очистка полей
-    document.getElementById('item-name').value = '';
-    document.getElementById('item-price').value = '';
-    document.getElementById('item-comment').value = '';
+    // Очистка
+    nameInput.value = '';
+    priceInput.value = '';
+    commentInput.value = '';
+
+    // Подтверждение успеха
+    showToast("Запись успешно добавлена!", "#40e0d0"); // Березовый цвет успеха
 }
+
 function saveInventory() {
     localStorage.setItem('myInventory', JSON.stringify(inventory));
 }
@@ -669,6 +673,20 @@ function setDone(id) {
     }
 }
 
+function showModal(title, text, onConfirm) {
+    const overlay = document.getElementById('modal-overlay');
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-text').innerText = text;
+    
+    overlay.classList.add('visible');
+    
+    document.getElementById('btn-confirm').onclick = () => {
+        onConfirm();
+        overlay.classList.remove('visible');
+    };
+    document.getElementById('btn-cancel').onclick = () => overlay.classList.remove('visible');
+}
+
 function saveNote(id, value) {
     const task = db.find(t => t.id == id);
     if (task) {
@@ -684,7 +702,11 @@ function addFinRecord(type) {
     const name = document.getElementById('fin-name').value;
     const amount = parseFloat(document.getElementById('fin-amount').value);
     
-    if(!name || isNaN(amount)) return alert("Заполните поля!");
+    if(!name || isNaN(amount)) {
+        // Можно сделать вторую функцию для маленьких всплывашек (тостов)
+        alert("Заполните поля корректно!"); // Или заменить на свой стилизованный блок
+        return;
+    }
 
     financeData.push({
         id: Date.now(),
@@ -694,8 +716,8 @@ function addFinRecord(type) {
         date: new Date().toISOString().split('T')[0]
     });
     
-    updateFinanceUI(); // Сначала обновляем интерфейс
-    saveData();        // ТЕПЕРЬ СОХРАНЯЕМ ВСЕ ДАННЫЕ ВМЕСТЕ
+    updateFinanceUI();
+    saveData();
 }
 
 
@@ -795,15 +817,42 @@ function setPeriod(period) {
 }
 
 function resetFinance() {
-    if(confirm("Очистить историю финансов?")) {
+    showModal("Очистка", "Удалить всю историю финансов?", () => {
         financeData = [];
-        saveData(); // Убедитесь, что у вас есть функция сохранения, которая кладет financeData в localStorage
+        saveData();
         updateFinanceUI();
-        vibrate('warning');
-    }
+        vibrate('warning'); // если есть такая функция
+    });
 }
 
 
+
+function adjust(type, delta) {
+        if (type === 'h') h = Math.max(0, h + delta);
+        if (type === 'm') m = Math.min(59, Math.max(0, m + delta));
+        if (type === 's') s = Math.min(59, Math.max(0, s + delta));
+        document.getElementById(`val-${type}`).innerText = (type === 'h' ? h : (type === 'm' ? m : s)).toString().padStart(2, '0');
+    }
+
+function applyCustomTime() {
+        totalTime = (h * 3600) + (m * 60) + s;
+        currentTime = totalTime;
+        clearInterval(timerInterval);
+        timerInterval = null;
+        document.getElementById('timer-ring').classList.remove('pulsing');
+        updateDisplay();
+        document.getElementById('time-status').innerText = "ПАУЗА";
+        document.getElementById('time-btn').innerText = "СТАРТ";
+    }
+
+function updateDisplay() {
+        const hh = Math.floor(currentTime / 3600);
+        const mm = Math.floor((currentTime % 3600) / 60);
+        const ss = currentTime % 60;
+        document.getElementById('time-display').innerText = `${hh.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
+        const elapsed = totalTime - currentTime;
+        document.getElementById('time-bar').style.width = (totalTime > 0 ? (elapsed / totalTime) * 100 : 0) + "%";
+    }
 // 1. ИНИЦИАЛИЗАЦИЯ
 
 function saveTimers() { localStorage.setItem('myTimers', JSON.stringify(timers)); }
@@ -817,54 +866,19 @@ function formatTime(s) {
 }
 
 // 2. ОТРИСОВКА (Разделена для стабильности)
-function renderTimers() {
-    const container = document.getElementById('timers-list');
-    if (!container) return; 
 
-    // Считаем статистику
-    document.getElementById('total-timers').innerText = timers.length;
-    document.getElementById('active-timers').innerText = timers.filter(t => t.running).length;
-    document.getElementById('done-timers').innerText = timers.filter(t => t.remaining === 0).length;
 
-    const formHtml = `
-        <div class="timer-input-area">
-            <input type="text" id="t-name" placeholder="Название" class="full-input">
-            <div class="time-inputs" style="display:flex; gap:5px;">
-                <select id="t-icon" class="small-input">
-                    <option value="">Без иконки</option>
-                    <option value="⏳">⏳</option>
-                    <option value="⚡">⚡</option>
-                    <option value="🔥">🔥</option>
-                    <option value="💰">💰</option>
-                    <option value="🛡️">🛡️</option>
-                </select>
-                <input type="number" id="t-h" placeholder="Ч" class="small-input">
-                <input type="number" id="t-m" placeholder="М" class="small-input">
-                <input type="number" id="t-s" placeholder="С" class="small-input">
-            </div>
-            <button class="timer-btn" style="width:100%" onclick="addCustomTimer()">+ ДОБАВИТЬ</button>
-        </div>`;
+function moveTimer(index, direction) {
+    const newIndex = index + direction;
 
-    const listHtml = timers.map(t => `
-        <div class="timer-card" data-id="${t.id}">
-            <div class="timer-info">
-                <div>${t.icon ? `<span class="timer-icon">${t.icon}</span> ` : ""}${t.name}</div>
-                <b class="timer-val">${formatTime(t.remaining)}</b>
-            </div>
-<div class="controls" style="display:flex; gap:8px;">
-    <button class="timer-btn" onclick="toggleTimer(${t.id})">
-        ${t.running ? '⏸️' : '▶️'}
-    </button>
-    <button class="timer-btn" onclick="resetTimer(${t.id})">
-        🔄
-    </button>
-    <button class="del-btn" onclick="deleteTimer(${t.id})">
-        ✕
-    </button>
-</div>
-        </div>`).join('');
+    // Проверка границ массива
+    if (newIndex < 0 || newIndex >= timers.length) return;
 
-    container.innerHTML = formHtml + listHtml;
+    // Меняем элементы местами (деструктуризация JS)
+    [timers[index], timers[newIndex]] = [timers[newIndex], timers[index]];
+
+    saveData();     // Сохраняем новый порядок
+    renderTimers(); // Перерисовываем список
 }
 // 3. ЛОГИКА
 function addCustomTimer() {
@@ -963,48 +977,111 @@ function renderTimers() {
         </div>`;
 
     // 3. СПИСОК
-    const listHtml = timers.map(t => `
-        <div class="timer-card" data-id="${t.id}">
-            <div class="timer-info">
-                <div>${t.icon ? `<span class="timer-icon">${t.icon}</span> ` : ""}${t.name}</div>
-                <b class="timer-val">${formatTime(t.remaining)}</b>
-            </div>
-            <div class="controls">
-                <button class="timer-btn" onclick="toggleTimer(${t.id})">${t.running ? '⏸️' : '▶️'}</button>
-                <button class="timer-btn" onclick="resetTimer(${t.id})">🔄</button>
-                <button class="del-btn" onclick="deleteTimer(${t.id})">✕</button>
-            </div>
+const listHtml = timers.map((t, index) => `
+<div class="timer-card ${t.remaining === 0 ? 'finished' : ''}" 
+         data-id="${t.id}" 
+         draggable="true" 
+         ondragstart="dragSourceIndex = ${index}" 
+         ondragover="event.preventDefault()" 
+         ondrop="handleDrop(${index})">
+            
+<div class="timer-info">
+    <div>
+        <span class="timer-icon">${t.icon || ''}</span> 
+        ${t.name}
+    </div>
+    <b class="timer-val">${formatTime(t.remaining)}</b>
+</div>
+<div class="controls">
+    <button class="timer-btn toggle-btn" onclick="toggleTimer(${t.id})">
+        ${t.running ? '⏸️' : '▶️'}
+    </button>
+    <button class="timer-btn" onclick="resetTimer(${t.id})">🔄</button>
+    <button class="del-btn" onclick="deleteTimer(${t.id})">✕</button>
+</div>
         </div>`).join('');
 
-    // ОБЪЕДИНЯЕМ ВСЁ
     container.innerHTML = formHtml + listHtml;
 }
 
+let dragSourceIndex = null;
+
+function handleDragStart(index) {
+    dragSourceIndex = index;
+    // Добавляем класс при начале перетаскивания
+    event.target.classList.add('dragging');
+}
+
+function handleDragEnd(event) {
+    event.target.classList.remove('dragging');
+    // Удаляем подсветку со всех карточек при завершении
+    document.querySelectorAll('.timer-card').forEach(c => c.classList.remove('drag-over'));
+}
+
+function handleDragOver(event) {
+    event.preventDefault(); // Нужно для возможности Drop
+    const card = event.target.closest('.timer-card');
+    if (card) card.classList.add('drag-over');
+}
+
+function handleDragLeave(event) {
+    const card = event.target.closest('.timer-card');
+    if (card) card.classList.remove('drag-over');
+}
+
+function handleDrop(targetIndex) {
+    if (dragSourceIndex === null || dragSourceIndex === targetIndex) return;
+
+    // Переставляем элемент в массиве
+    const movedItem = timers.splice(dragSourceIndex, 1)[0];
+    timers.splice(targetIndex, 0, movedItem);
+
+    dragSourceIndex = null;
+    saveTimers();
+    renderTimers(); // Полная перерисовка с новым порядком
+}
+
 setInterval(() => {
-    let changed = false;
+let changed = false;
     timers.forEach(t => {
         if (t.running && t.remaining > 0) {
-            t.remaining--; changed = true;
+            t.remaining--; 
+            changed = true;
+            
+            // Если время вышло
             if (t.remaining === 0) {
-                t.running = false;
-                if (window.Telegram?.WebApp) window.Telegram.WebApp.sendData(JSON.stringify({action: "timer_finished", name: t.name}));
+                t.running = false; 
+                
+                const card = document.querySelector(`[data-id="${t.id}"]`);
+                if (card) {
+                    card.classList.add('finished');
+                    
+                    // Кнопка меняется на плей, так как таймер остановился
+                    const btn = card.querySelector('.toggle-btn');
+                    if (btn) btn.innerText = '▶️'; 
+                }
             }
         }
     });
+
     if (changed) {
-        saveData();
+        saveTimers();
+        // Обновляем UI
         document.querySelectorAll('.timer-card').forEach(card => {
             const id = parseInt(card.dataset.id);
             const t = timers.find(x => x.id === id);
             if (t) {
+                // Обновляем время
                 const el = card.querySelector('.timer-val');
-                if (el.innerText !== formatTime(t.remaining)) {
+                if (el && el.innerText !== formatTime(t.remaining)) {
                     el.innerText = formatTime(t.remaining);
-                    el.classList.add('falling');
-                    setTimeout(() => el.classList.remove('falling'), 300);
                 }
+                // Обновляем иконку в карточке, если она уже на экране
+                const iconEl = card.querySelector('.timer-icon');
+                if (iconEl) iconEl.innerText = t.icon;
             }
         });
+        document.getElementById('done-timers').innerText = timers.filter(t => t.remaining === 0).length;
     }
 }, 1000);
 
@@ -1024,27 +1101,26 @@ function saveData() {
 function loadData() {
     const saved = localStorage.getItem('voidGuideData');
     
-    // Если данных нет, загружаем дефолты и сразу сохраняем
     if (!saved) {
+        console.log("Данных нет, загружаем дефолты");
         timers = [...defaultTimers];
-        // Инициализируем другие переменные дефолтными значениями, если нужно
         saveData();
     } else {
         try {
             const p = JSON.parse(saved);
+            // Если в сохраненных данных есть таймеры - берем их, если нет - дефолты
+            timers = (p.timers && p.timers.length > 0) ? p.timers : [...defaultTimers];
+            
             totalBP = p.totalBP || 0;
-            // ВАЖНО: используем || defaultTimers
-            timers = p.timers && p.timers.length > 0 ? p.timers : [...defaultTimers];
             financeData = p.financeData || [];
             inventory = p.inventory || [];
-            // ... (остальные поля)
+            // Догрузи остальные переменные здесь
         } catch (e) {
-            console.error("Ошибка загрузки, восстанавливаем дефолты:", e);
+            console.error("Ошибка парсинга, используем дефолты:", e);
             timers = [...defaultTimers];
         }
     }
 
-    renderTimers();
 }
 
 // 4. ИНИЦИАЛИЗАЦИЯ ЧЕРЕЗ WINDOW.ONLOAD
@@ -1063,7 +1139,6 @@ window.onload = () => {
         switchMainView('farm'); // Стартовый экран
         renderSkills();
         renderInventory();
-        renderTimers();
         updateFinanceUI();
         console.log("Приложение успешно запущено!");
     } catch (e) {

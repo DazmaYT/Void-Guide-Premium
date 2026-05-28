@@ -41,14 +41,29 @@
 
     <button class="system-reset" onclick="hardReset()">🔄 Сбросить текущую сессию</button>
 
-    <div class="online-hub">
-        <div class="radial-timer" id="timer-ring">
-            <div class="time-digits" id="time-display">03:00:00</div>
-            <div class="time-state" id="time-status">Система выкл</div>
-        </div>
-        <div class="bar-container"><div class="bar-fill" id="time-bar"></div></div>
-        <button class="btn-trigger" id="time-btn" onclick="controlOnline()">Старт</button>
+<div class="online-hub">
+    <table class="timer-table">
+        <tr><th><small>ЧАС</small></th><th><small>МИН</small></th><th><small>СЕК</small></th></tr>
+        <tr>
+            <td><div class="adj-group"><button onclick="adjust('h', -1)">-</button><span id="val-h">03</span><button onclick="adjust('h', 1)">+</button></div></td>
+            <td><div class="adj-group"><button onclick="adjust('m', -1)">-</button><span id="val-m">00</span><button onclick="adjust('m', 1)">+</button></div></td>
+            <td><div class="adj-group"><button onclick="adjust('s', -1)">-</button><span id="val-s">00</span><button onclick="adjust('s', 1)">+</button></div></td>
+        </tr>
+    </table>
+    <button class="btn-setup" onclick="applyCustomTime()">Применить время</button>
+
+    <div class="radial-timer" id="timer-ring">
+        <div class="time-digits" id="time-display">03:00:00</div>
+        <div class="time-state" id="time-status">ПАУЗА</div>
     </div>
+    
+    <div class="bar-container"><div class="bar-fill" id="time-bar"></div></div>
+    
+<div class="center-buttons">
+    <button class="btn-reset" onclick="resetSession()">СБРОСИТЬ ТЕКУЩУЮ СЕССИЮ</button>
+    <button class="btn-trigger" id="time-btn" onclick="controlOnline()">СТАРТ</button>
+</div>
+</div>
 
     <div class="category-scroller">
         <button class="cat-tab active" id="tab-easy" onclick="selectCategory('easy')">🟢 Простые</button>
@@ -124,7 +139,7 @@
 
             <div class="card">
                 <h3>📜 Инвентарь <small id="inv-count">(0)</small></h3>
-                <div id="inventory-list"></div>
+                <div id="inventory-list" ></div>
             </div>
         </div>
 
@@ -178,8 +193,18 @@
     </div>
 </div>
 
+<div id="modal-overlay" class="modal-hidden">
+    <div class="modal-card">
+        <h3 id="modal-title">Подтверждение</h3>
+        <p id="modal-text">Вы уверены?</p>
+        <div class="modal-buttons">
+            <button id="btn-cancel" class="timer-btn">Отмена</button>
+            <button id="btn-confirm" class="del-btn">Удалить</button>
+        </div>
+    </div>
+</div>
 
-
+<div id="toast-container" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999;"></div>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="script.js"></script>
 
