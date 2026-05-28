@@ -25,6 +25,7 @@
     </div>
 </div>
 
+<section id="farm-section">
 <div id="farm-section">
     <div class="dashboard">
         <div class="dash-grid">
@@ -42,6 +43,8 @@
     <button class="system-reset" onclick="hardReset()">🔄 Сбросить текущую сессию</button>
 
 <div class="online-hub">
+
+
     <table class="timer-table">
         <tr><th><small>ЧАС</small></th><th><small>МИН</small></th><th><small>СЕК</small></th></tr>
         <tr>
@@ -56,16 +59,27 @@
         <div class="time-digits" id="time-display">03:00:00</div>
         <div class="time-state" id="time-status">ПАУЗА</div>
     </div>
-    
     <div class="bar-container"><div class="bar-fill" id="time-bar"></div></div>
+
+    <div class="controls-row"> 
+        <div class="auto-toggle-container">
+            <div class="toggle-switch" id="auto-run-switch" onclick="toggleAutoRun()">
+                <div class="toggle-knob"></div>
+            </div>
+            <small>АВТО</small>
+        </div>
+        <button class="btn-trigger" id="time-btn" onclick="controlOnline()">СТАРТ</button>
+    </div>
+    <br><br>    <button class="btn-reset" onclick="resetSession()">↺ Сбросить сессию</button>
+</div>
+
+
     
-<div class="center-buttons">
-    <button class="btn-reset" onclick="resetSession()">СБРОСИТЬ ТЕКУЩУЮ СЕССИЮ</button>
-    <button class="btn-trigger" id="time-btn" onclick="controlOnline()">СТАРТ</button>
 </div>
 </div>
 
     <div class="category-scroller">
+<button class="btn-reset-tasks" onclick="resetAllDoneTasks()">↺</button>
         <button class="cat-tab active" id="tab-easy" onclick="selectCategory('easy')">🟢 Простые</button>
         <button class="cat-tab" id="tab-medium" onclick="selectCategory('medium')">🟡 Средние</button>
         <button class="cat-tab" id="tab-hard" onclick="selectCategory('hard')">🔴 Сложные</button>
@@ -75,7 +89,7 @@
 
     <div class="feed-container" id="feed-box"></div>
 </div>
-
+</section>
 <div id="skills-section" style="display: none;">
     <div class="feed-container" id="skills-container" style="padding: 16px;"></div>
 </div>
@@ -162,49 +176,19 @@
 
 
 
-<div id="modal-container" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center;">
-    <div style="background:#11152c; padding:25px; border-radius:18px; border:1px solid #6d4aff; text-align:center; width: 80%; max-width: 300px;">
-        <p style="color:white; font-size: 1.1em; margin-bottom:20px;">Удалить этот таймер?</p>
-        <div style="display: flex; gap: 10px; justify-content: center;">
-            <button id="btn-del-yes" class="timer-btn" style="background:#ff4a4a; flex:1;">Да</button>
-            <button class="timer-btn btn-no" style="background:#2d3436; flex:1;">Нет</button>
-        </div>
-    </div>
-</div>
-
-
-<div id="toast-container"></div>
-<div id="modal-container" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center;">
-    <div style="background:#11152c; padding:20px; border-radius:15px; border:1px solid #6d4aff; text-align:center;">
-        <p style="color:white;">Удалить этот таймер?</p>
-        <button id="btn-del-yes" class="timer-btn" style="background:#ff4a4a;">Да</button>
-        <button onclick="document.getElementById('modal-container').style.display='none'" class="timer-btn">Нет</button>
-    </div>
-</div>
-
-
-<div id="modal-container" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center;">
-    <div style="background:#11152c; padding:25px; border-radius:18px; border:1px solid #6d4aff; text-align:center; width: 80%; max-width: 300px;">
-        <p style="color:white; font-size: 1.1em; margin-bottom:20px;">Удалить этот таймер?</p>
-        <div style="display: flex; gap: 10px; justify-content: center;">
-            <button id="btn-del-yes" class="timer-btn" style="background:#ff4a4a; flex:1;">Да</button>
-            <button class="timer-btn btn-no" style="background:#2d3436; flex:1;">Нет</button>
-        </div>
-    </div>
-</div>
-
-<div id="modal-overlay" class="modal-hidden">
-    <div class="modal-card">
-        <h3 id="modal-title">Подтверждение</h3>
-        <p id="modal-text">Вы уверены?</p>
-        <div class="modal-buttons">
-            <button id="btn-cancel" class="timer-btn">Отмена</button>
-            <button id="btn-confirm" class="del-btn">Удалить</button>
+<div id="modal-global" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(5px); z-index:20000; align-items:center; justify-content:center;">
+    <div style="background:#11152c; padding:25px; border-radius:18px; border:1px solid #6d4aff; text-align:center; width: 85%; max-width: 320px;">
+        <h3 id="modal-title" style="color:white; margin-bottom:15px;">Подтверждение</h3>
+        <p id="modal-text" style="color:#ddd; margin-bottom:25px;">Вы уверены?</p>
+        <div style="display: flex; gap: 10px;">
+            <button id="btn-modal-no" style="flex:1; padding:12px; border-radius:10px; border:none; background:#2d3436; color:white;">Нет</button>
+            <button id="btn-modal-yes" style="flex:1; padding:12px; border-radius:10px; border:none; background:#ff4a4a; color:white;">Да</button>
         </div>
     </div>
 </div>
 
 <div id="toast-container" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999;"></div>
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="script.js"></script>
 

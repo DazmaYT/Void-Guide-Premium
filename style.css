@@ -225,7 +225,15 @@
         }
 
         /* Остальной UI без изменений */
-.online-hub { width: 300px; margin: auto; font-family: sans-serif; }
+        .online-hub { 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 320px; 
+            margin: 0 auto; 
+        }
+
 .timer-table { margin-bottom: 20px; }
 
 .radial-timer { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 200px; height: 200px; border-radius: 50%; border: 2px solid #3d3d5c; margin: 20px auto; }
@@ -250,15 +258,7 @@
 .adj-group { display: flex; align-items: center; justify-content: center; gap: 5px; }
     .adj-group button { background: #3d3d5c; border: none; color: white; border-radius: 5px; cursor: pointer; width: 30px; }
         
-        .controls-row { 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            background: #161625; 
-            padding: 8px; 
-            border-radius: 10px; 
-            border: 1px solid #3d3d5c;
-        }
+.controls-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; margin-top: 20px; }
 
         .controls-row small { 
         font-size: 0.7rem; 
@@ -305,12 +305,12 @@
     overflow: hidden; 
 }
 .center-buttons {
-    display: flex; /* Делаем из них гибкий ряд */
-    flex-direction: column; /* Ставим кнопки друг под другом */
-    align-items: center; /* Центрируем по горизонтали */
-    gap: 15px; /* Расстояние между кнопками */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Равномерный отступ между кнопкой Сброса и Старта */
+    margin-top: 30px; /* Отступ всего блока кнопок от таймера сверху */
     width: 100%;
-    margin-top: 20px;
 }
         .bar-fill {
             height: 100%;
@@ -320,11 +320,13 @@
         }
 
         .btn-trigger {
+            flex: 1;    
+            max-width: 200px;
             background: linear-gradient(135deg, var(--void-neon), #4a2cdb);
             color: #fff;
             border: none;
-            padding: 10px 28px;
-            border-radius: 30px;
+            padding: 15px;
+            border-radius: 12px;
             font-weight: 800;
             font-size: 13px;
             text-transform: uppercase;
@@ -332,6 +334,15 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(109, 74, 255, 0.4);
         }
+
+
+.auto-toggle-container { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+
+.toggle-switch { width: 50px; height: 26px; background: #ff4757; border-radius: 15px; position: relative; cursor: pointer; transition: 0.3s; padding: 3px; }
+
+.toggle-knob { width: 20px; height: 20px; background: white; border-radius: 50%; position: absolute; left: 3px; transition: 0.3s; }
+    .toggle-switch.active { background: #40e0d0; }
+    .toggle-switch.active .toggle-knob { left: 27px; }
 
 .category-scroller {
     display: flex;
@@ -393,14 +404,14 @@
     gap: 8px;
     flex-shrink: 0;
 }
+
 .task-card {
     background: var(--bg-card);
     border-radius: 14px;
     padding: 16px;
     border: var(--border-style);
-    transition: all 0.3s ease;
-    overflow: hidden;
-    margin-bottom: 10px; /* Добавим отступ между карточками */
+    margin-bottom: 10px;
+    transition: 0.3s;
 }
 .task-card.done {
     border-color: rgba(0, 240, 255, 0.15) !important;
@@ -1320,12 +1331,14 @@
     background: #333;
     border-color: #777;
 }
-.btn-reset, .btn-trigger {
-    display: block; /* Позволяет кнопкам слушаться text-align */
-    margin: 0 auto; /* Центрирует внутри родителя */
-    text-align: center;
+.btn-trigger, .btn-reset {
+    width: 100%; /* Кнопки будут занимать всю ширину контейнера */
+    max-width: 280px; /* Но не станут слишком огромными */
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
 }
-
 .btn-play { color: #4af58a; } /* Зеленый для старта */
 .btn-pause { color: #f5d14a; } /* Желтый для паузы */
 .btn-reset {
@@ -1409,10 +1422,14 @@
 .modal-closing { animation: fadeOut 0.2s ease-in forwards; }
 
 #modal-overlay {
-    position: fixed; top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s;
+    display: none; /* Изначально скрыто */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
 }
 #modal-overlay.visible { opacity: 1; pointer-events: all; }
 
@@ -1457,6 +1474,24 @@
 /* Возврат стилей кнопок */
 .controls { display: flex; gap: 8px; }
 
+.task-card.inactive {
+    opacity: 0.5; /* Полупрозрачность */
+    border: 2px solid #ff4d4d; /* Красная рамка */
+    filter: grayscale(0.5); /* Немного обесцвечиваем */
+}
+
+.btn-toggle {
+    background: #40e0d0;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.btn-toggle.cross { background: #ff4d4d; color: white; } /* Крестик */
+.btn-toggle.check { background: #40e0d0; color: #000; }  /* Галочка */
+
 .toggle-btn { background: #40e0d0; color: #000; font-weight: bold; }
 .del-btn { background: #ff4d4d; color: white; }
 .timer-val { transition: transform 0.2s; display: inline-block; }
@@ -1479,3 +1514,96 @@
     transition: all 0.3s ease;
 }
 .pulsing { animation: pulse 1.5s infinite; border: 2px solid #40e0d0 !important; }
+
+
+
+
+
+
+
+
+
+
+/* Базовый вид карточки */
+.task-card { 
+    background: #1a1f2e; border-radius: 12px; padding: 12px; margin-bottom: 10px; 
+    border: 2px solid transparent; transition: 0.3s;
+}
+
+/* Активные - зеленая рамка */
+#active-items .task-card { border-left: 4px solid #2ecc71; }
+
+/* Неактивные - красная рамка + прозрачность */
+#inactive-items .task-card { 
+    border-left: 4px solid #e74c3c; 
+    opacity: 0.5; 
+}
+
+/* Состояние выполненного задания */
+.task-card.done { border: 2px solid #2ecc71 !important; opacity: 0.7; }
+
+/* Стиль кнопки (вместо "некрасивого крестика") */
+.toggle-btn {
+    background: transparent; border: none; cursor: pointer; font-size: 18px;
+    padding: 0 5px; color: #fff;
+}
+
+/* Поле заметки */
+.note-input-field {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    background: #121620;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    box-sizing: border-box; /* Чтобы не вылезало за края */
+}
+
+
+.task-card.expanded .task-desc { display: block !important; }
+
+
+
+.btn-refresh {
+    width: 44px;
+    height: 44px;
+    background: #1a1616; /* Темный фон */
+    border: 1px solid #752929; /* Темно-красная рамка */
+    color: #ff4a4a; /* Ярко-красный цвет иконки */
+    border-radius: 10px; /* Скругление */
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-refresh:hover {
+    background: #2a1a1a;
+    border-color: #ff4a4a;
+}
+
+.btn-refresh:active {
+    transform: scale(0.95);
+}
+
+.btn-reset-tasks {
+    background: #1a1f2e;
+    border: 1px solid #752929;
+    color: #ff4a4a;
+    padding: 10px 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.2s ease;
+    margin: 10px 0;
+}
+
+.btn-reset-tasks:hover {
+    background: #2a1a1a;
+    border-color: #ff4a4a;
+}
