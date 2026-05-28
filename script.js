@@ -183,7 +183,7 @@ function changeSkill(id, diff) {
 
 // --- УПРАВЛЕНИЕ ВИДАМИ ---
 function switchMainView(view) {
-    const sections = ['farm', 'skills', 'reseller', 'bots', 'timers'];
+    const sections = ['farm', 'skills', 'reseller', 'timers'];
     
     // 1. Переключаем секции
     sections.forEach(s => {
@@ -200,7 +200,7 @@ function switchMainView(view) {
 
     // 2. Обновляем заголовок
     const titleEl = document.getElementById('page-title');
-    const titles = { farm: "ФАРМ BP", skills: "НАВЫКИ", reseller: "КАЛЬКУЛЯТОР", bots: "БОТЫ", timers: "ТАЙМЕРЫ" };
+    const titles = { farm: "ФАРМ BP", skills: "НАВЫКИ", reseller: "КАЛЬКУЛЯТОР", timers: "ТАЙМЕРЫ" };
     if (titleEl && titles[view]) {
         titleEl.innerText = titles[view];
     }
