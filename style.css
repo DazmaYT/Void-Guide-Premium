@@ -811,13 +811,14 @@
 
 .sub-nav {
     display: flex;
-    overflow-x: auto;
-    gap: 10px;
-    padding: 10px 0;
-    margin-bottom: 15px;
-    scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+    flex-wrap: wrap; /* Разрешаем перенос */
+    justify-content: center; /* Центрируем кнопки */
+    gap: 8px;
 }
-.sub-nav::-webkit-scrollbar { display: none; } /* Скрываем в Chrome/Safari */
+
+.sub-nav::-webkit-scrollbar {
+    display: none;
+}
 
 .sub-tab {
     background: var(--bg-input);
