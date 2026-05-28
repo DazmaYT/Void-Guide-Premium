@@ -1,9 +1,38 @@
         @keyframes pulse-glow {
-    0% { box-shadow: 0 0 5px var(--void-accent); }
-    50% { box-shadow: 0 0 20px var(--void-accent); }
-    100% { box-shadow: 0 0 5px var(--void-accent); }
-}
-
+            0% { box-shadow: 0 0 5px var(--void-accent); }
+            50% { box-shadow: 0 0 20px var(--void-accent); }
+            100% { box-shadow: 0 0 5px var(--void-accent); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes walk {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(0); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        /* Анимация появления */
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        /* Анимации для модального окна */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.9); }
+        }
+        @keyframes clickEffect {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
 
         
         :root {
@@ -175,10 +204,10 @@
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
         }
         .mult-toggle-btn.active.vip-btn {
-            background: rgba(109, 74, 255, 0.15);
-            border-color: var(--void-neon);
+            background: rgba(0, 240, 255, 0.12);
+            border-color: var(--void-accent);
             color: #fff;
-            box-shadow: 0 0 15px rgba(109, 74, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
         }
 
         /* Остальной UI без изменений */
@@ -889,13 +918,13 @@
 }
 
 .full-input:focus {
-    border-color: var(--void-neon, #00c853);
+    border-color: var(--void-neon, #03f367);
 }
 
 .add-main-btn { 
     width: 100%; 
     padding: 14px; 
-    background: var(--void-neon, #ff0000); 
+    background: var(--void-neon, #ffffff); 
     border: none; 
     border-radius: 12px; 
     color: white; 
@@ -1108,3 +1137,208 @@
 .small-btn:active {
     opacity: 0.8;
 }
+
+
+
+
+
+
+
+/* Общий вид карточки */
+.card {
+    background: rgba(26, 29, 33, 0.85); /* Полупрозрачность */
+    backdrop-filter: blur(12px);         /* Размытие фона */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 10px;
+    transition: all 0.3s ease;
+}
+
+/* Эффект при наведении */
+.bot-card:hover {
+    background: rgba(35, 40, 47, 0.95);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Стиль текста кнопок */
+.bind-btn {
+    transition: background 0.2s;
+}
+
+.bind-btn:hover {
+    background: #3b4148 !important;
+}
+
+/* Добавим плавность появления */
+.bot-details {
+    animation: slideDown 0.3s ease-out;
+}
+
+
+
+.bot-active-indicator {
+    animation: walk 1s infinite;
+}
+
+.stats-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    flex: 1;
+    background: #11152c;
+    padding: 10px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid rgba(109, 74, 255, 0.2);
+}
+
+.stat-card span { font-size: 12px; color: #888; }
+.stat-card b { display: block; font-size: 18px; margin-top: 5px; }
+
+.timer-input-area { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; background: var(--bg-card); padding: 16px; border-radius: 16px; border: var(--border-style); }
+.time-inputs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.time-inputs input {
+    background: var(--bg-input);
+    border: var(--border-style);
+    color: var(--text-main);
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.small-input { width: 33%; background: var(--bg-input); border: var(--border-style); color: white; padding: 8px; border-radius: 8px; text-align: center; }
+.full-input { width: 100%; background: var(--bg-input); border: var(--border-style); color: white; padding: 8px; border-radius: 8px; margin-bottom: 5px; box-sizing: border-box; }
+
+.timer-container {
+    display: grid;
+    gap: 12px;
+}
+.timer-card {
+    background: var(--bg-card);
+    border: var(--border-style);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    margin-bottom: 16px;
+}
+/* Эффект при наведении (свечение) */
+.timer-card:hover {
+    border: 1px solid var(--void-neon);
+    animation: pulse-glow 2s infinite;
+}
+
+.timer-info div { color: var(--text-muted); font-size: 12px; }
+.timer-info b { color: var(--void-accent); font-size: 18px; font-weight: 600; letter-spacing: 1px; }
+.del-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 68, 68, 0.2);
+    color: #ff4444;
+    padding: 8px 12px;
+    border-radius: 10px;
+}
+
+.del-btn:hover { border-color: #ff4444; background: #222; }
+
+
+/* Кнопки управления */
+.controls { display: flex; gap: 6px; }
+
+.timer-btn {
+    background: #1a1a2e !important;
+    border: 1px solid #444;
+    color: #ffffff; /* Делаем текст чисто белым для контраста */
+    padding: 10px 16px; /* Чуть увеличим отступы, чтобы было больше «воздуха» */
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    /* ВОТ ЧТО ДЕЛАЕТ ТЕКСТ КРАСИВЫМ: */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 600;      /* Делаем чуть жирнее */
+    letter-spacing: 0.5px; /* Чуть раздвигаем буквы для легкости */
+    font-size: 14px;       /* Немного уменьшаем размер, так выглядит дороже */
+    text-transform: uppercase; /* Опционально: можно сделать заглавными */
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none; /* Запрещаем выделение текста при нажатии */
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+.timer-btn:focus {
+    outline: none;
+}
+/* Эффект нажатия */
+.timer-btn:active {
+    animation: clickEffect 0.2s ease-out;
+    background: #333;
+    border-color: #777;
+}
+.btn-play { color: #4af58a; } /* Зеленый для старта */
+.btn-pause { color: #f5d14a; } /* Желтый для паузы */
+.btn-reset { color: #4a9eff; } /* Синий для сброса */
+.del-btn {
+    background: #2a1b1b;
+    border: 1px solid #5a2a2a;
+    color: #ff6b6b;
+    padding: 8px 12px;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+.del-btn:active {
+    background: #ff6b6b;
+    color: white;
+    transform: scale(0.9);
+}
+.timer-btn:hover { border-color: #00d9ff; background: #222; }
+
+/* Кнопка удаления (красная, но стильная) */
+
+
+/* Принудительный темный стиль для всех инпутов в форме */
+.timer-input-area input, .timer-input-area select {
+    background: #1a1a2e !important; /* Твой темный цвет */
+    color: #ffffff !important;
+    border: 1px solid #333 !important;
+}
+
+
+
+/* Стили для контейнера тостов */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none; /* Чтобы не мешало кликать на кнопки под ним */
+}
+
+/* Стили для самого уведомления */
+.toast-msg {
+    background: linear-gradient(135deg, #6d4aff, #583cd6);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(109, 74, 255, 0.4);
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    animation: slideUp 0.4s ease-out;
+    pointer-events: auto; /* Возвращаем кликабельность самому уведомлению */
+}
+
+
+/* Классы для JS */
+.modal-active { display: flex !important; animation: fadeIn 0.3s ease-out; }
+.modal-closing { animation: fadeOut 0.2s ease-in forwards; }

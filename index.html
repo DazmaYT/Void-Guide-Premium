@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Void Guide • Premium</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+    // Инициализация WebApp
+    let tg = window.Telegram.WebApp;
+    tg.expand(); // Развернуть на весь экран
+</script>
     <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+    body { font-family: 'Montserrat', sans-serif; background: #0b0e14; color: white; }
+</style>
 </head>
 <body>
 
@@ -59,9 +68,9 @@
 <div class="nav-dock">
     <button class="nav-node active" id="nav-farm" onclick="switchMainView('farm')"><span class="ico">🌌</span>Фарм</button>
     <button class="nav-node" id="nav-skills" onclick="switchMainView('skills')"><span class="ico">⏳</span>Навыки</button>
-<button class="nav-node" id="nav-reseller" onclick="switchMainView('reseller')">
-    <span class="ico">💰</span>Калькулятор
-</button>
+    <button class="nav-node" id="nav-reseller" onclick="switchMainView('reseller')"><span class="ico">💰</span>Калькулятор</button>
+    <button class="nav-node" id="nav-bots" onclick="switchMainView('bots')"><span class="ico">👥</span>Боты</button>
+    <button class="nav-node" id="nav-timers" onclick="switchMainView('timers')"><span class="ico">⏱️</span>Таймеры</button>
 </div>
 <section id="reseller-section" style="display: none;">
     <div class="sub-nav" style="justify-content: center; width: 100%;">
@@ -111,7 +120,7 @@
                     <div class="stat-box green"><span class="label">ДОХОД</span><span class="value" id="stat-income">$ 0</span></div>
                     <div class="stat-box red"><span class="label">РАСХОД</span><span class="value" id="stat-expense">$ 0</span></div>
                 </div>
-                <button class="add-main-btn" style="background:#444" onclick="resetFinance()">🗑️ Сбросить</button>
+                <button class="add-main-btn" style="background:#ff0000" onclick="resetFinance()">🗑️ Сбросить</button>
             </div>
 
             <div class="card">
@@ -120,11 +129,85 @@
             </div>
         </div>
 
-        <div id="tab-rent" class="tab-content" style="display:none;">ЖДИ</div>
+        <div id="tab-rent" class="tab-content" style="display:none;">
+            
+        </div>
     </div>
 </section>
+
+
+
+<section id="bots-section" style="display: none;">
+<div class="card">
+    <button onclick="document.getElementById('ip-settings').style.display='block'" 
+            style="background:none; border:1px solid #444; color:#888; border-radius:8px; padding:5px 10px; cursor:pointer;">
+        ⚙️ Настройки сервера (IP)
+    </button>
+    
+    <div id="ip-settings" style="display:none; margin-top:10px;">
+        <input type="text" id="server-ip-input" placeholder="http://192.168.1.XX:5000" 
+               style="width: 100%; padding: 8px; background:#222; color:#fff; border:1px solid #444; border-radius:5px;">
+        <button onclick="saveIp()" style="margin-top:5px; width:100%; padding:8px; background:#00ff88; border:none; border-radius:5px; font-weight:bold;">
+            Сохранить
+        </button>
+    </div>
+</div>
+
+    <div id="bots-list"></div>
+
 </section>
+<section id="timers-section" style="padding: 15px;">
+    <div class="stats-row">
+        <div class="stat-card"><span>Всего</span><b id="total-timers">0</b></div>
+        <div class="stat-card"><span>Активны</span><b id="active-timers">0</b></div>
+        <div class="stat-card"><span>Готовы</span><b id="done-timers">0</b></div>
+    </div>
+    <div id="timers-list"></div>
+</section>
+
+
+
+<div id="modal-container" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center;">
+    <div style="background:#11152c; padding:25px; border-radius:18px; border:1px solid #6d4aff; text-align:center; width: 80%; max-width: 300px;">
+        <p style="color:white; font-size: 1.1em; margin-bottom:20px;">Удалить этот таймер?</p>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <button id="btn-del-yes" class="timer-btn" style="background:#ff4a4a; flex:1;">Да</button>
+            <button class="timer-btn btn-no" style="background:#2d3436; flex:1;">Нет</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="toast-container"></div>
+<div id="modal-container" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center;">
+    <div style="background:#11152c; padding:20px; border-radius:15px; border:1px solid #6d4aff; text-align:center;">
+        <p style="color:white;">Удалить этот таймер?</p>
+        <button id="btn-del-yes" class="timer-btn" style="background:#ff4a4a;">Да</button>
+        <button onclick="document.getElementById('modal-container').style.display='none'" class="timer-btn">Нет</button>
+    </div>
+</div>
+
+
+<div id="modal-container" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center;">
+    <div style="background:#11152c; padding:25px; border-radius:18px; border:1px solid #6d4aff; text-align:center; width: 80%; max-width: 300px;">
+        <p style="color:white; font-size: 1.1em; margin-bottom:20px;">Удалить этот таймер?</p>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <button id="btn-del-yes" class="timer-btn" style="background:#ff4a4a; flex:1;">Да</button>
+            <button class="timer-btn btn-no" style="background:#2d3436; flex:1;">Нет</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="script.js"></script>
-''
+
 </body>
 </html>
+
+
+
+
+
+

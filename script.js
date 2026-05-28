@@ -1,6 +1,7 @@
- let inventory = JSON.parse(localStorage.getItem('myInventory')) || []; 
- let currentFinancePeriod = 'today';    
-   
+
+let inventory = JSON.parse(localStorage.getItem('myInventory')) || [];
+let currentFinancePeriod = localStorage.getItem('financePeriod') || 'today';
+
         let db = [
         { id: 1,cat: "easy", name: "Посетить сайт", desc: "Посетить любой сайт в браузере", reward: 1, type: "click", icon: "🌐"},
         { id: 2,cat: "easy", name: "Зайти в канал Brawl", desc: "Зайти в любой канал Brawl", reward: 1, type: "click", icon: "💬" },
@@ -89,6 +90,25 @@ let skillsDb = [
     { id: 'contractor', name: "📋 Подрядчик", level: 0, goals: [10, 20, 30, 40, 50], done: 0 }
 ];
 
+const defaultTimers = [
+    { id: 1, name: "Почта", duration: 600, remaining: 600, running: false, icon: "✉️" },
+    { id: 2, name: "Организация", duration: 7200, remaining: 7200, running: false, icon: "🏢" },
+    { id: 3, name: "Автоугон", duration: 5400, remaining: 5400, running: false, icon: "🚗" },
+    { id: 4, name: "Сутенерка", duration: 5400, remaining: 5400, running: false, icon: "💃" },
+    { id: 5, name: "Контрабанда", duration: 300, remaining: 300, running: false, icon: "📦" },
+    { id: 6, name: "Автобус", duration: 5, remaining: 5, running: false, icon: "🚌" },
+    { id: 7, name: "Задание клуба", duration: 7200, remaining: 7200, running: false, icon: "♣️" },
+    { id: 8, name: "Тир", duration: 5400, remaining: 5400, running: false, icon: "🎯" },
+    { id: 9, name: "Швейка", duration: 5220, remaining: 5220, running: false, icon: "🧵" },
+    { id: 10, name: "Коробки", duration: 4020, remaining: 4020, running: false, icon: "📦" },
+    { id: 11, name: "Байкеры", duration: 7200, remaining: 7200, running: false, icon: "🏍️" },
+    { id: 12, name: "Реднеки", duration: 7200, remaining: 7200, running: false, icon: "🤠" },
+    { id: 13, name: "Кармит", duration: 7200, remaining: 7200, running: false, icon: "🥩" },
+    { id: 14, name: "Меривезер", duration: 7200, remaining: 7200, running: false, icon: "🚁" },
+    { id: 15, name: "Эпсилон", duration: 7200, remaining: 7200, running: false, icon: "🧘" },
+    { id: 16, name: "Дрессировка", duration: 930, remaining: 930, running: false, icon: "🐕" }
+];
+        let timers = [];
         let totalBP = 0;
         let activeCat = 'easy';
         
@@ -163,23 +183,30 @@ function changeSkill(id, diff) {
 
 // --- УПРАВЛЕНИЕ ВИДАМИ ---
 function switchMainView(view) {
-    // Список всех секций для переключения
-    const sections = ['farm', 'skills', 'reseller'];
+    const sections = ['farm', 'skills', 'reseller', 'bots', 'timers'];
     
+    // 1. Переключаем секции
     sections.forEach(s => {
-        const sectionEl = document.getElementById(`${s}-section`);
-        const navEl = document.getElementById(`nav-${s}`);
+        const sectionEl = document.getElementById(s + '-section');
+        const navEl = document.getElementById('nav-' + s);
         
-        if (sectionEl) sectionEl.style.display = (view === s) ? 'block' : 'none';
-        if (navEl) navEl.classList.toggle('active', view === s);
+        if (sectionEl) {
+            sectionEl.style.display = (view === s) ? 'block' : 'none';
+        }
+        if (navEl) {
+            navEl.classList.toggle('active', (view === s));
+        }
     });
-    
-    // Безопасное обновление заголовка
+
+    // 2. Обновляем заголовок
     const titleEl = document.getElementById('page-title');
-    const titles = { farm: "Void Guide", skills: "Навыки", reseller: "Калькулятор" };
+    const titles = { farm: "ФАРМ BP", skills: "НАВЫКИ", reseller: "КАЛЬКУЛЯТОР", bots: "БОТЫ", timers: "ТАЙМЕРЫ" };
     if (titleEl && titles[view]) {
         titleEl.innerText = titles[view];
     }
+
+    // 3. Дополнительная отрисовка при переключении
+    if (view === 'timers') renderTimers();
 }
 
 function calcResell() {
@@ -776,89 +803,392 @@ function resetFinance() {
     }
 }
 
+// База данных ботов
+let bots = JSON.parse(localStorage.getItem('myBots')) || [
+    { id: 0, name: "Анти-АФК", desc: "Поддерживает активность, чтобы не кикнуло с сервера.", enabled: false, bind: "F1" }
+];
 
+function renderBots() {
+    const list = document.getElementById('bots-list');
+    list.innerHTML = bots.map((bot, i) => `
+        <div class="card bot-card" 
+             onclick="toggleBotDetails(${i})" 
+             style="border-left: 5px solid ${bot.enabled ? '#00ff88' : '#333'}; position: relative; overflow: hidden;">
+            
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong style="font-size: 1.1em; color: #fff;">${bot.name}</strong>
+                <div style="width: 12px; height: 12px; border-radius: 50%; 
+                            background: ${bot.enabled ? '#00ff88' : '#ff3333'}; 
+                            box-shadow: 0 0 10px ${bot.enabled ? '#00ff88' : '#ff3333'};">
+                </div>
+            </div>
+            
+            <div id="bot-details-${i}" class="bot-details" style="display:none; margin-top:15px; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
+                <p style="color: #a0a0a0; font-size: 0.9em; margin-bottom: 15px;">${bot.desc}</p>
+                
+                <button class="add-main-btn" 
+                        onclick="toggleBot(${i}); event.stopPropagation();" 
+                        style="width: 100%; padding: 12px; background: ${bot.enabled ? '#ff3333' : '#00ff88'}; border: none; border-radius: 8px; color: #000; font-weight: bold; margin-bottom: 10px;">
+                    ${bot.enabled ? 'ВЫКЛЮЧИТЬ' : 'ВКЛЮЧИТЬ'}
+                </button>
+                
+                <button class="bind-btn" 
+                        onclick="startBinding(${i}); event.stopPropagation();" 
+                        style="width: 100%; padding: 12px; background: #2b3036; border: 1px solid #444; border-radius: 8px; color: #fff; cursor: pointer;">
+                    🕹️ Бинд: ${bot.bind || 'Нажми для выбора'}
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+let botInterval = null;
+
+function startMovement(botIndex) {
+    const keys = ['w', 'd', 's', 'a']; // Круг: Вперед, Право, Назад, Лево
+    let currentKeyIndex = 0;
+
+    // Запускаем цикл нажатий
+    botInterval = setInterval(() => {
+        const key = keys[currentKeyIndex];
+        console.log(`Имитация нажатия клавиши: ${key}`);
+        
+        // Эмуляция нажатия (в зависимости от движка игры)
+        // Если это Web-игра, используем KeyboardEvent:
+        window.dispatchEvent(new KeyboardEvent('keydown', { 'key': key }));
+        
+        currentKeyIndex = (currentKeyIndex + 1) % keys.length;
+    }, 1000); // Переключение клавиши каждую секунду
+}
+
+function stopMovement() {
+    clearInterval(botInterval);
+}
+function toggleBotDetails(i) {
+    const el = document.getElementById(`bot-details-${i}`);
+    el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+}
+
+function toggleBot(i) {
+    bots[i].enabled = !bots[i].enabled;
+    localStorage.setItem('myBots', JSON.stringify(bots));
+    
+    if (bots[i].enabled) {
+        if (bots[i].name === "Анти-АФК") {
+            startMovement(i);
+        }
+    } else {
+        stopMovement();
+    }
+    
+    renderBots();
+}
+
+function updateBind(i, val) {
+    bots[i].bind = val;
+    localStorage.setItem('myBots', JSON.stringify(bots));
+}
+
+
+let isBinding = false;
+let bindingIndex = null;
+
+function startBinding(index) {
+    isBinding = true;
+    bindingIndex = index;
+    
+    // Визуальная подсказка пользователю
+    const btn = event.target;
+    const oldText = btn.innerText;
+    btn.innerText = "Нажмите клавишу...";
+    btn.style.background = "#ffaa00";
+
+    // Слушатель одного нажатия
+    const handleKey = (e) => {
+        if (!isBinding) return;
+        
+        // Сохраняем нажатую клавишу
+        bots[bindingIndex].bind = e.key;
+        localStorage.setItem('myBots', JSON.stringify(bots));
+        
+        isBinding = false;
+        renderBots(); // Перерисовываем список с новым значением
+        
+        window.removeEventListener('keydown', handleKey);
+        vibrate('success');
+    };
+
+    window.addEventListener('keydown', handleKey);
+}
+
+
+
+
+
+// 1. ИНИЦИАЛИЗАЦИЯ
+
+
+function saveTimers() { localStorage.setItem('myTimers', JSON.stringify(timers)); }
+
+function formatTime(s) {
+    if (s < 0) s = 0;
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return `${h > 0 ? h+':' : ''}${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+}
+
+// 2. ОТРИСОВКА (Разделена для стабильности)
+function renderTimers() {
+    const container = document.getElementById('timers-list');
+    if (!container) return; 
+
+    // Считаем статистику
+    document.getElementById('total-timers').innerText = timers.length;
+    document.getElementById('active-timers').innerText = timers.filter(t => t.running).length;
+    document.getElementById('done-timers').innerText = timers.filter(t => t.remaining === 0).length;
+
+    const formHtml = `
+        <div class="timer-input-area">
+            <input type="text" id="t-name" placeholder="Название" class="full-input">
+            <div class="time-inputs" style="display:flex; gap:5px;">
+                <select id="t-icon" class="small-input">
+                    <option value="">Без иконки</option>
+                    <option value="⏳">⏳</option>
+                    <option value="⚡">⚡</option>
+                    <option value="🔥">🔥</option>
+                    <option value="💰">💰</option>
+                    <option value="🛡️">🛡️</option>
+                </select>
+                <input type="number" id="t-h" placeholder="Ч" class="small-input">
+                <input type="number" id="t-m" placeholder="М" class="small-input">
+                <input type="number" id="t-s" placeholder="С" class="small-input">
+            </div>
+            <button class="timer-btn" style="width:100%" onclick="addCustomTimer()">+ ДОБАВИТЬ</button>
+        </div>`;
+
+    const listHtml = timers.map(t => `
+        <div class="timer-card" data-id="${t.id}">
+            <div class="timer-info">
+                <div>${t.icon ? `<span class="timer-icon">${t.icon}</span> ` : ""}${t.name}</div>
+                <b class="timer-val">${formatTime(t.remaining)}</b>
+            </div>
+<div class="controls" style="display:flex; gap:8px;">
+    <button class="timer-btn" onclick="toggleTimer(${t.id})">
+        ${t.running ? '⏸️' : '▶️'}
+    </button>
+    <button class="timer-btn" onclick="resetTimer(${t.id})">
+        🔄
+    </button>
+    <button class="del-btn" onclick="deleteTimer(${t.id})">
+        ✕
+    </button>
+</div>
+        </div>`).join('');
+
+    container.innerHTML = formHtml + listHtml;
+}
+// 3. ЛОГИКА
+function addCustomTimer() {
+    const name = document.getElementById('t-name').value;
+    const dur = (parseInt(document.getElementById('t-h').value) || 0) * 3600 + (parseInt(document.getElementById('t-m').value) || 0) * 60 + (parseInt(document.getElementById('t-s').value) || 0);
+    if (name && dur > 0) {
+        timers.push({ id: Date.now(), name, duration: dur, remaining: dur, running: false, icon: document.getElementById('t-icon').value || null });
+        saveData(); renderTimers();
+        document.getElementById('t-name').value = '';
+        showToast("✅ Таймер добавлен!");
+    } else { showToast("⚠️ Введите данные!"); }
+}
+
+function showToast(message) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast-msg';
+    toast.innerText = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+    }, 2500);
+}
+
+function resetTimer(id) {
+    const t = timers.find(x => x.id === id);
+    if (t) { t.remaining = t.duration; t.running = false; saveData(); renderTimers(); }
+}
+
+function toggleTimer(id) {
+    const t = timers.find(x => x.id === id);
+    if (t) { t.running = !t.running; saveData(); renderTimers(); }
+}
+
+function deleteTimer(id) {
+    const modal = document.getElementById('modal-container');
+    
+    // Показываем окно
+    modal.className = 'modal-active'; 
+    
+    // Функция закрытия с анимацией
+    const closeModal = () => {
+        modal.classList.add('modal-closing');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.className = ''; // Сброс классов
+        }, 200);
+    };
+
+    // Привязываем события
+    document.getElementById('btn-del-yes').onclick = () => {
+        timers = timers.filter(t => t.id !== id);
+        saveData();
+        renderTimers();
+        closeModal();
+        showToast("🗑️ Таймер удален");
+    };
+
+    // Закрытие при клике на "Нет"
+    modal.querySelector('.btn-no').onclick = closeModal;
+}
+function formatTime(s) {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return `${h > 0 ? h+':' : ''}${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+}
+function renderTimers() {
+    const container = document.getElementById('timers-list');
+    if (!container) return; 
+
+    // 1. Статистика
+    document.getElementById('total-timers').innerText = timers.length;
+    document.getElementById('active-timers').innerText = timers.filter(t => t.running).length;
+    document.getElementById('done-timers').innerText = timers.filter(t => t.remaining === 0).length;
+
+    // 2. ФОРМА (Убедись, что она здесь есть!)
+    const formHtml = `
+        <div class="timer-input-area" style="margin-bottom: 20px;">
+            <input type="text" id="t-name" placeholder="Название" class="full-input">
+            <div class="time-inputs" style="display:flex; gap:5px; margin: 10px 0;">
+                <select id="t-icon" class="small-input">
+                    <option value="">Без иконки</option>
+                    <option value="⏳">⏳</option>
+                    <option value="⚡">⚡</option>
+                    <option value="🔥">🔥</option>
+                    <option value="💰">💰</option>
+                    <option value="🛡️">🛡️</option>
+                </select>
+                <input type="number" id="t-h" placeholder="Ч" class="small-input">
+                <input type="number" id="t-m" placeholder="М" class="small-input">
+                <input type="number" id="t-s" placeholder="С" class="small-input">
+            </div>
+            <button class="timer-btn" style="width:100%" onclick="addCustomTimer()">+ ДОБАВИТЬ</button>
+        </div>`;
+
+    // 3. СПИСОК
+    const listHtml = timers.map(t => `
+        <div class="timer-card" data-id="${t.id}">
+            <div class="timer-info">
+                <div>${t.icon ? `<span class="timer-icon">${t.icon}</span> ` : ""}${t.name}</div>
+                <b class="timer-val">${formatTime(t.remaining)}</b>
+            </div>
+            <div class="controls">
+                <button class="timer-btn" onclick="toggleTimer(${t.id})">${t.running ? '⏸️' : '▶️'}</button>
+                <button class="timer-btn" onclick="resetTimer(${t.id})">🔄</button>
+                <button class="del-btn" onclick="deleteTimer(${t.id})">✕</button>
+            </div>
+        </div>`).join('');
+
+    // ОБЪЕДИНЯЕМ ВСЁ
+    container.innerHTML = formHtml + listHtml;
+}
+
+setInterval(() => {
+    let changed = false;
+    timers.forEach(t => {
+        if (t.running && t.remaining > 0) {
+            t.remaining--; changed = true;
+            if (t.remaining === 0) {
+                t.running = false;
+                if (window.Telegram?.WebApp) window.Telegram.WebApp.sendData(JSON.stringify({action: "timer_finished", name: t.name}));
+            }
+        }
+    });
+    if (changed) {
+        saveData();
+        document.querySelectorAll('.timer-card').forEach(card => {
+            const id = parseInt(card.dataset.id);
+            const t = timers.find(x => x.id === id);
+            if (t) {
+                const el = card.querySelector('.timer-val');
+                if (el.innerText !== formatTime(t.remaining)) {
+                    el.innerText = formatTime(t.remaining);
+                    el.classList.add('falling');
+                    setTimeout(() => el.classList.remove('falling'), 300);
+                }
+            }
+        });
+    }
+}, 1000);
+
+
+
+// 2. ФУНКЦИЯ СОХРАНЕНИЯ (ЕДИНАЯ ДЛЯ ВСЕГО)
 function saveData() {
     const dataToSave = {
-        totalBP,
-        trackingDone,
-        trackingVal,
-        db,
-        skillsDb,
-        hasServerMod,
-        hasVipMod,
-        mult,
-        timeClock,
-        financeData,
-        inventory
+        totalBP, trackingDone, trackingVal, db, skillsDb, 
+        hasServerMod, hasVipMod, mult, timeClock, financeData, inventory, timers
     };
-    
-    // Сохраняем главный объект
     localStorage.setItem('voidGuideData', JSON.stringify(dataToSave));
-    
-    // И сохраняем финансы отдельно для быстрого доступа
     localStorage.setItem('myFinance', JSON.stringify(financeData));
-    
-    console.log("Данные сохранены:", dataToSave);
 }
 
+// 3. ФУНКЦИЯ ЗАГРУЗКИ
 function loadData() {
     const saved = localStorage.getItem('voidGuideData');
-    if (!saved) return;
-
-    try {
-        const p = JSON.parse(saved);
-        
-        totalBP = p.totalBP || 0;
-        trackingDone = p.trackingDone || {};
-        trackingVal = p.trackingVal || {};
-        hasServerMod = p.hasServerMod || false;
-        hasVipMod = p.hasVipMod || false;
-        mult = p.mult || 1;
-        timeClock = p.timeClock ?? TOTAL_TIME;
-        financeData = p.financeData || []; 
-        inventory = p.inventory || [];
-
-        if (p.db) db = p.db;
-        if (p.skillsDb) skillsDb = p.skillsDb;
-        
-        // Обновление UI
-        document.getElementById('stat-bp').innerText = totalBP;
-        
-        // Обновление кнопок множителей
-        document.getElementById('toggle-server').classList.toggle('active', hasServerMod);
-        document.getElementById('toggle-vip').classList.toggle('active', hasVipMod);
-
-        // Восстановление таймера
-        let h = Math.floor(timeClock / 3600).toString().padStart(2, '0');
-        let m = Math.floor((timeClock % 3600) / 60).toString().padStart(2, '0');
-        let s = (timeClock % 60).toString().padStart(2, '0');
-        document.getElementById('time-display').innerText = `${h}:${m}:${s}`;
-        updateFinanceUI();
-    } catch (e) {
-        console.error("Ошибка загрузки данных:", e);
+    
+    // Если данных нет, загружаем дефолты и сразу сохраняем
+    if (!saved) {
+        timers = [...defaultTimers];
+        // Инициализируем другие переменные дефолтными значениями, если нужно
+        saveData();
+    } else {
+        try {
+            const p = JSON.parse(saved);
+            totalBP = p.totalBP || 0;
+            // ВАЖНО: используем || defaultTimers
+            timers = p.timers && p.timers.length > 0 ? p.timers : [...defaultTimers];
+            financeData = p.financeData || [];
+            inventory = p.inventory || [];
+            // ... (остальные поля)
+        } catch (e) {
+            console.error("Ошибка загрузки, восстанавливаем дефолты:", e);
+            timers = [...defaultTimers];
+        }
     }
+
+    renderTimers();
 }
 
-
+// 4. ИНИЦИАЛИЗАЦИЯ ЧЕРЕЗ WINDOW.ONLOAD
 window.onload = () => {
-    // 1. Инициализация Telegram
-    if (window.Telegram && window.Telegram.WebApp) {
+    // А) Инициализация Telegram
+    if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand(); 
+        window.Telegram.WebApp.expand();
     }
 
-    // 2. Сначала загрузка данных
-    loadData(); 
-    
-    // 3. Безопасная отрисовка
+    // Б) Загрузка данных
+    loadData();
+
+    // В) Отрисовка интерфейса
     try {
-        selectCategory('easy'); 
-        renderSkills();      // <--- Теперь точно вызовется
+        switchMainView('farm'); // Стартовый экран
+        renderSkills();
         renderInventory();
-        buildFeed();
-        updateCategoryStats();
+        renderTimers();
         updateFinanceUI();
+        console.log("Приложение успешно запущено!");
     } catch (e) {
-        console.error("Ошибка при отрисовке интерфейса:", e);
+        console.error("Критическая ошибка отрисовки:", e);
     }
 };
+
