@@ -1,6 +1,5 @@
 
-let inventory = JSON.parse(localStorage.getItem('myInventory')) || [];
-let currentFinancePeriod = localStorage.getItem('financePeriod') || 'today';
+
 
         let db = [
         { id: 1,cat: "easy", name: "Посетить сайт", desc: "Посетить любой сайт в браузере", active: true, reward: 1, type: "click", icon: "🌐", },
@@ -8,63 +7,63 @@ let currentFinancePeriod = localStorage.getItem('financePeriod') || 'today';
         { id: 3,cat: "easy", name: "Лотерея", desc: "Купить лотерейный билет. Доступно с 10:00 до 23:50", active: true, reward: 1, type: "click", icon: "🎰" },
         { id: 4,cat: "easy", name: "Лайк Match", desc: "Поставить лайк любой анкете в Match", active: true, reward: 1, type: "click", icon: "🔥" },
         { id: 5,cat: "easy", name: "Кейс за DP", desc: "Покрутить за DP серебряный или золотой кейс", active: true, reward: 10, type: "click", icon: "📦" },
-        { id: 6,cat: "easy", name: "Броски питомцу", desc: "Кинуть мяч питомцу 15 раз", active: true, reward: 2, type: "counter", max: 15, icon: "🎾" },
-        { id: 7,cat: "easy", name: "Команды питомца", desc: "Выполнить 15 команд питомцем", active: true, reward: 2, type: "counter", max: 15, icon: "🐾" },
+        { id: 6,cat: "easy", name: "Броски питомцу", desc: "Кинуть мяч питомцу 15 раз", active: true, reward: 2, type: "click", icon: "🎾" },
+        { id: 7,cat: "easy", name: "Команды питомца", desc: "Выполнить 15 команд питомцем", active: true, reward: 2, type: "click", icon: "🐾" },
         { id: 8,cat: "easy", name: "Киностудия", desc: "Снять киностудию. Цена с Platinum VIP -2500$", active: true, reward: 2, type: "click", icon: "🎥" },
         { id: 9,cat: "easy", name: "Тир", desc: "Успешно пройти тренировку в тире (>75% попаданий)", active: true, reward: 1, type: "click", icon: "🔫" },
-        { id: 10,cat: "easy", name: "Кинотеатр", desc: "5 раз добавить видео в очередь кинотеатра", active: true, reward: 1, type: "counter", max: 5, icon: "🎬" },
-        { id: 11,cat: "easy", name: "Баскетбол", desc: "Забросить 2 мяча в баскетболе", reward: 1, active: true, type: "counter", max: 2, icon: "🏀" },
-        { id: 12,cat: "easy", name: "Футбол", desc: "Забить 2 гола в футболе", reward: 1, active: true, type: "counter", max: 2, icon: "🥅" },
+        { id: 10,cat: "easy", name: "Кинотеатр", desc: "5 раз добавить видео в очередь кинотеатра", active: true, reward: 1, type: "click", icon: "🎬" },
+        { id: 11,cat: "easy", name: "Баскетбол", desc: "Забросить 2 мяча в баскетболе", reward: 1, active: true, type: "click",  icon: "🏀" },
+        { id: 12,cat: "easy", name: "Футбол", desc: "Забить 2 гола в футболе", reward: 1, active: true, type: "click", icon: "🥅" },
         { id: 13,cat: "easy", name: "Волейбол", desc: "Играть в волейбол минуту", reward: 1, active: true, type: "click", icon: "🏐" },
         { id: 14,cat: "easy", name: "Настольный теннис", desc: "Играть в настольный теннис минуту", reward: 1, active: true, type: "click", icon: "🏓" },
         { id: 15,cat: "easy", name: "Большой теннис", desc: "Играть в большой теннис минуту", reward: 1, active: true, type: "click", icon: "🎾" },
         { id: 16,cat: "easy", name: "Колесо удачи", desc: "Сделай ставку 100 фишек в межсерверном колесе удачи казино", active: true, reward: 3, type: "click", icon: "🎡" },
         { id: 17,cat: "easy", name: "Автосервис (Своё)", desc: "Починить деталь на своем автомобиле", active: true, reward: 2, type: "click", icon: "🛠️" },
         { id: 18,cat: "easy", name: "Починить чужое авто", desc: "Починить чужой автомобиль на сервисе", active: true, reward: 1, type: "click", icon: "🚗" },
-        { id: 19,cat: "easy", name: "Автобус", desc: "Проехать 2 рейса водителем автобуса", reward: 2, active: true, type: "counter", max: 2, icon: "🚌" },
-        { id: 20,cat: "easy", name: "Стройка", desc: "Совершить 25 действий на стройке", reward: 2, active: true,type: "counter", max: 25, icon: "🧱" },
-        { id: 21,cat: "easy", name: "Порт", desc: "Совершить 25 действий в порту", active: true, reward: 2, type: "counter", max: 25, icon: "🚢" },
-        { id: 22,cat: "easy", name: "Шахта", desc: "Совершить 25 действий на шахте", active: true, reward: 2, type: "counter", max: 25, icon: "💎"},
+        { id: 19,cat: "easy", name: "Автобус", desc: "Проехать 2 рейса водителем автобуса", reward: 2, active: true, type: "click", icon: "🚌" },
+        { id: 20,cat: "easy", name: "Стройка", desc: "Совершить 25 действий на стройке", reward: 2, active: true,type: "click", icon: "🧱" },
+        { id: 21,cat: "easy", name: "Порт", desc: "Совершить 25 действий в порту", active: true, reward: 2, type: "click", icon: "🚢" },
+        { id: 22,cat: "easy", name: "Шахта", desc: "Совершить 25 действий на шахте", active: true, reward: 2, type: "click", icon: "💎"},
         { id: 23,cat: "easy", name: "Дартс", desc: "Победить в дартсе", reward: 1, active: true, type: "click", icon: "🎯" },     
         { id: 24,cat: "easy", name: "Метро", desc: "Проехать одну станцию на метро", reward: 2, active: true, type: "click", icon: "🚇" },
-        { id: 25,cat: "easy", name: "Ферма", desc: "Совершиить 10 действий на ферме", reward: 1, active: true, type: "counter", max: 10, icon: "🌾" },
-        { id: 26,cat: "easy", name: "Рыбалка", desc: "Поймать 20 рыб", reward: 4, active: true, type: "counter", max: 20, icon: "🎣" },
-        { id: 27,cat: "medium", name: "Дальнобойщик", desc: "3 раза доставить груз(+7 уровень)", active: true, reward: 2, type: "counter", max: 4, icon: "🚚" },
+        { id: 25,cat: "easy", name: "Ферма", desc: "Совершиить 10 действий на ферме", reward: 1, active: true, type: "click",  icon: "🌾" },
+        { id: 26,cat: "easy", name: "Рыбалка", desc: "Поймать 20 рыб", reward: 4, active: true, type: "click", icon: "🎣" },
+        { id: 27,cat: "medium", name: "Дальнобойщик", desc: "3 раза доставить груз(+7 уровень)", active: true, reward: 2, type: "click", icon: "🚚" },
         { id: 28,cat: "medium", name: "Сокровище", desc: "Найи сокровище (Не хлам/семена)", active: true, reward: 1, type: "click", icon: "💎" },
-        { id: 29,cat: "medium", name: "Охота", desc: "Разделать 5 шкур (100% прочности)", active: true,reward: 2, type: "counter", max: 5, icon: "🦌" },
-        { id: 30,cat: "medium", name: "Тренажерный зал", desc: "20 подходов на любом тренажёре", active: true, reward: 1, type: "counter", max: 20, icon: "🏋️" },
-        { id: 31,cat: "medium", name: "Квесты клуба", desc: "Выполнить 2 квеста любых клубов", active: true, reward: 4, type: "counter", max: 2, icon: "🏆" },
-        { id: 32,cat: "medium", name: "Пожарный", desc: "Потушить 25 огоньков (10+ уровень)", active: true, reward: 1, type: "counter", max: 25, icon: "🚒" },
+        { id: 29,cat: "medium", name: "Охота", desc: "Разделать 5 шкур (100% прочности)", active: true,reward: 2, type: "click", icon: "🦌" },
+        { id: 30,cat: "medium", name: "Тренажерный зал", desc: "20 подходов на любом тренажёре", active: true, reward: 1, type: "click", icon: "🏋️" },
+        { id: 31,cat: "medium", name: "Квесты клуба", desc: "Выполнить 2 квеста любых клубов", active: true, reward: 4, type: "click", icon: "🏆" },
+        { id: 32,cat: "medium", name: "Пожарный", desc: "Потушить 25 огоньков (10+ уровень)", active: true, reward: 1, type: "click", icon: "🚒" },
         { id: 33,cat: "hard", name: "Нули в казино", desc: "Выиграть в рулетке на 0 или 00", active: true, reward: 2, type: "click",icon: "🎲" },
         { id: 34,cat: "hard", name: "Заказ материалов", desc: "Вкл/выкл автозаказ материалов для бизнеса", active: true, reward: 1, type: "click", icon: "📦" },
-        { id: 35,cat: "hard", name: "Смена внешности", desc: "2 раза сменить внешность у хирурга в EMS", active: true, reward: 2, type: "counter", max: 2, icon: "💇" },
+        { id: 35,cat: "hard", name: "Смена внешности", desc: "2 раза сменить внешность у хирурга в EMS", active: true, reward: 2, type: "click", icon: "💇" },
         { id: 36,cat: "hard", name: "Золотая рыбка", desc: "Поймать золотую рыбку", active: true, reward: 5, type: "click", icon: "🐠" },
-        { id: 37,cat: "hard", name: "Почта", desc: "Отвезти 10 посылок с почты (+7 уровень)", active: true, reward: 1, type: "counter", max: 10, icon: "✉️" },
+        { id: 37,cat: "hard", name: "Почта", desc: "Отвезти 10 посылок с почты (+7 уровень)", active: true, reward: 1, type: "click", icon: "✉️" },
         { id: 38,cat: "hard", name: "Платеж по лизингу", desc: "Сделать платеж по лизингу", active: true, reward: 1, type: "click", icon: "🧾" },
         { id: 39,cat: "pairs", name: "Гонка", desc: "Поучавствовать в гонке со ставкой >1000$", active: true, reward: 1, type: "click", icon: "🏁" },
-        { id: 40,cat: "pairs", name: "Тренироввчный комлпекс", desc: "5 раз победить со ставкой >100$", active: true, reward: 1, type: "counter", max: 5, icon: "💪" },
+        { id: 40,cat: "pairs", name: "Тренироввчный комлпекс", desc: "5 раз победить со ставкой >100$", active: true, reward: 1, type: "click", icon: "💪" },
         { id: 41,cat: "pairs", name: "Картинг", desc: "Выиграть гонку на картинге. Вход 500$", active: true, reward: 1, type: "click", icon: "🏎️" },
-        { id: 42,cat: "pairs", name: "Арена", desc: "3 раза победить влюбом режиме со ставкой >100$", active: true, reward: 1, type: "counter",max: 3, icon: "🏟️" },
-        { id: 43,cat: "pairs", name: "Денс Батл", desc: "3 раза выиграть в дэнс батле", active: true, reward: 2, type: "counter", max: 3, icon: "🕺" },
+        { id: 42,cat: "pairs", name: "Арена", desc: "3 раза победить влюбом режиме со ставкой >100$", active: true, reward: 1, type: "click", icon: "🏟️" },
+        { id: 43,cat: "pairs", name: "Денс Батл", desc: "3 раза выиграть в дэнс батле", active: true, reward: 2, type: "click", icon: "🕺" },
         { id: 44,cat: "pairs", name: "Армрестлинг", desc: "Победить в армрестлинге", active: true, reward: 1, type: "click", icon: "💪" },
         { id: 45,cat: "pairs", name: "Мафия", desc: "Сыграть в мафию в казино", active: true, reward: 3, type: "click", icon: "🎭" },
         { id: 46,cat: "fraction", name: "Трава", desc: "Посадить траву в теплице", active: true, reward: 4, type: "click", icon: "🌿" },
         { id: 47,cat: "fraction", name: "Обезболивающие", desc: "Запустить переработку обезболивающих в лабаратории", active: true, reward: 4, type: "click", icon: "💊" },
-        { id: 48,cat: "fraction", name: "Аирдропы", desc: "Принять участие в аирдропе", active: true, reward: 4, type: "counter", max: 2, icon: "📦" },
-        { id: 49,cat: "fraction", name: "Граффити", desc: "Закрасить 7 граффити (банда)", active: true, reward: 1, type: "counter", max: 7, icon: "🎨" },
-        { id: 50,cat: "fraction", name: "Контрабанда", desc: "Сдать 5 контрабанды (мафия)", active: true, reward: 2, type: "counter", max: 5, icon: "💼" },
-        { id: 51,cat: "fraction", name: "Бизвар", desc: "Участвие в бизваре (мафия)", active: true, reward: 2, type: "counter",max: 5, icon: "🔫" },
+        { id: 48,cat: "fraction", name: "Аирдропы", desc: "Принять участие в аирдропе", active: true, reward: 4, type: "click", icon: "📦" },
+        { id: 49,cat: "fraction", name: "Граффити", desc: "Закрасить 7 граффити (банда)", active: true, reward: 1, type: "click", icon: "🎨" },
+        { id: 50,cat: "fraction", name: "Контрабанда", desc: "Сдать 5 контрабанды (мафия)", active: true, reward: 2, type: "click", icon: "💼" },
+        { id: 51,cat: "fraction", name: "Бизвар", desc: "Участвие в бизваре (мафия)", active: true, reward: 2, type: "click", icon: "🔫" },
         { id: 52,cat: "fraction", name: "Капт", desc: "Участие в капте (банда)", active: true, reward: 1, type: "click", icon: "👥" },
         { id: 53,cat: "fraction", name: "Хаммер с ВЗХ", desc: "Пригнать хаммер на респавн (крайм)", active: true, reward: 3, type: "click", icon: "🚗" },
-        { id: 53,cat: "fraction", name: "Медкарта EMS", desc: "Выдать 5 медкарт EMS", active: true, reward: 2, type: "counter", max: 5, icon: "🏥" },
-        { id: 54,cat: "fraction", name: "Вызов EMS", desc: "Закрыть 15 вызовов EMS", active: true, reward: 2, type: "counter", max: 15, icon: "🚑" },
+        { id: 53,cat: "fraction", name: "Медкарта EMS", desc: "Выдать 5 медкарт EMS", active: true, reward: 2, type: "click", icon: "🏥" },
+        { id: 54,cat: "fraction", name: "Вызов EMS", desc: "Закрыть 15 вызовов EMS", active: true, reward: 2, type: "click", icon: "🚑" },
         { id: 55,cat: "fraction", name: "Зелёная строка WN", desc: "Сообщения в зелёной строке (WN)", active: true, reward: 2, type: "click", icon: "📄" },
-        { id: 56,cat: "fraction", name: "Обьявления WN", desc: "Отредоктировать 40 обьявлений (WN)", active: true, reward: 2, type: "counter",max: 40, icon: "📰" },
-        { id: 57,cat: "fraction", name: "Ограбление дома", desc: "Взломать 15 замков (банды)", active: true, reward: 2, type: "counter", max: 15, icon: "🏠" },
-        { id: 58,cat: "fraction", name: "Коды", desc: "Закрыть 5 кодов (силовые структуры)", active: true, reward: 2, type: "counter", max: 5, icon: "🔢" },
-        { id: 59,cat: "fraction", name: "Регистрация авто", desc: "поставить на учет 2авто (LSPD)", active: true, reward: 1, type: "counter",max: 2, icon: "🚗" },
+        { id: 56,cat: "fraction", name: "Обьявления WN", desc: "Отредоктировать 40 обьявлений (WN)", active: true, reward: 2, type: "click", icon: "📰" },
+        { id: 57,cat: "fraction", name: "Ограбление дома", desc: "Взломать 15 замков (банды)", active: true, reward: 2, type: "click", icon: "🏠" },
+        { id: 58,cat: "fraction", name: "Коды", desc: "Закрыть 5 кодов (силовые структуры)", active: true, reward: 2, type: "click", icon: "🔢" },
+        { id: 59,cat: "fraction", name: "Регистрация авто", desc: "поставить на учет 2авто (LSPD)", active: true, reward: 1, type: "click", icon: "🚗" },
         { id: 60,cat: "fraction", name: "Арест", desc: "Произвести 1 арест (LSPD,LSSD)", active: true, reward: 1, type: "click", icon: "👮" },
-        { id: 61,cat: "fraction", name: "Выкуп с КПЗ", desc: "Выкупить 2 человека (адвокат)", active: true, reward: 2, type: "counter", max: 2, icon: "🔓" },
+        { id: 61,cat: "fraction", name: "Выкуп с КПЗ", desc: "Выкупить 2 человека (адвокат)", active: true, reward: 2, type: "click", icon: "🔓" },
     ];
 
 let skillsDb = [
@@ -99,8 +98,8 @@ const defaultTimers = [
     { id: 6, name: "Автобус", duration: 5, remaining: 5, running: false, icon: "🚌" },
     { id: 7, name: "Задание клуба", duration: 7200, remaining: 7200, running: false, icon: "♣️" },
     { id: 8, name: "Тир", duration: 5400, remaining: 5400, running: false, icon: "🎯" },
-    { id: 9, name: "Швейка", duration: 5220, remaining: 5220, running: false, icon: "🧵" },
-    { id: 10, name: "Коробки", duration: 4020, remaining: 4020, running: false, icon: "📦" },
+    { id: 9, name: "Швейка", duration: 87, remaining: 87, running: false, icon: "🧵" },
+    { id: 10, name: "Коробки", duration: 67, remaining: 67, running: false, icon: "📦" },
     { id: 11, name: "Байкеры", duration: 7200, remaining: 7200, running: false, icon: "🏍️" },
     { id: 12, name: "Реднеки", duration: 7200, remaining: 7200, running: false, icon: "🤠" },
     { id: 13, name: "Кармит", duration: 7200, remaining: 7200, running: false, icon: "🥩" },
@@ -108,21 +107,21 @@ const defaultTimers = [
     { id: 15, name: "Эпсилон", duration: 7200, remaining: 7200, running: false, icon: "🧘" },
     { id: 16, name: "Дрессировка", duration: 930, remaining: 930, running: false, icon: "🐕" }
 ];
-    
-        let autoRun = false;
-        let h = 3, m = 0, s = 0;
-        let totalTime = 0; // 3 часа в секундах
+        let savedTimers = JSON.parse(localStorage.getItem('myTimers'));
+        let savedInventory = JSON.parse(localStorage.getItem('myInventory')) || [];
+        let autoRun = JSON.parse(localStorage.getItem('timerAutoRun')) || false;
+        let totalTime = 0; 
         let currentTime = 0;
         let timerInterval = null;
-        let timers = JSON.parse(localStorage.getItem('myTimers')) || [...defaultTimers];
-        let totalBP = 0;
-        let activeCat = 'easy';
+        let timers = (savedTimers && savedTimers.length > 0) ? savedTimers : [...defaultTimers];
+        let inventory = savedInventory;
+        let totalBP = parseInt(localStorage.getItem('totalBP')) || 0;
+        let activeCat = localStorage.getItem('activeCat') || 'easy';
         let timerEndTime = null;
         // Новые состояния переключателей
         let hasServerMod = false;
         let hasVipMod = false;
         let mult = 1; // Изначально оба выключены = х1
-
         const TOTAL_TIME = 3 * 60 * 60;
         let timeClock = TOTAL_TIME;
         let runningOnline = false;
@@ -300,20 +299,31 @@ function buildFeed() {
         const card = document.createElement('div');
         card.className = `task-card ${isDone ? 'done' : ''}`;
         
-        // Кнопка переключения: Крестик (в активе) / Галочка (в неактиве)
+        // Drag & Drop атрибуты
+        card.draggable = true;
+        card.dataset.id = q.id;
+        card.ondragstart = (e) => {
+            e.dataTransfer.setData('text/plain', q.id);
+            card.classList.add('dragging');
+        };
+        card.ondragend = () => card.classList.remove('dragging');
+        card.ondragover = (e) => e.preventDefault();
+        card.ondrop = (e) => {
+            e.preventDefault();
+            const sourceId = parseInt(e.dataTransfer.getData('text/plain'));
+            moveTaskInDb(sourceId, q.id);
+        };
+
         const toggleBtn = `<button class="toggle-btn" onclick="toggleTaskStatus(${q.id}); event.stopPropagation();">
             ${q.active ? '✕' : '✔'}
         </button>`;
 
-        // Формирование правой части с кнопками
         let rightSide = '';
         if (!q.active) {
-            // В неактивных кнопки выполнения не работают
             rightSide = `<span style="color:#666; font-size:12px;">Выключено</span>`;
         } else if (isDone) {
             rightSide = `<button class="reset-btn" onclick="resetTask(${q.id}, event)">↺</button>`;
         } else if (q.type === 'counter') {
-            // Кнопки счетчика для заданий с типом 'counter'
             rightSide = `
                 <div class="counter-box" onclick="event.stopPropagation()" style="display:flex; align-items:center; gap:8px;">
                     <button class="cnt-btn" onclick="stepCount(${q.id}, -1, ${q.max}, ${q.reward})">−</button>
@@ -323,11 +333,9 @@ function buildFeed() {
                 <div style="font-size:10px; color:#2ecc71; text-align:center;">+${q.reward * mult} BP</div>
             `;
         } else {
-            // Обычная кнопка для заданий типа 'click'
             rightSide = `<button class="cnt-btn" onclick="finishTask(${q.id}, ${q.reward}, event)">+${q.reward * mult} BP</button>`;
         }
 
-        // Верстка карточки
         card.innerHTML = `
             <div class="task-row" style="display:flex; align-items:center; gap:10px;">
                 ${toggleBtn}
@@ -345,12 +353,26 @@ function buildFeed() {
             </div>
         `;
 
-        // Распределение по блокам
         if (q.active) activeBox.appendChild(card);
         else inactiveBox.appendChild(card);
     });
 }
 
+
+function moveTaskInDb(sourceId, targetId) {
+    const fromIndex = db.findIndex(q => q.id === sourceId);
+    const toIndex = db.findIndex(q => q.id === targetId);
+
+    if (fromIndex !== -1 && toIndex !== -1) {
+        // Перемещаем, только если это один тип (актив/неактив)
+        if (db[fromIndex].active === db[toIndex].active) {
+            const movedItem = db.splice(fromIndex, 1)[0];
+            db.splice(toIndex, 0, movedItem);
+            saveData();
+            buildFeed();
+        }
+    }
+}
 
 function stepCount(id, diff, max, reward) {
     let currentVal = trackingVal[id] || 0;
@@ -493,89 +515,126 @@ function toggleModifier(type) {
 
 function controlOnline() {
     const btn = document.getElementById('time-btn');
-    const status = document.getElementById('time-status');
     
+    // 1. Добавляем проверку: если времени нет, ничего не делаем и показываем тост
+    if (currentTime <= 0 && totalTime <= 0) {
+        showToast("⚠️ Сначала установите время!");
+        
+        // Вибрация, чтобы юзер почувствовал ошибку
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+            window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+        }
+        return; // Прерываем функцию
+    }
+
     if (timerInterval) {
-        // --- СТОП (Пауза) ---
+        // Останавливаем
         clearInterval(timerInterval);
         timerInterval = null;
-        
-        // ВАЖНО: Вместо удаления записи, сохраняем, сколько секунд осталось
-        localStorage.setItem('timerSavedSeconds', currentTime);
-        localStorage.removeItem('timerEndTime'); // Удаляем финиш, так как таймер стоит
-        
-        btn.innerText = "СТАРТ";
-        status.innerText = "ПАУЗА";
-        document.getElementById('timer-ring').classList.remove('pulsing');
+        if(btn) btn.innerText = "СТАРТ";
     } else {
-        // --- СТАРТ ---
+        // Запускаем
+        if (currentTime <= 0) currentTime = totalTime; 
+        
         if (currentTime > 0) {
-            // Запускаем новый отсчет от текущего момента
-            localStorage.setItem('timerEndTime', Date.now() + (currentTime * 1000));
-            // Удаляем сохраненные секунды, так как таймер пошел
-            localStorage.removeItem('timerSavedSeconds');
             startTimerInterval();
-        } else {
-            showToast("⚠️ Установите время для старта!");
+            if(btn) btn.innerText = "СТОП";
         }
     }
+    saveData();
 }
-function startTimerInterval() {
-    // Если интервал уже запущен, ничего не делаем
-    if (timerInterval) return;
 
-    // Вспомогательная функция для обновления UI без ошибок
-    const updateUI = (isRunning) => {
-        const btn = document.getElementById('time-btn');
-        const status = document.getElementById('time-status');
-        const ring = document.getElementById('timer-ring');
-        
-        if (btn) btn.innerText = isRunning ? "СТОП" : "СТАРТ";
-        if (status) status.innerText = isRunning ? "РАБОТА" : "ПАУЗА";
-        if (ring) {
-            if (isRunning) ring.classList.add('pulsing');
-            else ring.classList.remove('pulsing');
-        }
-    };
-
-    updateUI(true); // Устанавливаем статус "РАБОТА"
+// Инициализация времени из поля ввода
+function initTimerFromInput() {
+    const h = parseInt(document.getElementById('inp-h').value) || 0;
+    const m = parseInt(document.getElementById('inp-m').value) || 0;
+    const s = parseInt(document.getElementById('inp-s').value) || 0;
     
+    const newTotal = (h * 3600) + (m * 60) + s;
+    
+    if (newTotal > 0) {
+        totalTime = newTotal;
+        currentTime = newTotal;
+        localStorage.setItem('timerSavedSeconds', currentTime);
+        updateUI(); // Обновляем полосу сразу после ввода
+    }
+}
+
+// Обновление полосы и поля ввода (вызывай это внутри своего интервала)
+function updateUI() {
+    const bar = document.getElementById('time-bar');
+    
+    // Обновляем полосу
+    if (bar && totalTime > 0) {
+        const percent = ((totalTime - currentTime) / totalTime) * 100;
+        bar.style.width = Math.min(percent, 100) + "%";
+    }
+
+    // Обновляем поля ввода
+    const h = Math.floor(currentTime / 3600);
+    const m = Math.floor((currentTime % 3600) / 60);
+    const s = currentTime % 60;
+
+    document.getElementById('inp-h').value = String(h).padStart(2, '0');
+    document.getElementById('inp-m').value = String(m).padStart(2, '0');
+    document.getElementById('inp-s').value = String(s).padStart(2, '0');
+
+    // ЛОГИКА АВТО
+    if (currentTime <= 0 && autoRun && totalTime > 0) {
+        currentTime = totalTime;
+        startTimerInterval();
+    }
+}
+
+const finishSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+
+function startTimerInterval() {
+    // 1. Очищаем старый интервал, чтобы не плодить их
+    if (timerInterval) clearInterval(timerInterval);
+    
+    // 2. Запускаем новый
     timerInterval = setInterval(() => {
         if (currentTime > 0) {
             currentTime--;
-            updateDisplay();
-            // Обновляем "финиш" в localStorage
-            localStorage.setItem('timerEndTime', Date.now() + (currentTime * 1000));
+            updateUI(); // Здесь обновляется и цифры, и полоса
+            saveData();
         } else {
-            handleTimerEnd();
-            updateUI(false); // Устанавливаем статус "ПАУЗА" при окончании
+            // Если таймер дошел до 0
+            clearInterval(timerInterval);
+            timerInterval = null;
+            
+            // Если включен авто-рестарт
+            if (autoRun) {
+                console.log("Авто-запуск таймера...");
+                currentTime = totalTime; // Сброс на полное время
+                startTimerInterval();    // Рекурсивный запуск
+            } else {
+                handleTimerComplete();
+            }
         }
     }, 1000);
 }
 
 // Единая логика завершения
-function handleTimerEnd() {
+function handleTimerComplete() {
     clearInterval(timerInterval);
     timerInterval = null;
+    localStorage.removeItem('timerSavedSeconds');
+    localStorage.removeItem('timerEndTime');
     
-    appState.timerEndTime = null;
-    saveToDB();
-    
-    // Безопасное обновление DOM
-    const ring = document.getElementById('timer-ring');
-    const status = document.getElementById('time-status');
-    const btn = document.getElementById('time-btn');
-
-    if (ring) ring.classList.add('pulsing');
-    if (status) status.innerText = "ЗАВЕРШЕНО";
-    if (btn) btn.innerText = "СТАРТ";
+    // Звуковой индикатор
+    finishSound.play().catch(e => console.log("Автовоспроизведение заблокировано браузером"));
 
     if (autoRun) {
-        setTimeout(() => {
-            applyCustomTime();
-            controlOnline();
-        }, 1000);
+        // Мгновенный перезапуск
+        currentTime = totalTime;
+        startTimerInterval();
+        showToast("🔄 Авто-перезапуск сессии");
+    } else {
+        document.getElementById('time-btn').innerText = "СТАРТ";
+        showToast("✅ Время вышло!");
     }
+    updateUI();
 }
 
 function startTimer(durationSeconds) {
@@ -631,17 +690,21 @@ function loadFromDB() {
 }
 
 function resetSession() {
+    // 1. Останавливаем
     clearInterval(timerInterval);
     timerInterval = null;
-    h = 0; m = 0; s = 0;
     
-    // Обновляем визуальные цифры настроек
-    document.getElementById('val-h').innerText = "00";
-    document.getElementById('val-m').innerText = "00";
-    document.getElementById('val-s').innerText = "00";
+    // 2. Сбрасываем только таймер
+    currentTime = 0;
+    totalTime = 0;
     
-    applyCustomTime(); // Сбрасываем дисплей
-    document.getElementById('timer-ring').classList.remove('pulsing');
+    // 3. Обновляем UI
+    updateUI();
+    document.getElementById('time-btn').innerText = "СТАРТ";
+    
+    // 4. Обязательно сохраняем, чтобы в базе обнулился только таймер
+    saveData(); 
+    showToast("↺ Таймер сброшен");
 }
 
 function hardReset() {
@@ -1077,39 +1140,70 @@ function resetFinance() {
 
 function toggleAutoRun() {
     autoRun = !autoRun;
-    document.getElementById('auto-run-switch').classList.toggle('active');
-} 
-
-
-function adjust(type, delta) {
-        if (type === 'h') h = Math.max(0, h + delta);
-        if (type === 'm') m = Math.min(59, Math.max(0, m + delta));
-        if (type === 's') s = Math.min(59, Math.max(0, s + delta));
-        document.getElementById(`val-${type}`).innerText = (type === 'h' ? h : (type === 'm' ? m : s)).toString().padStart(2, '0');
+    localStorage.setItem('timerAutoRun', autoRun);
+    
+    const sw = document.getElementById('auto-run-switch');
+    sw.classList.toggle('on', autoRun);
+    
+    // Красивое сообщение
+    if (typeof showToast === 'function') {
+        showToast(autoRun ? "✅ АВТО-режим включен" : "❌ АВТО-режим выключен");
     }
+    
+    // Вибрация (если есть доступ к Telegram)
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+    }
+}
 
-function applyCustomTime() {
-        totalTime = (h * 3600) + (m * 60) + s;
+
+
+
+function handleTimerComplete() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    localStorage.removeItem('timerSavedSeconds');
+    localStorage.removeItem('timerEndTime');
+    
+    // Звуковой индикатор
+    finishSound.play().catch(e => console.log("Автовоспроизведение заблокировано браузером"));
+
+    if (autoRun) {
+        // Мгновенный перезапуск
         currentTime = totalTime;
-        clearInterval(timerInterval);
-        timerInterval = null;
-        document.getElementById('timer-ring').classList.remove('pulsing');
-        updateDisplay();
-        document.getElementById('time-status').innerText = "ПАУЗА";
+        startTimerInterval();
+        showToast("🔄 Авто-перезапуск сессии");
+    } else {
         document.getElementById('time-btn').innerText = "СТАРТ";
-        console.trace("КТО МЕНЯ ВЫЗВАЛ?");
+        showToast("✅ Время вышло!");
     }
+    updateUI();
+}
+
+function updateTimeFromInput(val) {
+    const parts = val.split(':');
+    if (parts.length === 3) {
+        const h = parseInt(parts[0]) || 0;
+        const m = parseInt(parts[1]) || 0;
+        const s = parseInt(parts[2]) || 0;
+        currentTime = (h * 3600) + (m * 60) + s;
+        updateDisplay();
+        updateProgressBar();
+    }
+}
+
+function updateProgressBar() {
+    const bar = document.getElementById('time-bar');
+    const percent = (currentTime / TOTAL_TIME) * 100;
+    bar.style.width = percent + "%";
+}
 
 function updateDisplay() {
     const h = Math.floor(currentTime / 3600);
     const m = Math.floor((currentTime % 3600) / 60);
     const s = currentTime % 60;
-    
-    const display = document.getElementById('time-display');
-    if (display) {
-        display.innerText = 
-            `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    }
+    document.getElementById('time-display').innerText = 
+        `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 // 1. ИНИЦИАЛИЗАЦИЯ
 
@@ -1158,24 +1252,62 @@ function addCustomTimer() {
 }
 
 function showToast(message) {
-    const container = document.getElementById('toast-container');
+    // 1. Ищем или создаем контейнер
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        // Стили контейнера: фиксируем внизу экрана
+        container.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999; pointer-events:none; display:flex; flex-direction:column; gap:10px; align-items:center;';
+        document.body.appendChild(container);
+    }
+
+    // 2. Создаем само сообщение
     const toast = document.createElement('div');
     toast.className = 'toast-msg';
     toast.innerText = message;
     
+    // Базовые стили для красоты (если нет в CSS)
+    toast.style.cssText = `
+        background: rgba(109, 74, 255, 0.9);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.5s ease;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    `;
+    
     container.appendChild(toast);
 
-    // Удаление через 2.5 секунды
+    // 3. Удаление
     setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transform = 'translateY(10px)'; // Легкое движение вниз при исчезновении
+        toast.style.transform = 'translateY(10px)';
         setTimeout(() => toast.remove(), 500);
     }, 2500);
 }
 
-function resetTimer(id) {
-    const t = timers.find(x => x.id === id);
-    if (t) { t.remaining = t.duration; t.running = false; saveData(); renderTimers(); }
+function resetTimer() {
+    // 1. Останавливаем
+    clearInterval(timerInterval);
+    timerInterval = null;
+    
+    // 2. Сбрасываем значения
+    currentTime = 0;
+    totalTime = 0;
+    
+    // 3. Сбрасываем UI (полоса уйдет в 0 благодаря updateUI)
+    const bar = document.getElementById('time-bar');
+    if (bar) bar.style.width = "0%";
+    
+    const input = document.getElementById('time-input');
+    if (input) input.value = "00:00:00";
+    
+    const btn = document.getElementById('time-btn');
+    if (btn) btn.innerText = "СТАРТ";
+    
+    saveData();
 }
 
 function toggleTimer(id) {
@@ -1356,19 +1488,29 @@ let changed = false;
 
 // Единая функция сохранения
 function saveData() {
+    // Проверка: если основные данные пусты, не сохраняем, чтобы не затереть рабочую базу
+    if (!db || db.length === 0) {
+        console.warn("Данные БД пусты, сохранение отменено!");
+        return; 
+    }
+
     const dataToSave = {
         timers: timers,
         totalBP: totalBP,
         financeData: financeData,
         inventory: inventory,
-        db: db,                // Твоя база заданий
+        db: db,
         trackingDone: trackingDone,
-        trackingVal: trackingVal
+        trackingVal: trackingVal,
+        timerState: {
+            currentTime: currentTime,
+            totalTime: totalTime,
+            autoRun: autoRun
+        }
     };
     localStorage.setItem('voidGuideData', JSON.stringify(dataToSave));
 }
 
-// Единая функция загрузки
 function loadData() {
     const saved = localStorage.getItem('voidGuideData');
     if (saved) {
@@ -1378,64 +1520,48 @@ function loadData() {
             totalBP = p.totalBP || 0;
             financeData = p.financeData || [];
             inventory = p.inventory || [];
-            db = p.db || db;
+            db = p.db || db; // Если в сохраненных пусто - оставляем дефолтную db
             trackingDone = p.trackingDone || {};
             trackingVal = p.trackingVal || {};
-        } catch (e) { console.error("Ошибка загрузки:", e); }
+            
+            if (p.timerState) {
+                currentTime = p.timerState.currentTime || 0;
+                totalTime = p.timerState.totalTime || 0;
+                autoRun = p.timerState.autoRun || false;
+            }
+        } catch (e) { console.error("Ошибка:", e); }
+    } else {
+        // ЕСЛИ ДАННЫХ НЕТ - ПРИНУДИТЕЛЬНО СОХРАНЯЕМ ДЕФОЛТ
+        console.log("Данных нет, создаю новые...");
+        saveData();
     }
 }
 
 window.onload = () => {
-    // 1. Инициализация Telegram WebApp
     if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
     }
 
-    // 2. ЗАГРУЗКА ВСЕХ ДАННЫХ
-    // Эта функция подгружает db, trackingDone, trackingVal и настройки
     loadData(); 
+    
+    // Настраиваем UI
+    const autoSwitch = document.getElementById('auto-run-switch');
+    if(autoSwitch) autoSwitch.classList.toggle('on', autoRun);
 
-    // 3. ВОССТАНОВЛЕНИЕ ТАЙМЕРА
-    const savedEndTime = localStorage.getItem('timerEndTime');
-    const savedSeconds = localStorage.getItem('timerSavedSeconds');
+    // Запускаем таймер, если он был
+    if (currentTime > 0) startTimerInterval();
+    
+    updateUI();
 
-    if (savedEndTime) {
-        const remaining = Math.round((parseInt(savedEndTime) - Date.now()) / 1000);
-        if (remaining > 0) {
-            currentTime = remaining;
-            updateDisplay();
-            startTimerInterval();
-        } else {
-            localStorage.removeItem('timerEndTime');
-            currentTime = 0;
-            updateDisplay();
-        }
-    } else if (savedSeconds) {
-        currentTime = parseInt(savedSeconds);
-        updateDisplay();
-    } else {
-        currentTime = 0;
-        updateDisplay();
-    }
-
-    // 4. ФИНАЛЬНАЯ ОТРИСОВКА ИНТЕРФЕЙСА
+    // Рендерим всё остальное
     try {
-        // Переключаем вид
         switchMainView('farm');
-        
-        // Обязательно устанавливаем активную категорию (если она нужна)
-        activeCat = activeCat || 'easy'; 
-        
-        // Рендерим всё через единый движок buildFeed
         buildFeed(); 
-        
-        // Рендерим остальные модули
         if (typeof renderSkills === 'function') renderSkills();
         if (typeof renderInventory === 'function') renderInventory();
         if (typeof updateFinanceUI === 'function') updateFinanceUI();
-        
     } catch (e) {
-        console.error("Ошибка при инициализации интерфейса:", e);
+        console.error("Ошибка инициализации:", e);
     }
 };

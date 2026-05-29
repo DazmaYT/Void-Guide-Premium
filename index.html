@@ -43,25 +43,19 @@
     <button class="system-reset" onclick="hardReset()">🔄 Сбросить текущую сессию</button>
 
 <div class="online-hub">
-
-
-    <table class="timer-table">
-        <tr><th><small>ЧАС</small></th><th><small>МИН</small></th><th><small>СЕК</small></th></tr>
-        <tr>
-            <td><div class="adj-group"><button onclick="adjust('h', -1)">-</button><span id="val-h">03</span><button onclick="adjust('h', 1)">+</button></div></td>
-            <td><div class="adj-group"><button onclick="adjust('m', -1)">-</button><span id="val-m">00</span><button onclick="adjust('m', 1)">+</button></div></td>
-            <td><div class="adj-group"><button onclick="adjust('s', -1)">-</button><span id="val-s">00</span><button onclick="adjust('s', 1)">+</button></div></td>
-        </tr>
-    </table>
-    <button class="btn-setup" onclick="applyCustomTime()">Применить время</button>
-
-    <div class="radial-timer" id="timer-ring">
-        <div class="time-digits" id="time-display">03:00:00</div>
-        <div class="time-state" id="time-status">ПАУЗА</div>
+    <div class="progress-wrapper">
+        <div class="bar-fill" id="time-bar" style="width: 0%;"></div>
     </div>
-    <div class="bar-container"><div class="bar-fill" id="time-bar"></div></div>
+    
+<div class="time-input-container" style="display: flex; gap: 5px; justify-content: center; margin: 10px 0;">
+    <input type="number" id="inp-h" placeholder="00" min="0" max="99" class="t-inp" onchange="initTimerFromInput()">
+    <span style="align-self: center; font-weight: bold;"></span>
+    <input type="number" id="inp-m" placeholder="00" min="0" max="59" class="t-inp" onchange="initTimerFromInput()">
+    <span style="align-self: center; font-weight: bold;"></span>
+    <input type="number" id="inp-s" placeholder="00" min="0" max="59" class="t-inp" onchange="initTimerFromInput()">
+</div>
 
-    <div class="controls-row"> 
+    <div class="controls-row">
         <div class="auto-toggle-container">
             <div class="toggle-switch" id="auto-run-switch" onclick="toggleAutoRun()">
                 <div class="toggle-knob"></div>
@@ -70,7 +64,8 @@
         </div>
         <button class="btn-trigger" id="time-btn" onclick="controlOnline()">СТАРТ</button>
     </div>
-    <br><br>    <button class="btn-reset" onclick="resetSession()">↺ Сбросить сессию</button>
+
+    <button class="btn-reset-session" onclick="resetSession()">↺ Сбросить Сессию</button>
 </div>
 
 
@@ -79,14 +74,13 @@
 </div>
 
     <div class="category-scroller">
-<button class="btn-reset-tasks" onclick="resetAllDoneTasks()">↺</button>
         <button class="cat-tab active" id="tab-easy" onclick="selectCategory('easy')">🟢 Простые</button>
         <button class="cat-tab" id="tab-medium" onclick="selectCategory('medium')">🟡 Средние</button>
         <button class="cat-tab" id="tab-hard" onclick="selectCategory('hard')">🔴 Сложные</button>
         <button class="cat-tab" id="tab-pairs" onclick="selectCategory('pairs')">👥 Парные</button>
         <button class="cat-tab" id="tab-fraction" onclick="selectCategory('fraction')">🏛️ Фракция</button>
     </div>
-
+<button class="btn-reset-tasks" onclick="resetAllDoneTasks()">↺ Сброс заданий</button>
     <div class="feed-container" id="feed-box"></div>
 </div>
 </section>
