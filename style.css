@@ -1077,8 +1077,18 @@
 
 .period-tabs {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    flex-wrap: wrap; /* Разрешает перенос на новую строку */
+    gap: 10px;        /* Расстояние между кнопками */
+    justify-content: center; /* Центрирует кнопки */
+    margin: 10px 0;
+}
+
+.period-tabs .sub-tab {
+    flex: 1 1 calc(25% - 10px); /* Кнопки будут занимать около 25% ширины */
+    min-width: 70px;            /* Минимальная ширина, чтобы не были слишком узкими */
+    padding: 8px 5px;
+    font-size: 12px;            /* Немного уменьшаем шрифт для мобильных */
+    white-space: nowrap;        /* Текст не будет переноситься внутри кнопки */
 }
 
 .p-tab {
