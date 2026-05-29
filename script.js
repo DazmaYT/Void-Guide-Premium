@@ -707,43 +707,79 @@ function resetSession() {
     showToast("↺ Таймер сброшен");
 }
 
+/**
+ * Полный сброс приложения: очистка хранилища, 
+ * сброс переменных и перезагрузка интерфейса.
+ */
 function hardReset() {
-    // 1. Очистка данных из памяти браузера (самое важное)
-    localStorage.removeItem('voidGuideData');
-    localStorage.removeItem('myTasksData');
+    const modal = document.getElementById('confirm-modal');
+    if (modal) modal.style.display = 'flex';
 
-    // 2. Сброс переменных в памяти
+    // 2. Очистка локального хранилища
+    localStorage.clear();
+
+    // 3. Сброс критических переменных в памяти
+    // Убедись, что эти переменные объявлены глобально
     totalBP = 0; 
     timeClock = TOTAL_TIME; 
     runningOnline = false;
-    clearInterval(clockInterval);
     trackingDone = {}; 
     trackingVal = {};
     hasServerMod = false;
     hasVipMod = false;
     mult = 1;
-
-    // 3. Сброс UI (интерфейса)
-    document.getElementById('stat-bp').innerText = "0";
-    document.getElementById('stat-hours').innerText = "0";
-    document.getElementById('time-display').innerText = "03:00:00";
-    document.getElementById('time-status').innerText = "Система выкл";
-    document.getElementById('time-status').classList.remove('on');
-    document.getElementById('timer-ring').className = "radial-timer";
-    document.getElementById('time-bar').style.width = "0%";
     
-    const btn = document.getElementById('time-btn');
-    btn.innerText = "Старт"; 
-    btn.disabled = false;
+    // Останавливаем все интервалы
+    clearInterval(clockInterval);
+    clearInterval(timerInterval); // Добавил на случай, если используешь timerInterval
 
-    // Сброс множителей
-    document.getElementById('toggle-server').classList.remove('active');
-    document.getElementById('toggle-vip').classList.remove('active');
-    document.getElementById('stat-mult-text').innerText = "Базовый (х1)";
+    // 4. Визуальный отклик
+    if (typeof vibrate === 'function') {
+        vibrate('warning');
+    }
 
-    // Перерисовка текущей категории и обратная связь
-    selectCategory('easy');
-    vibrate('warning');
+    // 5. Принудительная перезагрузка
+    // Это самый надежный способ сбросить все элементы DOM и состояние скриптов
+    location.reload();
+}
+
+// 2. Закрывает окно
+function closeConfirm() {
+    document.getElementById('confirm-modal').style.display = 'none';
+}
+
+// 3. Выполняет реальный сброс (после нажатия кнопки "Удалить")
+function executeHardReset() {
+    // Очищаем хранилище
+    localStorage.clear();
+    
+    // Останавливаем таймеры (на всякий случай)
+    if (typeof clockInterval !== 'undefined') clearInterval(clockInterval);
+    if (typeof timerInterval !== 'undefined') clearInterval(timerInterval);
+    
+    // Виброотклик
+    if (typeof vibrate === 'function') vibrate('warning');
+    
+    // Перезагрузка страницы
+    location.reload();
+}
+
+function toggleSetting(settingName) {
+    const el = document.getElementById(settingName + '-switch');
+    el.classList.toggle('on');
+    localStorage.setItem('setting_' + settingName, el.classList.contains('on'));
+}
+
+// Открытие слайд-меню
+function toggleSlide() {
+    document.getElementById('slide-menu').classList.toggle('active');
+}
+
+// Смена темы
+function toggleTheme() {
+    document.body.classList.toggle('light');
+    const isLight = document.body.classList.contains('light');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
 }
 
         // Запуск базового состояния приложения
@@ -1513,54 +1549,71 @@ function saveData() {
 
 function loadData() {
     const saved = localStorage.getItem('voidGuideData');
-    if (saved) {
-        try {
-            const p = JSON.parse(saved);
-            timers = p.timers || [];
-            totalBP = p.totalBP || 0;
-            financeData = p.financeData || [];
-            inventory = p.inventory || [];
-            db = p.db || db; // Если в сохраненных пусто - оставляем дефолтную db
-            trackingDone = p.trackingDone || {};
-            trackingVal = p.trackingVal || {};
-            
-            if (p.timerState) {
-                currentTime = p.timerState.currentTime || 0;
-                totalTime = p.timerState.totalTime || 0;
-                autoRun = p.timerState.autoRun || false;
-            }
-        } catch (e) { console.error("Ошибка:", e); }
-    } else {
-        // ЕСЛИ ДАННЫХ НЕТ - ПРИНУДИТЕЛЬНО СОХРАНЯЕМ ДЕФОЛТ
-        console.log("Данных нет, создаю новые...");
-        saveData();
+    if (!saved) {
+        console.log("Данных нет, создаю дефолтную базу...");
+        saveData(); // Инициализируем начальное состояние
+        return;
+    }
+
+    try {
+        const p = JSON.parse(saved);
+        
+        // Используй оператор ?? (nullish coalescing) для надежности
+        timers       = p.timers ?? [];
+        totalBP      = p.totalBP ?? 0;
+        financeData  = p.financeData ?? [];
+        inventory    = p.inventory ?? [];
+        db           = p.db ?? db; 
+        trackingDone = p.trackingDone ?? {};
+        trackingVal  = p.trackingVal ?? {};
+        
+        if (p.timerState) {
+            currentTime = p.timerState.currentTime ?? 0;
+            totalTime   = p.timerState.totalTime ?? 0;
+            autoRun     = p.timerState.autoRun ?? false;
+        }
+    } catch (e) {
+        console.error("Критическая ошибка загрузки, сбрасываю данные:", e);
+        localStorage.removeItem('voidGuideData');
+        location.reload(); // Если сейв поврежден — лучше просто перезагрузить и создать чистый
     }
 }
 
 window.onload = () => {
+    // 1. Инициализация Telegram WebApp
     if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
     }
 
+    // 2. Загрузка данных
     loadData(); 
     
-    // Настраиваем UI
+    // 3. Синхронизация состояния UI с данными
     const autoSwitch = document.getElementById('auto-run-switch');
-    if(autoSwitch) autoSwitch.classList.toggle('on', autoRun);
+    if(autoSwitch) autoSwitch.classList.toggle('on', !!autoRun); // !! гарантирует boolean
 
-    // Запускаем таймер, если он был
-    if (currentTime > 0) startTimerInterval();
+    // 4. Безопасный запуск таймера
+    // Добавляем проверку, что currentTime существует и больше 0
+    if (typeof currentTime !== 'undefined' && currentTime > 0) {
+        startTimerInterval();
+    }
     
     updateUI();
 
-    // Рендерим всё остальное
+    // 5. Рендеринг всех модулей
     try {
-        switchMainView('farm');
+        // Установим дефолтный экран, если он не был сохранен
+        const lastView = localStorage.getItem('lastView') || 'farm';
+        switchMainView(lastView);
+        
         buildFeed(); 
+        
         if (typeof renderSkills === 'function') renderSkills();
         if (typeof renderInventory === 'function') renderInventory();
         if (typeof updateFinanceUI === 'function') updateFinanceUI();
+        
+        console.log("Приложение успешно инициализировано");
     } catch (e) {
         console.error("Ошибка инициализации:", e);
     }

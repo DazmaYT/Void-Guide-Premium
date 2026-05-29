@@ -18,6 +18,31 @@
 </head>
 <body>
 
+
+<button class="settings-trigger" onclick="toggleSlide()" >⚙️</button>
+
+<div id="slide-menu" class="slide-menu">
+    <div class="menu-header">
+        <h3 style="margin:0;">Настройки</h3>
+        <button onclick="toggleSlide()" style="background:none; border:none; color:var(--text-main);">✕</button>
+    </div>
+    
+    <div class="menu-content">
+        <div class="setting-item">
+            <span>🔔 Уведомления</span>
+            <div class="toggle-switch" id="notif-switch" onclick="toggleSetting('notifications')"><div class="toggle-knob"></div></div>
+        </div>
+        
+        <div class="setting-item">
+            <span>🔊 Звуки</span>
+            <div class="toggle-switch" id="sound-switch" onclick="toggleSetting('sounds')"><div class="toggle-knob"></div></div>
+        </div>
+        
+        <button class="reset-btn-hard" onclick="hardReset()">🗑️ Сбросить все данные</button>
+    </div>
+</div>
+
+
 <div class="brand-header">
     <div class="brand-logo">
         <h1 id="page-title">ФАРМ BP</h1>
@@ -39,8 +64,6 @@
         </div>
         
     </div>
-
-    <button class="system-reset" onclick="hardReset()">🔄 Сбросить текущую сессию</button>
 
 <div class="online-hub">
     <div class="progress-wrapper">
