@@ -153,6 +153,7 @@ const achievementsConfig = [
         notifications: true,
         sounds: true
         };
+        let appState = { timerEndTime: null };
 
 
         // Перехватчик изменений currentTime
@@ -682,41 +683,36 @@ function stopTimer() {
 
 function runTimerLogic() {
     if (timerInterval) clearInterval(timerInterval);
-
-    // Сразу обновляем экран, чтобы не ждать секунду
+    
     updateDisplay();
 
     timerInterval = setInterval(() => {
-        // Вычисляем заново каждый тик, чтобы таймер был точным
+        if (!appState.timerEndTime) return;
+        
         const remaining = Math.round((appState.timerEndTime - Date.now()) / 1000);
         
         if (remaining > 0) {
             currentTime = remaining;
             updateDisplay();
         } else {
-            handleTimerEnd(); 
+            handleTimerEnd();
         }
     }, 1000);
 }
 
+// Используйте эту функцию вместо старых handleTimerComplete
 function handleTimerEnd() {
-    // 1. Останавливаем интервал, чтобы код не крутился вхолостую
     if (timerInterval) {
         clearInterval(timerInterval);
         timerInterval = null;
     }
 
-    // 2. Сбрасываем переменные
     currentTime = 0;
-    appState.timerEndTime = null; 
+    appState.timerEndTime = null;
     
-    // 3. Обновляем визуальную часть
-    updateDisplay();
-    
-    // 4. Сохраняем состояние (чтобы таймер не «воскрес» после перезагрузки)
+    updateDisplay(); // Обновление интерфейса
     saveData(); 
     
-    // 5. Уведомляем пользователя
     sendNotification("⏰ Время вышло!");
     playSound();
     
@@ -1661,23 +1657,19 @@ function cancelAch(id) {
 
 function playSound() {
     if (settings.sounds) {
-        // Создаем объект аудио (файл должен лежать в папке проекта)
-        const audio = new Audio('notification.mp3'); 
+        const audio = new Audio('notification.mp3');
         audio.play().catch(e => console.log("Звук заблокирован браузером"));
     }
 }
 
 function sendNotification(msg) {
     if (settings.notifications) {
-        // 1. Показываем нативный попап Telegram
         if (window.Telegram?.WebApp) {
             window.Telegram.WebApp.showPopup({
                 title: '⏰ Таймер',
                 message: msg,
                 buttons: [{ type: 'ok', text: 'Понятно' }]
             });
-            
-            // 2. Вибрация
             window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
         }
     }
@@ -1691,8 +1683,8 @@ function sendNotification(msg) {
 function saveData() {
 
     const dataToSave = {
-        timers: timers,
-        totalBP: totalBP,
+        timers: typeof timers !== 'undefined' ? timers : [],
+        totalBP: typeof totalBP !== 'undefined' ? totalBP : 0,
         financeData: financeData,
         inventory: inventory,
         db: db,
@@ -1704,7 +1696,8 @@ function saveData() {
         timerState: {
             currentTime: currentTime,
             totalTime: totalTime,
-            autoRun: autoRun
+            autoRun: autoRun,
+            timerEndTime: appState.timerEndTime
         }
     };
     localStorage.setItem('voidGuideData', JSON.stringify(dataToSave));
@@ -1734,10 +1727,11 @@ function loadData() {
         trackingVal  = p.trackingVal ?? {};
         achievementsDone = p.achievementsDone ?? [];
         settings = p.settings ?? { notifications: true, sounds: true };
-        if (p.timerState) {
+    if (p.timerState) {
             currentTime = p.timerState.currentTime ?? 0;
             totalTime   = p.timerState.totalTime ?? 0;
             autoRun     = p.timerState.autoRun ?? false;
+            appState.timerEndTime = p.timerState.timerEndTime ?? null; // ВОТ ЭТА СТРОКА
         }
     } catch (e) {
         console.error("Критическая ошибка загрузки, сбрасываю данные:", e);
@@ -1763,8 +1757,16 @@ window.onload = () => {
 
     // 4. Безопасный запуск таймера
     // Добавляем проверку, что currentTime существует и больше 0
-    if (typeof currentTime !== 'undefined' && currentTime > 0) {
-        startTimerInterval();
+// 4. Возобновление таймера
+    // Если есть время окончания в будущем — запускаем нашу точную логику
+    if (appState.timerEndTime && appState.timerEndTime > Date.now()) {
+        console.log("Возобновление точного таймера...");
+        runTimerLogic(); 
+    } 
+    // Если время вышло, пока приложение было закрыто
+    else if (appState.timerEndTime && appState.timerEndTime <= Date.now()) {
+        console.log("Время таймера вышло в оффлайне");
+        handleTimerEnd(); // Ваша функция завершения
     }
     
     updateUI();
