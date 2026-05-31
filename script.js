@@ -1683,12 +1683,24 @@ function sendNotification(msg) {
                 window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
             }
             
-            // Алерт внутри приложения
-            if (window.Telegram.WebApp.isVersionAtLeast('6.2')) {
-                window.Telegram.WebApp.showAlert(msg);
-            } else {
-                showToast(msg);
+            // 3. Отправка сообщения в чат через Bot API
+            const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id;
+            // !!! ВАЖНО: Вставьте ваш токен бота от @BotFather вместо "ВАШ_ТОКЕН_БОТА" !!!
+            const botToken = "8963992215:AAG6fSdZyf1KZ5z6ITwRQ6TpPwCsZGPeLss"; 
+
+            if (userId && botToken !== "ВАШ_ТОКЕН_БОТА") {
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: userId,
+                        text: msg
+                    })
+                }).catch(err => console.error("Ошибка отправки сообщения ботом:", err));
             }
+
+            // Вместо мешающей "таблички" оставляем только маленькое уведомление внутри приложения
+            showToast(msg);
         }
     }
 }
