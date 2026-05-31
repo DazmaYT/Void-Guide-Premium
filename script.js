@@ -1260,6 +1260,7 @@ function handleTimerComplete() {
     } else {
         document.getElementById('time-btn').innerText = "СТАРТ";
         sendNotification("✅ Время сессии вышло!");
+        playSound();
     }
     updateUI();
 }
@@ -1529,6 +1530,7 @@ let changed = false;
             if (t.remaining === 0) {
                 t.running = false; 
                 sendNotification(`⏰ Таймер "${t.name}" завершен!`);
+                playSound();
                 
                 const card = document.querySelector(`[data-id="${t.id}"]`);
                 if (card) {
@@ -1664,31 +1666,29 @@ function playSound() {
 
 function sendNotification(msg) {
     if (settings.notifications) {
-        // 1. Системное уведомление (появится как баннер сверху)
+        // 1. Системное уведомление браузера
         if ("Notification" in window && Notification.permission === "granted") {
             try {
                 new Notification("⏰ Void Guide", { 
                     body: msg, 
-                    icon: "favicon.ico" 
+                    icon: "https://telegram.org/img/t_logo.png" 
                 });
             } catch (e) {
                 console.log("Notification API error:", e);
             }
         }
 
-        // 2. Инструменты Telegram
         if (window.Telegram?.WebApp) {
-            // Вибрация (Haptic Feedback)
+            // 2. Вибрация
             if (window.Telegram.WebApp.HapticFeedback && window.Telegram.WebApp.isVersionAtLeast('6.1')) {
                 window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
             }
             
-            // 3. Отправка сообщения в чат через Bot API
+            // 3. Отправка сообщения через БОТА в личку
             const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id;
-            // !!! ВАЖНО: Вставьте ваш токен бота от @BotFather вместо "ВАШ_ТОКЕН_БОТА" !!!
             const botToken = "8963992215:AAG6fSdZyf1KZ5z6ITwRQ6TpPwCsZGPeLss"; 
 
-            if (userId && botToken !== "ВАШ_ТОКЕН_БОТА") {
+            if (userId && botToken) {
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1699,7 +1699,7 @@ function sendNotification(msg) {
                 }).catch(err => console.error("Ошибка отправки сообщения ботом:", err));
             }
 
-            // Вместо мешающей "таблички" оставляем только маленькое уведомление внутри приложения
+            // 4. Красивый тост вместо системного алерта
             showToast(msg);
         }
     }
