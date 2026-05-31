@@ -125,6 +125,106 @@ const achievementsConfig = [
     { id: "12", title: "Я раньше почему злой был", desc: "Доставить 1000 почтовых отправлений.", goal: 1000, reward: 50, status: "available",isSystem: false },
     { id: "13", title: "Король дорог", desc: "Сделать 100 перевозок груза, работая дальнобойщиком.", goal: 100, reward: 25, status: "available",isSystem: false },
     { id: "14", title: "Добрый самаритянин", desc: "5 раз помочь пострадавшим NPC в дорожных авариях с починкой авто.", goal: 5, reward: 25, status: "available",isSystem: false },
+    { id: "15", title: "Водитель от Бога", desc: "Совершить 1000 перевозок, работая в такси.", goal: 1000, reward: 25, status: "available",isSystem: false },
+    { id: "16", title: "Профессиональный ловец", desc: "Поймать 2000 рыб.", goal: 2000, reward: 25, status: "available",isSystem: false },
+    { id: "17", title: "Время загадать желание", desc: "Поймать золотую рыбку и загадать желание.", goal: 1, reward: 50, status: "available",isSystem: false },
+    { id: "18", title: "Король мероприятий", desc: "Выиграть в мероприятиях 50 раз.", goal: 50, reward: 1, status: "locked",isSystem: false },
+    { id: "19", title: "Бракосочетание", desc: "Соедините брачные узы воедино.", goal: 1, reward: 25, status: "available",isSystem: false },
+    { id: "20", title: "Большой куш", desc: "Сорвать Джекпот (выбить 777 в любом из автоматов в казино).", goal: 1, reward: 30, status: "available",isSystem: false },
+    { id: "21", title: "Отчаянный ход", desc: "Выиграть, поставив на 0 или 00.", goal: 1, reward: 25, status: "available",isSystem: false },
+    { id: "22", title: "Счастливая рука", desc: "Выбить 12 очков при игре в кости 12 раз.", goal: 1, reward: 25, status: "available",isSystem: false },
+    { id: "23", title: "Вращайте барабан", desc: "Прокрутить колесо удачи 100 раз.", goal: 100, reward: 1000, status: "available",isSystem: false },
+    { id: "24", title: "Держим ритм", desc: "Победить 100 раз в Dance Battle (танцы в ночных клубах).", goal: 100, reward: 25, status: "available",isSystem: false },
+    { id: "25", title: "Завсегдатый бара", desc: "Выпейте 10 бокалов алкоголя в казино.", goal: 10, reward: 10, status: "available",isSystem: false },
+    { id: "26", title: "Доброжелатель", desc: "Пожертвовать 1000000$.", goal: 1000000, reward: 25, status: "available",isSystem: false },
+    { id: "27", title: "Мать драконов", desc: "Купить «Загадочное яйцо» в мебельном магазине за 1000000$.", goal: 1, reward: 10, status: "available",isSystem: false },
+    { id: "28", title: "Мастер навалить бочком", desc: "Набрать 20000 очков дрифта за раз (доступно от 7 уровня персонажа).", goal: 20000, reward: 10, status: "available",isSystem: false },
+    { id: "29", title: "Не шей мне срок", desc: "Отсидеть в тюрьме более 55 часов за раз.", goal: 55, reward: 100, status: "available",isSystem: false },
+    { id: "29", title: "Мясник из Болингброук", desc: "Убить других заключённых с помощью заточки 50 раз.", goal: 50, reward: 25, status: "available",isSystem: false },
+    { id: "30", title: "За друзей и тюремный двор", desc: "Освободить 10 заключённых при нападении на тюрьму.", goal: 10, reward: 25, status: "available",isSystem: false },
+    { id: "31", title: "Ты знаешь с кем разговариваешь?", desc: "Быть освобожденным при нападении на тюрьму.", goal: 1, reward: 10, status: "available",isSystem: false },
+    { id: "32", title: "Сомелье", desc: "Выпить бутылку коллекционного вина.", goal: 1, reward: 1, status: "available",isSystem: false },
+    { id: "33", title: "Руки-базуки", desc: "Безошибочно сделать 5 подходов подряд со стокилограммовой штангой.", goal: 5, reward: 10, status: "available",isSystem: false },
+    { id: "34", title: "Самая быстрая рука в Сан-Андреас", desc: "Набрать 200 очков в тире за одну попытку.", goal: 5, reward: 25, status: "available",isSystem: false },
+    { id: "35", title: "Оставить след", desc: "Получить свой памятник в Зале Славы.", goal: 1, reward: 100, status: "available",isSystem: false },
+    { id: "36", title: "Прирожденный фермер", desc: "Выполнить 10000 действий на ферме.", goal: 10000, reward: 1, status: "available",isSystem: false },
+    { id: "37", title: "Король картинга", desc: "Победить в 100 заездах из 6 человек в картинге.", goal: 100, reward: 1, status: "available",isSystem: false },
+    { id: "38", title: "На страже Форта Занкудо", desc: "Починить электричество на Форте Занкудо во время нападения до загрузки матовозок нападающими.", goal: 1, reward: 25, status: "available",isSystem: false },
+    { id: "39", title: "На страже Федеральной тюрьмы", desc: "Починить электричество в Федеральной тюрьме до освобождения заключенных нападающими.", goal: 1, reward: 25, status: "available",isSystem: false },
+    { id: "40", title: "Золотая лихорадка", desc: "Найти и сдать скупщику сокровищ на 100000$.", goal: 100000, reward: 10, status: "available",isSystem: false },
+    { id: "41", title: "Особенности национальной охоты", desc: "Убить пуму голыми руками в состоянии алкогольного опьянения.", goal: 1, reward: 100, status: "available",isSystem: false },
+    { id: "42", title: "Знаменосец", desc: "Поставить флаг мотоклуба 10 раз при выполнении задания «Покорение вершин».", goal: 10, reward: 10, status: "available",isSystem: false },
+    { id: "43", title: "Ангел дорог", desc: "Достигнуть максимального ранга в любом мотоклубе.", goal: 1, reward: 30, status: "available",isSystem: false },
+    { id: "44", title: "Дом у дороги", desc: "Победить в пьяной драке в общине деревенщин с активным заданием на неё против других игроков с этим же заданием.", goal: 1, reward: 30, status: "available",isSystem: false },
+    { id: "45", title: "Из-за этих гадов мы без работы сидим!", desc: "Достигнуть максимального ранга в клубе Rednecks.", goal: 1, reward: 30, status: "available",isSystem: false },
+    { id: "46", title: "Глотай пыль", desc: "Занять 1 место в 100 гонках за репутацию в автоклубе Car Meet.", goal: 100, reward: 10, status: "available",isSystem: false },
+    { id: "47", title: "Газ в пол", desc: "Достигнуть максимального уровня в автоклубе Car Meet.", goal: 1, reward: 30, status: "available",isSystem: false },
+    { id: "48", title: "Небеса разверзлись", desc: "Победить в 50 аирдропах в составе фракции, будучи сотрудником Merryweather.", goal: 50, reward: 100, status: "available",isSystem: false },
+    { id: "49", title: "Боевое крещение", desc: "Достигнуть максимального ранга в Merryweather.", goal: 1, reward: 30, status: "available",isSystem: false },
+    { id: "50", title: "Таксую для души", desc: "Выполнить 100 заказов такси на Truffade Fake Taxi.", goal: 100, reward: 50, status: "available",isSystem: false },
+    { id: "51", title: "Дядюшка Скрудж", desc: "Выкинуть на ветер 1000000$ из оружия Sup Cash Cannon.", goal: 1000000, reward: 1, status: "available",isSystem: false },
+    { id: "52", title: "Томми не умеет плавать", desc: "Умереть в воде в обличье Томми Версетти.", goal: 1, reward: 25, status: "available",isSystem: false },
+    { id: "53", title: "Вкус лета", desc: "Попробовать мороженое всех 8 видов на Летнем фестивале.", goal: 8, reward: 25, status: "locked",isSystem: false },
+    { id: "54", title: "Попа слиплась", desc: "Получить по попе боевым леденцом, находясь без сознания.", goal: 1, reward: 10, status: "available",isSystem: false },
+    { id: "55", title: "Соло на клавиатуре", desc: "Поднять настроение окружающим 1000 раз, сыграв им на пианино или синтезаторе.", goal: 1000, reward: 1, status: "available",isSystem: false },
+    { id: "56", title: "Тонкий слух", desc: "Получить настроение от чьей-нибудь игры на пианино или синтезаторе 100 раз.", goal: 100, reward: 100, status: "available",isSystem: false },
+    { id: "57", title: "Заслуженный дрессировщик", desc: "Достич 100% дрессирвки любого питомца.", goal: 100, reward: 100, status: "available",isSystem: false },
+    { id: "58", title: "Алчности нет предела", desc: "Выполнить задание «Сбор данных для Санты» 25 раз, пометив всех детей плохими.", goal: 25, reward: 1, status: "locked",isSystem: false },
+    { id: "59", title: "Палочки к бою", desc: "Победить 50 раз в магических дуэлях во время проведения события «Хеллоуин 2024».", goal: 50, reward: 1, status: "locked",isSystem: false },
+    { id: "60", title: "Позолоти ручку", desc: "Забрать у других людей 66 конфет в заданиях Гадалки во время проведения события «Хеллоуин 2024».", goal: 66, reward: 1, status: "locked",isSystem: false },
+    { id: "61", title: "Успешный кейс", desc: "Доставить 30 кейсов Годовщины организатору.", goal: 30, reward: 1, status: "locked",isSystem: false },
+    { id: "62", title: "Безупречная защита", desc: "Защитить пряничный замок, не допустив повреждения ворот.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "63", title: "Снежный чемпион 2024", desc: "Получить повышенную награду в соревновательных квестах события «Новый год 2024» 100 раз.", goal: 100, reward: 1, status: "locked",isSystem: false },
+    { id: "64", title: "Санта Клаус 2020", desc: "Подарить другим игрокам 50 подарков на новогодние праздники.", goal: 50, reward: 25, status: "locked",isSystem: false },
+    { id: "65", title: "Главный герой", desc: "Завершить сюжетную линию события Годовщина 2024 до 16.09.2024.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "66", title: "Дал бог зайку", desc: "50 раз получить награду за победу в задании «Любимый воспитатель» в событии «Первый курс».", goal: 50, reward: 1, status: "locked",isSystem: false },
+    { id: "67", title: "Строитель светлого будущего", desc: "Строитель светлого будущего", goal: 100, reward: 1, status: "locked",isSystem: false },
+    { id: "68", title: "Сентябрь 2020", desc: "Получить 5 по всем предметам.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "69", title: "Сентябрь 2021", desc: "Получить 5 по всем предметам.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "70", title: "Сентябрь 2022", desc: "Получить 5 по всем предметам.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "71", title: "Сентябрь 2025", desc: "Получить 5 по всем предметам.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "72", title: "Годовщина 2021", desc: "Открыть кейс годовщины 2021 года.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "73", title: "Годовщина 2022", desc: "Открыть кейс годовщины 2022 года.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "74", title: "Годовщина 2023", desc: "Открыть кейс годовщины 2023 года.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "75", title: "Годовщина 2024", desc: "Открыть кейс годовщины 2024 года.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "76", title: "Годовщина 2025", desc: "Открыть кейс годовщины 2025 года.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "77", title: "Хеллоуин 2021", desc: "Убить 500 зомби во время проведения события «Хеллоуин 2021».", goal: 500, reward: 1, status: "locked",isSystem: false },
+    { id: "78", title: "Хеллоуин 2022", desc: "Убить 500 зомби во время проведения события «Хеллоуин 2022».", goal: 500, reward: 50, status: "locked",isSystem: false },
+    { id: "79", title: "Хеллоуин 2023", desc: "Убить 500 зомби во время проведения события «Хеллоуин 2023».", goal: 500, reward: 50, status: "locked",isSystem: false },
+    { id: "80", title: "Зима 2021", desc: "Активировать сезонный пропуск «Зима '21».", goal: 1, reward: 10, status: "locked",isSystem: false },
+    { id: "81", title: "Зима 2022", desc: "Активировать сезонный пропуск «Зима '22».", goal: 1, reward: 10, status: "locked",isSystem: false },
+    { id: "82", title: "Зима 2023", desc: "Активировать сезонный пропуск «Зима '23».", goal: 1, reward: 10, status: "locked",isSystem: false },
+    { id: "83", title: "Зима 2024", desc: "Активировать сезонный пропуск «Зима '24».", goal: 1, reward: 10, status: "locked",isSystem: false },
+    { id: "84", title: "Новый год 2020", desc: "Встретьте 2020 год вместе с сервером.", goal: 1, reward: 1, status: "locked",isSystem: false },
+    { id: "85", title: "Новый год 2021", desc: "Встретьте 2021 год вместе с сервером.", goal: 1, reward: 20, status: "locked",isSystem: false },
+    { id: "86", title: "Новый год 2022", desc: "Встретьте 2022 год вместе с сервером.", goal: 1, reward: 20, status: "locked",isSystem: false },
+    { id: "87", title: "Новый год 2023", desc: "Встретьте 2023 год вместе с сервером.", goal: 1, reward: 50, status: "locked",isSystem: false },
+    { id: "88", title: "Новый год 2024", desc: "Встретьте 2024 год вместе с сервером.", goal: 1, reward: 50, status: "locked",isSystem: false },
+    { id: "89", title: "Новый год 2025", desc: "Встретьте 2025 год вместе с сервером.", goal: 1, reward: 50, status: "locked",isSystem: false },
+    { id: "90", title: "Лето 2021", desc: "Активировать сезонный пропуск «Лето '21».", goal: 1, reward: 10, status: "locked",isSystem: false },
+    { id: "91", title: "Лето 2022", desc: "Активировать сезонный пропуск «Лето '22».", goal: 1, reward: 10, status: "locked",isSystem: false },
+    { id: "92", title: "Лето 2023", desc: "Активировать сезонный пропуск «Лето '23».", goal: 1, reward: 10, status: "locked",isSystem: false },
+    { id: "93", title: "Лето 2024", desc: "Активировать сезонный пропуск «Лето '24».", goal: 1, reward: 10, status: "locked",isSystem: false },
+    { id: "94", title: "Лето 2025", desc: "Активировать сезонный пропуск «Лето '25».", goal: 1, reward: 10, status: "locked",isSystem: false },
+    { id: "95", title: "Легенда Летнего фестиваля 2024", desc: "Победить в соревнованиях Летнего фестиваля 150 раз.", goal: 150, reward: 1, status: "locked",isSystem: false },
+    { id: "96", title: "Легенда Летнего фестиваля 2025", desc: "Выполнять все задания Летнего фестиваля ежедневно в течение 15 дней.", goal: 15, reward: 100, status: "locked",isSystem: false },
+    { id: "97", title: "Ужасы Хеллоуина 2022", desc: "Одержать верх над любым из Ужасов Хэллоуина.", goal: 1, reward: 50, status: "locked",isSystem: false },
+    { id: "98", title: "Ужасы Хеллоуина 2023", desc: "Одержать верх над любым из Ужасов Хэллоуина.", goal: 1, reward: 50, status: "locked",isSystem: false },
+    { id: "99", title: "На страже Рождества 2022", desc: "Отпугните Гринча, когда застанете его за попыткой вломиться в чужой дом.", goal: 1, reward: 50, status: "locked",isSystem: false },
+    { id: "100", title: "На страже Рождества 2023", desc: "Прорекламируйте супергеройский фильм в костюме супергероя 50 раз, выполняя задание учителя ритмики (квест «Реклама»).", goal: 50 ,reward: 1, status: "locked",isSystem: false },
+    { id: "101", title: "Летние движения", desc: "Повторить трудноразличимые танцы на Летнем фестивале 250 раз.", goal: 20 ,reward: 1, status: "locked",isSystem: false },
+    { id: "102", title: "Первая кровь", desc: "Сделать первое убийство на капте за банду.", goal: 1 ,reward: 10 ,status: "hidden",isSystem: false },
+    { id: "103", title: "Гурман", desc: "Пообедать в тюремной столовой 100 раз.", goal: 100 ,reward: 1 ,status: "hidden",isSystem: false },
+    { id: "104", title: "Нездоровое везение", desc: "Съесть неправильно приготовленную рыбу фугу и выжить.", goal: 1 ,reward: 10 ,status: "hidden",isSystem: false },
+    { id: "105", title: "Слишком грубые руки", desc: "Обидеть 200 коров.", goal: 200 ,reward: 1 ,status: "hidden",isSystem: false },
+    { id: "106", title: "Барон Дымхаузер", desc: "Получить настроение от использования вейпа 100 раз.", goal: 100 ,reward: 10 ,status: "hidden",isSystem: false },
+    { id: "107", title: "Тост за победителя", desc: "Открыть бутылку шампанского после победы.", goal: 1 ,reward: 10 ,status: "hidden",isSystem: false },
+    { id: "108", title: "Стремительная карьера", desc: "Посадить себя в федеральную тюрьму и отсидеть не менее 4 часов.", goal: 4 ,reward: 25 ,status: "hidden",isSystem: false },
+    { id: "109", title: "Аристократические замашки", desc: "Получите настроение, покурив трубку с моноклем.", goal: 1 ,reward: 10 ,status: "hidden",isSystem: false },
+    { id: "110", title: "Постижение непостижимого", desc: "Обрести Киффлом, отказавшись от всех обязательств Программы Epsilon у Криса Формажа.", goal: 10000 ,reward: 1 ,status: "hidden",isSystem: false },
+    { id: "111", title: "Инвестировал в говно", desc: "Поддержать местный сельскохозяйственный бизнес за 1000000$.", goal: 1000000 ,reward: 1 ,status: "hidden",isSystem: false },
+    { id: "112", title: "Ты не Шаришь", desc: "Получить 25 отрицательных ответов от шара восьмёрки.", goal: 25, reward: 1, status: "available",isSystem: false },
+    { id: "113", title: "Жареный аргумент", desc: "Пожарить праздничный шашлык во время проведения события «Майские праздники.»", goal: 25, reward: 1, status: "available",isSystem: false },
 ];
 
 
@@ -248,17 +348,131 @@ function switchMainView(view) {
     if (view === 'achievements') renderAchievements('active');
 }
 
-function calcResell() {
-    const buy = parseFloat(document.getElementById('buy-price').value);
-    const profit = parseFloat(document.getElementById('profit-goal').value);
-    const result = document.getElementById('calc-result');
+// 1. РАСШИРЕННЫЙ КАЛЬКУЛЯТОР ПЕРЕКУПА
+function updateCalculator() {
+    const buy = parseFloat(document.getElementById('buy-price')?.value) || 0;
+    const tuning = parseFloat(document.getElementById('tuning-cost')?.value) || 0;
+    const taxPercent = parseFloat(document.getElementById('tax-percent')?.value) || 0;
+    const sellPrice = parseFloat(document.getElementById('target-sell')?.value) || 0;
 
-    if (!isNaN(buy) && !isNaN(profit)) {
-        const total = buy + profit;
-        result.innerHTML = `Цена продажи: <br><span style="font-size: 1.5em">${total.toLocaleString()}$</span>`;
-    } else {
-        result.innerText = "Введите корректные данные";
+    // Расходная часть
+    const totalInvested = buy + tuning;
+    // Налог с продажи
+    const taxAmount = sellPrice * (taxPercent / 100);
+    const netProfit = sellPrice - totalInvested - taxAmount;
+    const roi = totalInvested > 0 ? (netProfit / totalInvested) * 100 : 0;
+
+    // Цена, при которой прибыль будет 0 (точка безубыточности)
+    const breakEven = totalInvested / (1 - (taxPercent / 100));
+
+    // UI Update
+    const netEl = document.getElementById('calc-res-net');
+    const roiEl = document.getElementById('calc-res-roi');
+    const breakEvenEl = document.getElementById('calc-res-breakeven');
+
+    if (netEl) {
+        netEl.innerText = `${Math.floor(netProfit).toLocaleString()}$`;
+        netEl.style.color = netProfit >= 0 ? '#00f0ff' : '#ff4a4a';
     }
+    if (roiEl) roiEl.innerText = `${roi.toFixed(1)}%`;
+    if (breakEvenEl) breakEvenEl.innerText = `${Math.ceil(breakEven).toLocaleString()}$`;
+}
+
+// 2. УЛУЧШЕННЫЙ ИНВЕНТАРЬ
+function sellItem(id) {
+    const item = inventory.find(i => i.id === id);
+    if (!item) return;
+
+    // Запрашиваем сумму именно здесь, при нажатии
+    const sellPriceInput = prompt(`Введите сумму, за которую продали "${item.name}":`, item.price);
+    
+    // Если нажали "Отмена" или ввели пустоту
+    if (sellPriceInput === null || sellPriceInput.trim() === "") return;
+
+    const sellPrice = parseFloat(sellPriceInput.replace(/\s/g, '')) || 0;
+    const profit = sellPrice - item.price;
+
+    // Добавляем запись в финансы (как доход)
+    financeData.push({ 
+        id: Date.now(), 
+        name: `💎 Продажа: ${item.name}`, 
+        amount: sellPrice, 
+        type: 'income', 
+        date: new Date().toISOString().split('T')[0] 
+    });
+
+    inventory = inventory.filter(i => i.id !== id);
+    
+    saveData();
+    renderInventory();
+    updateFinanceUI();
+    
+    showToast(profit >= 0 ? `💰 Продано в плюс! Прибыль: ${profit}$` : `📉 Продано в минус: ${profit}$`);
+    vibrate('success');
+}
+
+// 3. ДАННЫЕ ДЛЯ НОВЫХ РАЗДЕЛОВ
+const wikiData = {
+    rent: [
+        { name: "Транспорт (Новички)", price: "500$ / час", icon: "🚲" },
+        { name: "Вертолет", price: "15,000$ / час", icon: "🚁" },
+        { name: "Лодка", price: "5,000$ / час", icon: "🚤" }
+    ],
+    estate: [
+        { name: "Квартира (Эконом)", price: "150,000$+", icon: "🏢" },
+        { name: "Дом (Средний)", price: "800,000$+", icon: "🏡" },
+        { name: "Вилла", price: "5,000,000$+", icon: "🏰" }
+    ],
+    craft: [
+        { name: "Бронежилет", materials: "Ткань (5), Пластины (2)", icon: "🛡️" },
+        { name: "Косяк", materials: "Трава (3), Бумага (1)", icon: "🌿" },
+        { name: "Турбо-декодер", materials: "Схемы (10), Металл (5)", icon: "📟" }
+    ],
+    spank: [
+        { name: "Производство", info: "Требует: Эфедрин + Йод", icon: "🧪" },
+        { name: "Сбыт", info: "Выгода: +25% к гос. цене", icon: "💵" }
+    ]
+};
+
+function renderWikiSection(category) {
+    const container = document.getElementById('wiki-container');
+    if (!container) return;
+
+    const items = wikiData[category] || [];
+    container.innerHTML = items.map(item => `
+        <div class="wiki-item">
+            <div style="font-size: 24px;">${item.icon}</div>
+            <div style="font-weight: bold; margin-top: 8px;">${item.name}</div>
+            <div style="color: var(--void-accent); font-size: 12px;">${item.price || item.materials || item.info}</div>
+        </div>
+    `).join('');
+}
+
+// 4. ПЕРЕКЛЮЧЕНИЕ ПОД-ВКЛАДОК В КАЛЬКУЛЯТОРЕ
+function selectResellTab(tabName, btnElement) {
+    document.querySelectorAll('.sub-tab').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    const calcSection = document.getElementById('tab-calc');
+    const invSection = document.getElementById('tab-inventory');
+    const wikiSection = document.getElementById('tab-wiki');
+
+    // Прячем всё
+    if(calcSection) calcSection.style.display = 'none';
+    if(invSection) invSection.style.display = 'none';
+    if(wikiSection) wikiSection.style.display = 'none';
+
+    if (tabName === 'calc') {
+        calcSection.style.display = 'block';
+    } else if (tabName === 'inventory') {
+        invSection.style.display = 'block';
+    } else {
+        // Для всех остальных (rent, estate, craft, spank) показываем wiki
+        wikiSection.style.display = 'block';
+        renderWikiSection(tabName);
+    }
+    
+    vibrate('light');
 }
 
 function updateSkill(id, type, diff) {
@@ -642,26 +856,7 @@ function startTimerInterval() {
 }
 
 // Единая логика завершения
-function handleTimerComplete() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-    localStorage.removeItem('timerSavedSeconds');
-    localStorage.removeItem('timerEndTime');
-    
-    // Звуковой индикатор
-    finishSound.play().catch(e => console.log("Автовоспроизведение заблокировано браузером"));
-
-    if (autoRun) {
-        // Мгновенный перезапуск
-        currentTime = totalTime;
-        startTimerInterval();
-        showToast("🔄 Авто-перезапуск сессии");
-    } else {
-        document.getElementById('time-btn').innerText = "СТАРТ";
-        showToast("✅ Время вышло!");
-    }
-    updateUI();
-}
+// Дубликат handleTimerComplete удален. Рабочая версия находится ниже.
 
 function startTimer(durationSeconds) {
     // Вычисляем время финиша
@@ -915,18 +1110,6 @@ function renderInventory() {
 }
 
 // --- Логика продажи/удаления с записью в финансы ---
-function sellItem(id) {
-    const item = inventory.find(i => i.id === id);
-    financeData.push({ 
-        id: Date.now(), name: "Продажа: " + item.name, amount: item.price, 
-        type: 'income', date: new Date().toISOString().split('T')[0] 
-    });
-    inventory = inventory.filter(i => i.id !== id);
-    saveData();
-    renderInventory();
-    updateFinanceUI();
-}
-
 function deleteItem(id) {
     const item = inventory.find(i => i.id === id);
     financeData.push({ 
@@ -1106,41 +1289,7 @@ function getFilteredFinance(period) {
     });
 }
 
-function updateFinanceUI() {
-    const now = new Date();
-    const todayStr = now.toISOString().split('T')[0];
-    
-    // Вычисляем начало недели (7 дней назад)
-    const weekAgo = new Date();
-    weekAgo.setDate(now.getDate() - 7);
-    
-    // Вычисляем начало месяца (30 дней назад)
-    const monthAgo = new Date();
-    monthAgo.setDate(now.getDate() - 30);
-
-    const filtered = financeData.filter(item => {
-        const itemDate = new Date(item.date);
-        
-        if (currentFinancePeriod === 'today') return item.date === todayStr;
-        if (currentFinancePeriod === 'week') return itemDate >= weekAgo;
-        if (currentFinancePeriod === 'month') return itemDate >= monthAgo;
-        return true; // для 'all'
-    });
-
-    let income = 0;
-    let expense = 0;
-    filtered.forEach(item => {
-        if (item.type === 'income') income += item.amount;
-        else expense += item.amount;
-    });
-
-    // Обновляем доходы и расходы
-    document.getElementById('stat-income').innerText = `$ ${income.toLocaleString()}`;
-    document.getElementById('stat-expense').innerText = `$ ${expense.toLocaleString()}`;
-
-    // ДОБАВЛЯЕМ ЭТУ СТРОКУ:
-    document.getElementById('stat-bp').innerText = totalBP.toLocaleString();
-}
+// Консолидировано в финальную функцию updateFinanceUI.
 // Функция для открытия модалки
 function resetAllDoneTasks() {
     showModal("Сброс прогресса", "Вы уверены, что хотите сбросить все задания?", () => {
@@ -1242,28 +1391,7 @@ function toggleAutoRun() {
 
 
 
-function handleTimerComplete() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-    localStorage.removeItem('timerSavedSeconds');
-    localStorage.removeItem('timerEndTime');
-    
-    // Звуковой индикатор
-    finishSound.play().catch(e => console.log("Автовоспроизведение заблокировано браузером"));
-// Удален дубликат функции handleTimerComplete
-
-    if (autoRun) {
-        // Мгновенный перезапуск
-        currentTime = totalTime;
-        startTimerInterval();
-        showToast("🔄 Авто-перезапуск сессии");
-    } else {
-        document.getElementById('time-btn').innerText = "СТАРТ";
-        sendNotification("✅ Время сессии вышло!");
-        playSound();
-    }
-    updateUI();
-}
+// Удален дубликат.
 
 function updateTimeFromInput(val) {
     const parts = val.split(':');
@@ -1292,22 +1420,6 @@ function updateDisplay() {
 }
 // 1. ИНИЦИАЛИЗАЦИЯ
 
-function saveTimer(endTime) {
-    try {
-        localStorage.setItem('timerEndTime', endTime);
-        console.log("Таймер успешно сохранен до:", new Date(endTime).toLocaleTimeString());
-    } catch (e) {
-        console.error("Ошибка сохранения в localStorage:", e);
-    }
-}
-
-function formatTime(s) {
-    if (s < 0) s = 0;
-    const h = Math.floor(s / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    const sec = s % 60;
-    return `${h > 0 ? h+':' : ''}${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
-}
 
 // 2. ОТРИСОВКА (Разделена для стабильности)
 

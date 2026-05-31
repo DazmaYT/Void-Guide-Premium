@@ -19,30 +19,6 @@
             from { transform: translateY(50px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        /* Анимации для модального окна */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(0.9); }
-        }
-        @keyframes clickEffect {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.9); }
-            100% { transform: scale(1); }
-        }
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(20px); }
-            20% { opacity: 1; transform: translateY(0); }
-            80% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
         @keyframes pulse-border {
             0% { transform: scale(1); }
             50% { transform: scale(1.02); }
@@ -318,20 +294,18 @@
 
 .category-scroller {
     display: flex;
-    gap: 8px;
-    /* Убираем justify-content: center, так как растягивание 
-       заполнит всё пространство автоматически */
+    gap: 10px;
     width: 100%; 
     margin-bottom: 16px;
+    overflow-x: auto; /* Включаем прокрутку */
+    padding: 4px 2px;
+    scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+    -webkit-overflow-scrolling: touch;
 }
+.category-scroller::-webkit-scrollbar { display: none; } /* Скрываем в Chrome/Safari */
 
 .cat-tab {
-    /* flex-grow: 1 заставляет вкладку занимать всю доступную ширину */
-    flex-grow: 1; 
-    
-    /* flex-shrink: 1 позволяет им сжиматься, если не влезают */
-    flex-shrink: 1; 
-    
+    flex: 0 0 auto; /* Запрещаем сжиматься, чтобы можно было мотать */
     background: var(--bg-card);
     border: 1px solid rgba(255, 255, 255, 0.05);
     color: var(--text-muted);
@@ -839,14 +813,61 @@
 
 
 .calc-card {
+    background: linear-gradient(135deg, var(--bg-card) 0%, #0d111d 100%);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(109, 74, 255, 0.3);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.wiki-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-bottom: 20px;
+}
+
+.wiki-item {
     background: var(--bg-card);
     border: var(--border-style);
+    padding: 15px;
     border-radius: 16px;
-    padding: 20px;
+    text-align: center;
+}
+
+.calc-res-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
     margin-bottom: 20px;
 }
-.input-group { margin-top: 15px; display: flex; flex-direction: column; gap: 5px; }
-.input-group label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+
+.calc-stat-box {
+    background: rgba(109, 74, 255, 0.05);
+    border: 1px solid rgba(109, 74, 255, 0.1);
+    padding: 15px;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.calc-stat-box span { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.calc-stat-box b { display: block; font-size: 18px; color: var(--void-accent); margin-top: 4px; }
+
+.calc-main-res {
+    background: rgba(0, 240, 255, 0.05);
+    border: 1px solid var(--void-accent);
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.calc-main-res label { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 8px; }
+.calc-main-res .price-val { font-size: 28px; font-weight: 900; color: #fff; text-shadow: 0 0 15px var(--void-glow); }
+
+.input-group { margin-bottom: 16px; }
+.input-group label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block; font-weight: 700; }
 
 .sub-nav {
     display: flex;
@@ -1411,6 +1432,31 @@
     letter-spacing: 0.5px;
     animation: slideUp 0.4s ease-out;
     pointer-events: auto; /* Возвращаем кликабельность самому уведомлению */
+}
+
+/* Стили для графика прибыли */
+.chart-container {
+    background: var(--bg-card);
+    border: var(--border-style);
+    border-radius: 16px;
+    padding: 15px;
+    margin: 15px 0;
+    height: 180px;
+    position: relative;
+}
+
+.chart-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.chart-path {
+    fill: none;
+    stroke: var(--void-accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 5px var(--void-accent));
 }
 
 
