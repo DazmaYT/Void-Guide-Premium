@@ -55,57 +55,197 @@
         { id: 51,cat: "fraction", name: "Бизвар", desc: "Участвие в бизваре (мафия)", active: true, reward: 2, type: "click", icon: "🔫" },
         { id: 52,cat: "fraction", name: "Капт", desc: "Участие в капте (банда)", active: true, reward: 1, type: "click", icon: "👥" },
         { id: 53,cat: "fraction", name: "Хаммер с ВЗХ", desc: "Пригнать хаммер на респавн (крайм)", active: true, reward: 3, type: "click", icon: "🚗" },
-        { id: 53,cat: "fraction", name: "Медкарта EMS", desc: "Выдать 5 медкарт EMS", active: true, reward: 2, type: "click", icon: "🏥" },
-        { id: 54,cat: "fraction", name: "Вызов EMS", desc: "Закрыть 15 вызовов EMS", active: true, reward: 2, type: "click", icon: "🚑" },
-        { id: 55,cat: "fraction", name: "Зелёная строка WN", desc: "Сообщения в зелёной строке (WN)", active: true, reward: 2, type: "click", icon: "📄" },
-        { id: 56,cat: "fraction", name: "Обьявления WN", desc: "Отредоктировать 40 обьявлений (WN)", active: true, reward: 2, type: "click", icon: "📰" },
-        { id: 57,cat: "fraction", name: "Ограбление дома", desc: "Взломать 15 замков (банды)", active: true, reward: 2, type: "click", icon: "🏠" },
-        { id: 58,cat: "fraction", name: "Коды", desc: "Закрыть 5 кодов (силовые структуры)", active: true, reward: 2, type: "click", icon: "🔢" },
-        { id: 59,cat: "fraction", name: "Регистрация авто", desc: "поставить на учет 2авто (LSPD)", active: true, reward: 1, type: "click", icon: "🚗" },
-        { id: 60,cat: "fraction", name: "Арест", desc: "Произвести 1 арест (LSPD,LSSD)", active: true, reward: 1, type: "click", icon: "👮" },
-        { id: 61,cat: "fraction", name: "Выкуп с КПЗ", desc: "Выкупить 2 человека (адвокат)", active: true, reward: 2, type: "click", icon: "🔓" },
+        { id: 54,cat: "fraction", name: "Медкарта EMS", desc: "Выдать 5 медкарт EMS", active: true, reward: 2, type: "click", icon: "🏥" },
+        { id: 55,cat: "fraction", name: "Вызов EMS", desc: "Закрыть 15 вызовов EMS", active: true, reward: 2, type: "click", icon: "🚑" },
+        { id: 56,cat: "fraction", name: "Зелёная строка WN", desc: "Сообщения в зелёной строке (WN)", active: true, reward: 2, type: "click", icon: "📄" },
+        { id: 57,cat: "fraction", name: "Обьявления WN", desc: "Отредоктировать 40 обьявлений (WN)", active: true, reward: 2, type: "click", icon: "📰" },
+        { id: 58,cat: "fraction", name: "Ограбление дома", desc: "Взломать 15 замков (банды)", active: true, reward: 2, type: "click", icon: "🏠" },
+        { id: 59,cat: "fraction", name: "Коды", desc: "Закрыть 5 кодов (силовые структуры)", active: true, reward: 2, type: "click", icon: "🔢" },
+        { id: 60,cat: "fraction", name: "Регистрация авто", desc: "поставить на учет 2авто (LSPD)", active: true, reward: 1, type: "click", icon: "🚗" },
+        { id: 61,cat: "fraction", name: "Арест", desc: "Произвести 1 арест (LSPD,LSSD)", active: true, reward: 1, type: "click", icon: "👮" },
+        { id: 62,cat: "fraction", name: "Выкуп с КПЗ", desc: "Выкупить 2 человека (адвокат)", active: true, reward: 2, type: "click", icon: "🔓" },
     ];
 
 let skillsDb = [
-    { id: 'strength', name: "💪 Сила", level: 0, done: 0, goals: [100, 200, 300, 400, 500] },
-    { id: 'shooting', name: "🔫 Стрельба", level: 0, done: 0, goals: [5, 5, 5, 5, 15, 15, 15, 15, 20] },
-    { id: 'cooking', name: "🍳 Кулинария", level: 0, goals: [50, 100, 150, 200, 250], done: 0 },
-    { id: 'fishing', name: "🎣 Рыболовство", level: 0, goals: [25, 75, 200, 400, 600, 1000], done: 0 },
-    { id: 'hunting', name: "🦌 Охота", level: 0, goals: [100, 150, 200, 250, 300], done: 0 },
-    { id: 'treasure', name: "💎 Поиск сокровищ", level: 0, goals: [100, 200, 300, 400, 500], done: 0 },
-    { id: 'farming', name: "🌾 Фермерство", level: 0, goals: [500, 500, 1000, 1000, 1500], done: 0 },
-    { id: 'builder', name: "🧱 Строитель", level: 0, goals: [1500, 2250, 3000, 3750, 4500], done: 0 },
-    { id: 'miner', name: "⛏️ Шахтер", level: 0, goals: [1000, 1500, 2000, 2500, 3000], done: 0 },
-    { id: 'port', name: "🚢 Порт", level: 0, goals: [1500, 2250, 3000, 3750, 4500], done: 0 },
-    { id: 'taxi', name: "🚕 Таксист", level: 0, goals: [100, 200, 300, 400, 500], done: 0 },
-    { id: 'diver', name: "🤿 Дайвер", level: 0, goals: [85, 170, 255, 340, 425], done: 0 },
-    { id: 'collector', name: "💰 Инкассатор", level: 0, goals: [40, 80, 120, 160, 200], done: 0 },
-    { id: 'bus', name: "🚌 Водитель автобуса", level: 0, goals: [35, 75, 105, 135, 175], done: 0 },
-    { id: 'mechanic', name: "🛠️ Механик", level: 0, goals: [40, 80, 120, 160, 200], done: 0 },
-    { id: 'fire', name: "🚒 Пожарный", level: 0, goals: [250, 500, 750, 1000, 1250], done: 0 },
-    { id: 'truck', name: "🚚 Дальнобойщик", level: 0, goals: [40, 80, 120, 160, 200], done: 0 },
-    { id: 'courier', name: "📦 Курьер", level: 0, goals: [100, 200, 300, 400, 500], done: 0 },
-    { id: 'post', name: "✉️ Почтальон", level: 0, goals: [140, 280, 420, 560, 700], done: 0 },
-    { id: 'contractor', name: "📋 Подрядчик", level: 0, goals: [10, 20, 30, 40, 50], done: 0 }
+    { 
+        id: 'strength', 
+        name: "💪 Сила", 
+        level: 0, 
+        done: 0, 
+        goals: [100, 200, 300, 400, 500],
+        desc: "● Улучшается рельеф мышц<br>● Увеличивается скорость бега и плавания на 4% за каждый уровень<br>● Увеличивается скорость копания лопатой, лазания по лестницам и продолжительность дыхания под водой"
+    },
+    { 
+        id: 'shooting', 
+        name: "🎯 Стрельба", 
+        level: 0, 
+        done: 0, 
+        goals: [5, 5, 5, 5, 5, 15, 15, 15, 15, 20],
+        desc: "● Уменьшение разброса<br>● Доступ к двум анимациям стрельбы с пистолетов"
+    },
+    { 
+        id: 'cooking', 
+        name: "👨‍🍳 Кулинария", 
+        level: 0, 
+        done: 0,
+        goals: [50, 100, 150, 200, 250], 
+        desc: "● Доступ к новым видам блюд каждый уровень"
+    },
+    { 
+        id: 'fishing', 
+        name: "🎣 Рыболовство", 
+        level: 0, 
+        done: 0,
+        goals: [25, 75, 200, 400, 600, 1000], 
+        desc: "● 3, 4, 5, 6 уровни — новые виды рыб"
+    },
+    { 
+        id: 'hunting', 
+        name: "🏹 Охота", 
+        level: 0, 
+        done: 0,
+        goals: [100, 150, 200, 250, 300], 
+        desc: "● Каждый уровень увеличивается минимальное качество шкур<br>● Появляется шанс сохранить прочность разделочного ножа"
+    },
+    { 
+        id: 'treasure', 
+        name: "💎 Поиск сокровищ", 
+        level: 0, 
+        done: 0,
+        goals: [100, 200, 300, 400, 500], 
+        desc: "● Каждый уровень уменьшение шанса найти хлам<br>● Прибавка по 10% к цене сдачи сокровищ за каждый уровень"
+    },
+    { 
+        id: 'farming', 
+        name: "🌾 Фермерство", 
+        level: 0, 
+        done: 0,
+        goals: [500, 500, 1000, 1000, 1500], 
+        desc: "● Увеличение оплаты каждый уровень<br>● 2 уровень — доступ к трактору для прополки<br>● 3 уровень — доступ к посадке пшеницы и сбору на комбайне<br>● 5 уровень — доступ к самолёту для распыления химикатов"
+    },
+    { 
+        id: 'builder', 
+        name: "🏗️ Строитель", 
+        level: 0, 
+        done: 0,
+        goals: [1500, 2250, 3000, 3750, 4500], 
+        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе на грузоподъёмнике"
+    },
+    { 
+        id: 'miner', 
+        name: "⛏️ Шахтёр", 
+        level: 0, 
+        done: 0,
+        goals: [1000, 1500, 2000, 2500, 3000], 
+        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе на бульдозере"
+    },
+    { 
+        id: 'port', 
+        name: "🚢 Порт", 
+        level: 0, 
+        done: 0,
+        goals: [1500, 2250, 3000, 3750, 4500], 
+        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе на контейнерном погрузчике"
+    },
+    { 
+        id: 'taxi', 
+        name: "🚕 Таксист", 
+        level: 0, 
+        done: 0,
+        goals: [100, 200, 300, 400, 500], 
+        desc: "● Постепенное улучшение авто техническим тюнингом каждый уровень<br>● 1 уровень — доступ к BF Olivia A7<br>● 2 уровень — доступ к Benefactor Schafter<br>● 3 уровень — доступ к Enus Deit<br>● 4 уровень — доступ к Benefactor E-Series 63 W213<br>● 5 уровень — доступ к Benefactor S-series W223"
+    },
+    { 
+        id: 'diver', 
+        name: "🤿 Дайвер", 
+        level: 0, 
+        done: 0,
+        goals: [85, 170, 255, 340, 425], 
+        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе в озере Сэнди-Шорс<br>● 5 уровень — доступ к работе на батискафе"
+    },
+    { 
+        id: 'collector', 
+        name: "💰 Инкассатор", 
+        level: 0, 
+        done: 0,
+        goals: [40, 80, 120, 160, 200], 
+        desc: "● Увеличение оплаты каждый уровень"
+    },
+    { 
+        id: 'bus', 
+        name: "🚌 Водитель автобуса", 
+        level: 0, 
+        done: 0,
+        goals: [35, 75, 105, 135, 175], 
+        desc: "● Увеличение оплаты каждый уровень<br>● Новые маршруты каждый уровень"
+    },
+    { 
+        id: 'mechanic', 
+        name: "🔧 Механик", 
+        level: 0, 
+        done: 0,
+        goals: [40, 80, 120, 160, 200], 
+        desc: "● Постепенное улучшение авто техническим тюнингом каждый уровень<br>● 5 уровень — возможность работы на машине-эвакуаторе"
+    },
+    { 
+        id: 'fire', 
+        name: "🚒 Пожарный", 
+        level: 0, 
+        done: 0,
+        goals: [250, 500, 750, 1000, 1250], 
+        desc: "● Увеличение оплаты каждый уровень"
+    },
+    { 
+        id: 'truck', 
+        name: "🚛 Дальнобойщик", 
+        level: 0, 
+        done: 0,
+        goals: [40, 80, 120, 160, 200], 
+        desc: "● Увеличение оплаты каждый уровень"
+    },
+    { 
+        id: 'courier', 
+        name: "📦 Курьер", 
+        level: 0, 
+        done: 0, 
+        goals: [100, 200, 300, 400, 500], 
+        desc: "● Увеличение оплаты каждый уровень<br>● 5 уровень — появляется нумерация оптимального маршрута"
+    },
+    { 
+        id: 'post', 
+        name: "📮 Почтальон", 
+        level: 0, 
+        done: 0, 
+        goals: [140, 280, 420, 560, 700], 
+        desc: "● Увеличение оплаты за посылки на почте на 100$ за каждый уровень<br>● 5 уровень — доступ к работе на своём велосипеде или мотоцикле"
+    },
+    { 
+        id: 'contractor', 
+        name: "📋 Подрядчик", 
+        level: 0, 
+        done: 0, 
+        goals: [10, 20, 30, 40, 50], 
+        desc: "● +2% к шансу закрытия контракта за каждый уровень"
+    }
 ];
 
 const defaultTimers = [
-    { id: 1, name: "Почта", duration: 600, remaining: 600, running: false, icon: "✉️" },
-    { id: 2, name: "Организация", duration: 7200, remaining: 7200, running: false, icon: "🏢" },
-    { id: 3, name: "Автоугон", duration: 5400, remaining: 5400, running: false, icon: "🚗" },
-    { id: 4, name: "Сутенерка", duration: 5400, remaining: 5400, running: false, icon: "💃" },
-    { id: 5, name: "Контрабанда", duration: 300, remaining: 300, running: false, icon: "📦" },
-    { id: 6, name: "Автобус", duration: 5, remaining: 5, running: false, icon: "🚌" },
-    { id: 7, name: "Задание клуба", duration: 7200, remaining: 7200, running: false, icon: "♣️" },
-    { id: 8, name: "Тир", duration: 5400, remaining: 5400, running: false, icon: "🎯" },
-    { id: 9, name: "Швейка", duration: 87, remaining: 87, running: false, icon: "🧵" },
-    { id: 10, name: "Коробки", duration: 67, remaining: 67, running: false, icon: "📦" },
-    { id: 11, name: "Байкеры", duration: 7200, remaining: 7200, running: false, icon: "🏍️" },
-    { id: 12, name: "Реднеки", duration: 7200, remaining: 7200, running: false, icon: "🤠" },
-    { id: 13, name: "Кармит", duration: 7200, remaining: 7200, running: false, icon: "🥩" },
-    { id: 14, name: "Меривезер", duration: 7200, remaining: 7200, running: false, icon: "🚁" },
-    { id: 15, name: "Эпсилон", duration: 7200, remaining: 7200, running: false, icon: "🧘" },
-    { id: 16, name: "Дрессировка", duration: 930, remaining: 930, running: false, icon: "🐕" }
+    { id: 1, name: "Почта", duration: 600, remaining: 600, running: false, icon: "✉️", enabled: true },
+    { id: 2, name: "Организация", duration: 7200, remaining: 7200, running: false, icon: "🏢", enabled: true },
+    { id: 3, name: "Автоугон", duration: 5400, remaining: 5400, running: false, icon: "🚗", enabled: true },
+    { id: 4, name: "Сутенерка", duration: 5400, remaining: 5400, running: false, icon: "💃", enabled: true },
+    { id: 5, name: "Контрабанда", duration: 300, remaining: 300, running: false, icon: "📦", enabled: true },
+    { id: 6, name: "Автобус", duration: 5, remaining: 5, running: false, icon: "🚌", enabled: true },
+    { id: 7, name: "Задание клуба", duration: 7200, remaining: 7200, running: false, icon: "♣️", enabled: true },
+    { id: 8, name: "Тир", duration: 5400, remaining: 5400, running: false, icon: "🎯", enabled: true },
+    { id: 9, name: "Швейка", duration: 87, remaining: 87, running: false, icon: "🧵", enabled: true },
+    { id: 10, name: "Коробки", duration: 67, remaining: 67, running: false, icon: "📦", enabled: true },
+    { id: 11, name: "Байкеры", duration: 7200, remaining: 7200, running: false, icon: "🏍️", enabled: true },
+    { id: 12, name: "Реднеки", duration: 7200, remaining: 7200, running: false, icon: "🤠", enabled: true },
+    { id: 13, name: "Кармит", duration: 7200, remaining: 7200, running: false, icon: "🥩", enabled: true },
+    { id: 14, name: "Меривезер", duration: 7200, remaining: 7200, running: false, icon: "🚁", enabled: true },
+    { id: 15, name: "Эпсилон", duration: 7200, remaining: 7200, running: false, icon: "🧘", enabled: true },
+    { id: 16, name: "Дрессировка", duration: 930, remaining: 930, running: false, icon: "🐕", enabled: true }
 ];
 
 const achievementsConfig = [
@@ -118,7 +258,7 @@ const achievementsConfig = [
     { id: "7", title: "Пабло Аналгобар", desc: "Получите 1000 анальгетиков в лаборатории.", goal: 1000, reward: 25, status: "available",isSystem: false },
     { id: "8", title: "Транжира", desc: "Потратить 1000000$ на покупках одежды.", goal: 1000000, reward: 25, status: "available",isSystem: false },
 
-    { id: "9", title: "За проезд передаём", desc: "Оплатите поездку на автобусе 1000 раз на разных рейсах.", goal: 1000, reward: 1, status: "available",isSystem: false },
+    { id: "9", title: "За проезд передаём", desc: "Оплатите поездку на автобусе 1000 раз на разных рейсах.", goal: 1000, reward: 0, status: "available",isSystem: false },
 
     { id: "10", title: "Заслуженный строитель", desc: "Сделать 1000 действий на стройке.", goal: 1000, reward: 50, status: "available",isSystem: false },
     { id: "11", title: "Каменный проныра", desc: "Перетаскать 1000 камней на шахте.", goal: 1000, reward: 50, status: "available",isSystem: false },
@@ -128,7 +268,7 @@ const achievementsConfig = [
     { id: "15", title: "Водитель от Бога", desc: "Совершить 1000 перевозок, работая в такси.", goal: 1000, reward: 25, status: "available",isSystem: false },
     { id: "16", title: "Профессиональный ловец", desc: "Поймать 2000 рыб.", goal: 2000, reward: 25, status: "available",isSystem: false },
     { id: "17", title: "Время загадать желание", desc: "Поймать золотую рыбку и загадать желание.", goal: 1, reward: 50, status: "available",isSystem: false },
-    { id: "18", title: "Король мероприятий", desc: "Выиграть в мероприятиях 50 раз.", goal: 50, reward: 1, status: "locked",isSystem: false },
+    { id: "18", title: "Король мероприятий", desc: "Выиграть в мероприятиях 50 раз.", goal: 50, reward: 0, status: "locked",isSystem: false },
     { id: "19", title: "Бракосочетание", desc: "Соедините брачные узы воедино.", goal: 1, reward: 25, status: "available",isSystem: false },
     { id: "20", title: "Большой куш", desc: "Сорвать Джекпот (выбить 777 в любом из автоматов в казино).", goal: 1, reward: 30, status: "available",isSystem: false },
     { id: "21", title: "Отчаянный ход", desc: "Выиграть, поставив на 0 или 00.", goal: 1, reward: 25, status: "available",isSystem: false },
@@ -229,13 +369,11 @@ const achievementsConfig = [
 
 
         let savedTimers = JSON.parse(localStorage.getItem('myTimers'));
-        let savedInventory = JSON.parse(localStorage.getItem('myInventory')) || [];
         let autoRun = JSON.parse(localStorage.getItem('timerAutoRun')) || false;
         let totalTime = 0; 
         let currentTime = 0;
         let timerInterval = null;
         let timers = JSON.parse(localStorage.getItem('myTimers')) || [...defaultTimers];
-        let inventory = JSON.parse(localStorage.getItem('myInventory')) || [];
         let totalBP = parseInt(localStorage.getItem('totalBP')) || 0;
         let activeCat = localStorage.getItem('activeCat') || 'easy';
         let timerEndTime = null;
@@ -249,6 +387,7 @@ const achievementsConfig = [
         let lastTickTime = Date.now();
         let achievementsDone = JSON.parse(localStorage.getItem('achievementsDone')) || [];
         let currentAchFilter = 'available';
+        let totalActiveSeconds = 0;
         let settings = JSON.parse(localStorage.getItem('settings')) || { notifications: true, sounds: true };
         let appState = { timerEndTime: null };
 
@@ -276,20 +415,23 @@ function vibrate(type) {
 function renderSkills() {
     const container = document.getElementById('skills-container');
     container.innerHTML = skillsDb.map(s => {
-        const isMax = s.level >= s.goals.length - 1;
-        const currentGoal = s.goals[s.level];
+        const isMax = s.level >= s.goals.length;
+        const currentGoal = isMax ? s.goals[s.goals.length - 1] : s.goals[s.level];
         const percent = isMax ? 100 : Math.min(100, (s.done / currentGoal) * 100);
         
         return `
-        <div class="skill-card">
+        <div class="skill-card ${isMax ? 'max-level' : ''}" onclick="this.classList.toggle('expanded')">
             <div class="skill-header">
                 <span class="skill-name">${s.name}</span>
-                <span class="skill-lvl-badge">УРОВЕНЬ ${s.level + 1}</span>
+                <span class="skill-lvl-badge">УРОВЕНЬ ${s.level}</span>
             </div>
             <div class="skill-bar-container">
                 <div class="skill-bar-fill" style="width: ${percent}%"></div>
             </div>
-            <div class="skill-controls" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="skill-desc">
+                ${s.desc || ''}
+            </div>
+            <div class="skill-controls" onclick="event.stopPropagation()" style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="counter-box">
                     <button class="small-btn" onclick="updateSkill('${s.id}', 'done', -1)">-</button>
                     <span>${isMax ? 'MAX' : s.done + '/' + currentGoal}</span>
@@ -304,7 +446,7 @@ function renderSkills() {
     </button>
 </div>
             </div>
-            <div class="set-row">
+            <div class="set-row" onclick="event.stopPropagation()">
                 <input type="number" id="input-${s.id}" placeholder="Ввод" class="mini-input">
                 <button class="set-btn" onclick="setDone('${s.id}')">SET</button>
             </div>
@@ -319,26 +461,28 @@ function changeSkill(id, diff) {
     vibrate('light');
 }
 
+function updateStatHours() {
+    const el = document.getElementById('stat-hours');
+    if (el) {
+        el.innerText = formatTime(totalActiveSeconds);
+    }
+}
+
 // --- УПРАВЛЕНИЕ ВИДАМИ ---
 function switchMainView(view) {
-    const sections = ['farm', 'skills', 'reseller', 'timers', 'achievements'];
+    const sections = ['farm', 'skills', 'timers', 'achievements'];
     
     // 1. Переключаем секции
     sections.forEach(s => {
         const sectionEl = document.getElementById(s + '-section');
         const navEl = document.getElementById('nav-' + s);
-        
-        if (sectionEl) {
-            sectionEl.style.display = (view === s) ? 'block' : 'none';
-        }
-        if (navEl) {
-            navEl.classList.toggle('active', (view === s));
-        }
+        if (sectionEl) sectionEl.style.display = (view === s) ? 'block' : 'none';
+        if (navEl) navEl.classList.toggle('active', (view === s));
     });
 
     // 2. Обновляем заголовок
     const titleEl = document.getElementById('page-title');
-    const titles = { farm: "ФАРМ BP", skills: "НАВЫКИ", reseller: "КАЛЬКУЛЯТОР", timers: "ТАЙМЕРЫ", achievements: "ДОСТИЖЕНИЯ" };
+    const titles = { farm: "ФАРМ BP", skills: "НАВЫКИ", timers: "ТАЙМЕРЫ", achievements: "ДОСТИЖЕНИЯ" };
     if (titleEl && titles[view]) {
         titleEl.innerText = titles[view];
     }
@@ -348,148 +492,22 @@ function switchMainView(view) {
     if (view === 'achievements') renderAchievements('active');
 }
 
-// 1. РАСШИРЕННЫЙ КАЛЬКУЛЯТОР ПЕРЕКУПА
-function updateCalculator() {
-    const buy = parseFloat(document.getElementById('buy-price')?.value) || 0;
-    const tuning = parseFloat(document.getElementById('tuning-cost')?.value) || 0;
-    const taxPercent = parseFloat(document.getElementById('tax-percent')?.value) || 0;
-    const sellPrice = parseFloat(document.getElementById('target-sell')?.value) || 0;
-
-    // Расходная часть
-    const totalInvested = buy + tuning;
-    // Налог с продажи
-    const taxAmount = sellPrice * (taxPercent / 100);
-    const netProfit = sellPrice - totalInvested - taxAmount;
-    const roi = totalInvested > 0 ? (netProfit / totalInvested) * 100 : 0;
-
-    // Цена, при которой прибыль будет 0 (точка безубыточности)
-    const breakEven = totalInvested / (1 - (taxPercent / 100));
-
-    // UI Update
-    const netEl = document.getElementById('calc-res-net');
-    const roiEl = document.getElementById('calc-res-roi');
-    const breakEvenEl = document.getElementById('calc-res-breakeven');
-
-    if (netEl) {
-        netEl.innerText = `${Math.floor(netProfit).toLocaleString()}$`;
-        netEl.style.color = netProfit >= 0 ? '#00f0ff' : '#ff4a4a';
-    }
-    if (roiEl) roiEl.innerText = `${roi.toFixed(1)}%`;
-    if (breakEvenEl) breakEvenEl.innerText = `${Math.ceil(breakEven).toLocaleString()}$`;
-}
-
-// 2. УЛУЧШЕННЫЙ ИНВЕНТАРЬ
-function sellItem(id) {
-    const item = inventory.find(i => i.id === id);
-    if (!item) return;
-
-    // Запрашиваем сумму именно здесь, при нажатии
-    const sellPriceInput = prompt(`Введите сумму, за которую продали "${item.name}":`, item.price);
-    
-    // Если нажали "Отмена" или ввели пустоту
-    if (sellPriceInput === null || sellPriceInput.trim() === "") return;
-
-    const sellPrice = parseFloat(sellPriceInput.replace(/\s/g, '')) || 0;
-    const profit = sellPrice - item.price;
-
-    // Добавляем запись в финансы (как доход)
-    financeData.push({ 
-        id: Date.now(), 
-        name: `💎 Продажа: ${item.name}`, 
-        amount: sellPrice, 
-        type: 'income', 
-        date: new Date().toISOString().split('T')[0] 
-    });
-
-    inventory = inventory.filter(i => i.id !== id);
-    
-    saveData();
-    renderInventory();
-    updateFinanceUI();
-    
-    showToast(profit >= 0 ? `💰 Продано в плюс! Прибыль: ${profit}$` : `📉 Продано в минус: ${profit}$`);
-    vibrate('success');
-}
-
-// 3. ДАННЫЕ ДЛЯ НОВЫХ РАЗДЕЛОВ
-const wikiData = {
-    rent: [
-        { name: "Транспорт (Новички)", price: "500$ / час", icon: "🚲" },
-        { name: "Вертолет", price: "15,000$ / час", icon: "🚁" },
-        { name: "Лодка", price: "5,000$ / час", icon: "🚤" }
-    ],
-    estate: [
-        { name: "Квартира (Эконом)", price: "150,000$+", icon: "🏢" },
-        { name: "Дом (Средний)", price: "800,000$+", icon: "🏡" },
-        { name: "Вилла", price: "5,000,000$+", icon: "🏰" }
-    ],
-    craft: [
-        { name: "Бронежилет", materials: "Ткань (5), Пластины (2)", icon: "🛡️" },
-        { name: "Косяк", materials: "Трава (3), Бумага (1)", icon: "🌿" },
-        { name: "Турбо-декодер", materials: "Схемы (10), Металл (5)", icon: "📟" }
-    ],
-    spank: [
-        { name: "Производство", info: "Требует: Эфедрин + Йод", icon: "🧪" },
-        { name: "Сбыт", info: "Выгода: +25% к гос. цене", icon: "💵" }
-    ]
-};
-
-function renderWikiSection(category) {
-    const container = document.getElementById('wiki-container');
-    if (!container) return;
-
-    const items = wikiData[category] || [];
-    container.innerHTML = items.map(item => `
-        <div class="wiki-item">
-            <div style="font-size: 24px;">${item.icon}</div>
-            <div style="font-weight: bold; margin-top: 8px;">${item.name}</div>
-            <div style="color: var(--void-accent); font-size: 12px;">${item.price || item.materials || item.info}</div>
-        </div>
-    `).join('');
-}
-
-// 4. ПЕРЕКЛЮЧЕНИЕ ПОД-ВКЛАДОК В КАЛЬКУЛЯТОРЕ
-function selectResellTab(tabName, btnElement) {
-    document.querySelectorAll('.sub-tab').forEach(btn => btn.classList.remove('active'));
-    btnElement.classList.add('active');
-
-    const calcSection = document.getElementById('tab-calc');
-    const invSection = document.getElementById('tab-inventory');
-    const wikiSection = document.getElementById('tab-wiki');
-
-    // Прячем всё
-    if(calcSection) calcSection.style.display = 'none';
-    if(invSection) invSection.style.display = 'none';
-    if(wikiSection) wikiSection.style.display = 'none';
-
-    if (tabName === 'calc') {
-        calcSection.style.display = 'block';
-    } else if (tabName === 'inventory') {
-        invSection.style.display = 'block';
-    } else {
-        // Для всех остальных (rent, estate, craft, spank) показываем wiki
-        wikiSection.style.display = 'block';
-        renderWikiSection(tabName);
-    }
-    
-    vibrate('light');
-}
-
 function updateSkill(id, type, diff) {
     const s = skillsDb.find(x => x.id === id);
     if (!s) return;
 
     if (type === 'lvl') {
         // Управление уровнем
-        s.level = Math.max(0, Math.min(s.goals.length - 1, s.level + diff));
+        s.level = Math.max(0, Math.min(s.goals.length, s.level + diff));
         s.done = 0; // Сброс прогресса при смене уровня
     } else if (type === 'done') {
         // Управление прогрессом
+        if (s.level >= s.goals.length) return;
         const maxForLevel = s.goals[s.level];
         s.done = Math.max(0, Math.min(maxForLevel, s.done + diff));
         
         // Авто-переход на следующий уровень, если дошли до конца текущего
-        if (s.done >= maxForLevel && s.level < s.goals.length - 1) {
+        if (s.done >= maxForLevel && s.level < s.goals.length) {
             s.level++;
             s.done = 0;
         }
@@ -518,7 +536,7 @@ function updateCategoryStats() {
     if (elBPProgress) elBPProgress.innerText = `${earnedBP} / ${totalPossibleBP}`;
 
     const elTotalBP = document.getElementById('stat-bp');
-    if (elTotalBP) elTotalBP.innerText = totalBP;
+    if (elTotalBP) elTotalBP.innerText = totalBP * mult;
 }
 
         let trackingDone = {};
@@ -593,13 +611,13 @@ function buildFeed() {
         card.innerHTML = `
             <div class="task-row" style="display:flex; align-items:center; gap:10px;">
                 ${toggleBtn}
-                <div class="task-meta" onclick="this.closest('.task-card').classList.toggle('expanded'); this.closest('.task-card').querySelector('.task-desc').style.display = this.closest('.task-card').classList.contains('expanded') ? 'block' : 'none';" style="flex-grow:1; cursor:pointer;">
+                <div class="task-meta" onclick="this.closest('.task-card').classList.toggle('expanded');" style="flex-grow:1; cursor:pointer;">
                     ${q.icon} ${q.name}
                 </div>
                 <div class="task-right">${rightSide}</div>
             </div>
             <div class="task-line"></div>
-            <div class="task-desc" style="display:none; padding:10px; border-top:1px solid #333; margin-top:10px;">
+            <div class="task-desc">
                 <p style="margin:0 0 10px 0; font-size: 13px;">${q.desc}</p>
                 <input type="text" placeholder="📝 Заметка..." value="${q.note || ''}" 
                        oninput="saveNote(${q.id}, this.value)" class="note-input-field" 
@@ -652,7 +670,7 @@ function resetTask(id, event) {
     // Вычитаем Reward из общего BP
     const q = db.find(x => x.id === id);
     if (q) {
-        totalBP = Math.max(0, totalBP - (q.reward * mult));
+        totalBP = Math.max(0, totalBP - q.reward);
         document.getElementById('stat-bp').innerText = totalBP;
     }
     
@@ -666,7 +684,7 @@ function finishTask(id, reward, event) {
     
     // 1. Обновляем значение
     trackingDone[id] = true;
-    totalBP += (reward * mult);
+    totalBP += reward;
     
     // 2. Сохраняем в localStorage
     saveData();
@@ -674,7 +692,6 @@ function finishTask(id, reward, event) {
     // 3. ПЕРЕРИСОВЫВАЕМ ИНТЕРФЕЙС (обязательно!)
     buildFeed();
     updateCategoryStats();
-    updateFinanceUI();
     vibrate('success');
 }
 
@@ -766,8 +783,33 @@ function toggleModifier(type) {
 
             buildFeed();
             updateCategoryStats();
+            updateMultiplierUI();
             vibrate('light');
+            saveData();
         }
+
+function updateMultiplierUI() {
+    const labelEl = document.getElementById('stat-mult-text');
+    const sBtn = document.getElementById('toggle-server');
+    const vBtn = document.getElementById('toggle-vip');
+
+    if (sBtn) sBtn.classList.toggle('active', hasServerMod);
+    if (vBtn) vBtn.classList.toggle('active', hasVipMod);
+
+    if (hasServerMod && hasVipMod) {
+        mult = 4;
+        if (labelEl) labelEl.innerText = "Активен: х4 (Сервер + VIP)";
+    } else if (hasServerMod || hasVipMod) {
+        mult = 2;
+        if (labelEl) labelEl.innerText = hasServerMod ? "Активен: х2 (Только Сервер)" : "Активен: х2 (Только VIP)";
+    } else {
+        mult = 1;
+        if (labelEl) labelEl.innerText = "Базовый (х1)";
+    }
+
+    buildFeed();
+    updateCategoryStats();
+}
 
 function controlOnline() {
     const btn = document.getElementById('time-btn');
@@ -861,6 +903,11 @@ function startTimerInterval() {
         
         if (remaining > 0) {
             currentTime = remaining;
+            
+            // Считаем активность только когда таймер реально идет
+            totalActiveSeconds++;
+            updateStatHours();
+
             updateUI();
         } else {
             clearInterval(timerInterval);
@@ -870,8 +917,11 @@ function startTimerInterval() {
             updateUI();
 
             if (autoRun && totalTime > 0) {
+                sendNotification("⏰ Время вышло! Авторестарт...");
+                playSound();
                 currentTime = totalTime;
                 appState.timerEndTime = Date.now() + (totalTime * 1000);
+                updateUI();
                 startTimerInterval();
             } else {
                 handleTimerEnd();
@@ -1009,25 +1059,6 @@ function hardReset() {
 }
 
 // 2. Закрывает окно
-function closeConfirm() {
-    document.getElementById('confirm-modal').style.display = 'none';
-}
-
-// 3. Выполняет реальный сброс (после нажатия кнопки "Удалить")
-function executeHardReset() {
-    // Очищаем хранилище
-    localStorage.clear();
-    
-    // Останавливаем таймеры (на всякий случай)
-    if (typeof clockInterval !== 'undefined') clearInterval(clockInterval);
-    if (typeof timerInterval !== 'undefined') clearInterval(timerInterval);
-    
-    // Виброотклик
-    if (typeof vibrate === 'function') vibrate('warning');
-    
-    // Перезагрузка страницы
-    location.reload();
-}
 
 function toggleSetting(type) {
     settings[type] = !settings[type]; // Инвертируем (true -> false, false -> true)
@@ -1050,107 +1081,8 @@ function toggleSlide() {
 }
 
 // Смена темы
-function toggleTheme() {
-    document.body.classList.toggle('light');
-    const isLight = document.body.classList.contains('light');
-    localStorage.setItem('theme', isLight ? 'light' : 'dark');
-}
-
-        // Запуск базового состояния приложения
-        selectCategory('easy');
- function selectResellTab(tabName, btnElement) {
-    // 1. Убираем класс active у всех кнопок
-    document.querySelectorAll('.sub-tab').forEach(btn => btn.classList.remove('active'));
-    // 2. Добавляем активной кнопке
-    btnElement.classList.add('active');
-
-    // 3. Прячем всё содержимое
-    document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
-    
-    // 4. Показываем нужный блок
-    const activeTab = document.getElementById('tab-' + tabName);
-    if (activeTab) {
-        activeTab.style.display = 'block';
-    }
-    
-    vibrate('light');
-}   
-
-// --- Функция добавления ---
-function addNewItem() {
-    const nameInput = document.getElementById('item-name');
-    const priceInput = document.getElementById('item-price');
-    const commentInput = document.getElementById('item-comment');
-    const catText = document.getElementById('selected-text').innerText;
-    
-    // Проверка с красивой логикой
-    if (!nameInput.value || priceInput.value === '') {
-        showToast("Заполните все обязательные поля!", "#ff6b6b"); 
-        return;
-    }
-
-    const item = { 
-        id: Date.now(), 
-        name: nameInput.value, 
-        price: Number(priceInput.value), 
-        cat: catText, 
-        comment: commentInput.value 
-    };
-
-    inventory.push(item);
-    saveData();
-    renderInventory();
-    
-    // Очистка
-    nameInput.value = '';
-    priceInput.value = '';
-    commentInput.value = '';
-
-    // Подтверждение успеха
-    showToast("Запись успешно добавлена!", "#40e0d0"); // Березовый цвет успеха
-}
-
-function saveInventory() {
-    localStorage.setItem('myInventory', JSON.stringify(inventory));
-}
-
-// --- Рендеринг инвентаря с кнопками ---
-function renderInventory() {
-    const list = document.getElementById('inventory-list');
-    const count = document.getElementById('inv-count');
-    count.innerText = `(${inventory.length})`;
-    
-    list.innerHTML = inventory.map(item => `
-        <div class="card" style="margin-top:10px; border-left: 4px solid #4a90e2;">
-            <div style="display:flex; justify-content:space-between;">
-                <b>${item.name}</b>
-                <span>$${item.price.toLocaleString()}</span>
-            </div>
-            <div style="font-size: 11px; color: #888;">${item.cat}</div>
-            ${item.comment ? `<div style="font-size: 12px; margin: 5px 0; font-style: italic;">💬 ${item.comment}</div>` : ''}
-            <div style="display: flex; gap: 5px; margin-top: 8px;">
-                <button onclick="sellItem(${item.id})" style="flex:1; background:#28a745; color:white; border:none; padding:5px; border-radius:4px;">✅ Продал</button>
-                <button onclick="deleteItem(${item.id})" style="flex:1; background:#dc3545; color:white; border:none; padding:5px; border-radius:4px;">🗑️ Удалить</button>
-            </div>
-        </div>
-    `).join('');
-}
-
-// --- Логика продажи/удаления с записью в финансы ---
-function deleteItem(id) {
-    const item = inventory.find(i => i.id === id);
-    financeData.push({ 
-        id: Date.now(), name: "Удаление: " + item.name, amount: item.price, 
-        type: 'expense', date: new Date().toISOString().split('T')[0] 
-    });
-    inventory = inventory.filter(i => i.id !== id);
-    saveData();
-    renderInventory();
-    updateFinanceUI();
-}
-
 // --- 1. ФУНКЦИИ ДЛЯ ЗАДАЧ (Farm BP) ---
-function selectCategory(catName) {
+function selectCategory(catName, silent = false) { 
     // 1. Убираем активный класс у всех кнопок
     document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
     
@@ -1166,7 +1098,7 @@ function selectCategory(catName) {
     
     // 5. Остальные твои функции
     updateCategoryStats();
-    vibrate('light');
+    if (!silent) vibrate('light');
 }
 
 // --- 2. ФУНКЦИИ ДЛЯ ИНВЕНТАРЯ (Выбор категории товара) ---
@@ -1183,8 +1115,6 @@ function selectInvCategory(name, icon) {
     toggleInvDropdown(); // Закрываем меню после выбора
     vibrate('light');
 }
-// Запуск при загрузке
-window.addEventListener('DOMContentLoaded', renderInventory);
 
 function setDone(id) {
     const s = skillsDb.find(x => x.id === id);
@@ -1195,15 +1125,14 @@ function setDone(id) {
         s.done = val;
         
         // Автоматически повышаем уровень, если ввели значение больше текущей цели
-        // Используем s.goals.length - 1 для корректной работы с любым числом уровней
-        while (s.done >= s.goals[s.level] && s.level < s.goals.length - 1) {
+        while (s.level < s.goals.length && s.done >= s.goals[s.level]) {
             s.done -= s.goals[s.level];
             s.level++;
         }
         
-        // Если ввели больше, чем нужно для последнего уровня — фиксируем на максимуме
-        if (s.level >= s.goals.length - 1 && s.done > s.goals[s.goals.length - 1]) {
-            s.done = s.goals[s.goals.length - 1];
+        // Если достигли максимума — прогресс в 0
+        if (s.level >= s.goals.length) {
+            s.done = 0;
         }
 
         renderSkills();
@@ -1242,81 +1171,6 @@ function saveNote(id, value) {
     }
 }
 
-let financeData = JSON.parse(localStorage.getItem('myFinance')) || [];
-
-function addFinRecord(type) {
-    const name = document.getElementById('fin-name').value;
-    const amount = parseFloat(document.getElementById('fin-amount').value);
-    
-    if(!name || isNaN(amount)) {
-        // Можно сделать вторую функцию для маленьких всплывашек (тостов)
-        alert("Заполните поля корректно!"); // Или заменить на свой стилизованный блок
-        return;
-    }
-
-    financeData.push({
-        id: Date.now(),
-        name,
-        amount,
-        type, 
-        date: new Date().toISOString().split('T')[0]
-    });
-    
-    updateFinanceUI();
-    saveData();
-}
-
-
-
-function updateFinanceUI() {
-    let income = 0, expense = 0;
-    
-    financeData.forEach(item => {
-        if(item.type === 'income') income += item.amount;
-        else expense += item.amount;
-    });
-
-    document.getElementById('stat-income').innerText = `$ ${income.toLocaleString()}`;
-    document.getElementById('stat-expense').innerText = `$ ${expense.toLocaleString()}`;
-    document.getElementById('stat-profit').innerText = `$ ${(income - expense).toLocaleString()}`;
-    document.getElementById('stat-roi').innerText = expense ? `${(((income - expense) / expense) * 100).toFixed(1)}%` : "0%";
-
-    renderFinanceHistory();
-}
-
-function renderFinanceHistory() {
-    const list = document.getElementById('finance-history-list');
-    list.innerHTML = financeData.map(item => `
-        <div class="card" style="margin:5px 0; padding:10px">
-            <div style="display:flex; justify-content:space-between">
-                <span>${item.name}</span>
-                <span style="color:${item.type === 'income' ? '#2ecc71' : '#e74c3c'}">
-                    ${item.type === 'income' ? '+' : '-'}$${item.amount.toLocaleString()}
-                </span>
-            </div>
-        </div>
-    `).join('');
-}
-
-
-// Функция для фильтрации финансов по дате
-function getFilteredFinance(period) {
-    const now = new Date();
-    return financeData.filter(item => {
-        const itemDate = new Date(item.date);
-        if (period === 'day') return item.date === now.toISOString().split('T')[0];
-        if (period === 'week') {
-            const oneWeekAgo = new Date(now.setDate(now.getDate() - 7));
-            return itemDate >= oneWeekAgo;
-        }
-        if (period === 'month') {
-            return itemDate.getMonth() === now.getMonth() && itemDate.getFullYear() === now.getFullYear();
-        }
-        return true; // "все время"
-    });
-}
-
-// Консолидировано в финальную функцию updateFinanceUI.
 // Функция для открытия модалки
 function resetAllDoneTasks() {
     showModal("Сброс прогресса", "Вы уверены, что хотите сбросить все задания?", () => {
@@ -1365,7 +1219,6 @@ function confirmReset() {
     
     // 4. Обновляем интерфейс
     if (typeof buildFeed === 'function') buildFeed();
-    if (typeof updateFinanceUI === 'function') updateFinanceUI();
     
     // 5. Закрываем окно и показываем уведомление
     closeModal();
@@ -1540,20 +1393,24 @@ function toggleTimer(id) {
     renderTimers();
 }
 
-function deleteTimer(id) {
-    showModal("Удаление", "Вы уверены, что хотите удалить этот таймер?", () => {
-        // Твоя логика удаления
-        timers = timers.filter(t => t.id !== id);
+function toggleTimerStatus(id) {
+    const t = timers.find(x => x.id === id);
+    if (t) {
+        t.enabled = !t.enabled;
         saveData();
         renderTimers();
-        showToast("🗑️ Таймер удален");
-    });
+    }
+}
+
+function deleteTimer(id) {
+    toggleTimerStatus(id);
+    showToast("📋 Статус таймера изменен");
 }
 function formatTime(s) {
     const h = Math.floor(s / 3600);
     const m = Math.floor((s % 3600) / 60);
     const sec = s % 60;
-    return `${h > 0 ? h+':' : ''}${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
 }
 function renderTimers() {
     const container = document.getElementById('timers-list');
@@ -1589,8 +1446,9 @@ function renderTimers() {
         </div>`;
 
     // 3. Генерация списка таймеров с поддержкой Drag & Drop
-    const listHtml = timers.map((t, index) => `
-        <div class="timer-card ${t.remaining === 0 ? 'finished' : ''}" 
+    const activeTimersHtml = timers.filter(t => t.enabled !== false).map((t, index) => `
+        <div class="timer-card ${t.remaining === 0 ? 'finished' : ''}"
+             style="${t.remaining === 0 ? 'animation: finish-flash 1s infinite alternate;' : ''}"
              data-id="${t.id}" 
              draggable="true" 
              ondragstart="handleDragStart(${index})" 
@@ -1607,15 +1465,30 @@ function renderTimers() {
             </div>
             
             <div class="controls">
-                <button class="timer-btn toggle-btn" onclick="toggleTimer(${t.id})">
+                <button class="timer-btn toggle-btn" id="timer-btn-${t.id}" onclick="toggleTimer(${t.id})">
                     ${t.running ? '⏸️' : '▶️'}
                 </button>
                 <button class="timer-btn" onclick="resetTimer(${t.id})">🔄</button>
-                <button class="del-btn" onclick="deleteTimer(${t.id})">✕</button>
+                <button class="del-btn" onclick="toggleTimerStatus(${t.id})">✕</button>
             </div>
         </div>`).join('');
 
-    container.innerHTML = formHtml + listHtml;
+    const inactiveTimersHtml = timers.filter(t => t.enabled === false).map((t, index) => `
+        <div class="timer-card inactive" data-id="${t.id}" style="opacity: 0.6;">
+            <div class="timer-info">
+                <div><span class="timer-icon">${t.icon || ''}</span> <span class="timer-name">${t.name}</span></div>
+                <b class="timer-val">${formatTime(t.remaining)}</b>
+            </div>
+            <div class="controls">
+                <button class="timer-btn" onclick="toggleTimerStatus(${t.id})">✔</button>
+            </div>
+        </div>`).join('');
+
+    container.innerHTML = `
+        ${formHtml}
+        <div class="task-section"><h3>🟢 Активные</h3>${activeTimersHtml}</div>
+        <div class="task-section"><h3>🔴 Неактивные</h3>${inactiveTimersHtml}</div>
+    `;
 }
 
 let dragSourceIndex = null;
@@ -1671,13 +1544,14 @@ let changed = false;
                 sendNotification(`⏰ Таймер "${t.name}" завершен!`);
                 playSound();
                 
-                const card = document.querySelector(`[data-id="${t.id}"]`);
+                const card = document.querySelector(`.timer-card[data-id="${t.id}"]`);
                 if (card) {
                     card.classList.add('finished');
                     
                     // Кнопка меняется на плей, так как таймер остановился
-                    const btn = card.querySelector('.toggle-btn');
+                    const btn = document.getElementById(`timer-btn-${t.id}`);
                     if (btn) btn.innerText = '▶️'; 
+                    card.style.animation = "finish-flash 1s infinite alternate";
                 }
             }
         }
@@ -1854,12 +1728,14 @@ function saveData() {
     const dataToSave = {
         timers: typeof timers !== 'undefined' ? timers : [],
         totalBP: typeof totalBP !== 'undefined' ? totalBP : 0,
-        financeData: financeData,
-        inventory: inventory,
         db: db,
         skillsDb: skillsDb,
         trackingDone: trackingDone,
         trackingVal: trackingVal,
+        activeCat: activeCat,
+        totalActiveSeconds: totalActiveSeconds,
+        hasServerMod: hasServerMod,
+        hasVipMod: hasVipMod,
         achievementsDone: achievementsDone,
         settings: settings,
         timerState: {
@@ -1888,12 +1764,14 @@ function loadData() {
         // Используй оператор ?? (nullish coalescing) для надежности
         timers       = p.timers ?? [];
         totalBP      = p.totalBP ?? 0;
-        financeData  = p.financeData ?? [];
-        inventory    = p.inventory ?? [];
         db           = p.db ?? db; 
         skillsDb     = p.skillsDb ?? skillsDb;
         trackingDone = p.trackingDone ?? {};
         trackingVal  = p.trackingVal ?? {};
+        activeCat    = p.activeCat ?? 'easy';
+        hasServerMod = p.hasServerMod ?? false;
+        hasVipMod = p.hasVipMod ?? false;
+        totalActiveSeconds = p.totalActiveSeconds ?? 0;
         achievementsDone = p.achievementsDone ?? [];
         settings = p.settings ?? { notifications: true, sounds: true };
     if (p.timerState) {
@@ -1943,26 +1821,34 @@ window.onload = () => {
         handleTimerEnd(); // Ваша функция завершения
     }
     
-    updateUI();
-    renderAchievements();
-    renderSkills();
-    buildFeed();
-
-    if (document.getElementById('achievements-list')) {
-        renderAchievements();
+    // Update timer button text if timer is active on load
+    if (timerInterval) {
+        document.getElementById('time-btn').innerText = "СТОП";
     }
+    updateStatHours();
     
+    updateUI();
+    
+    // Восстанавливаем множители и состояние BP
+    // 1. Восстанавливаем множители и состояние BP
+    updateMultiplierUI();
+    // Загружаем нужную категорию и обновляем счетчик BP на экране
+    
+    // 2. Синхронизация визуального состояния настроек (уведомления и звук)
+    if (document.getElementById('notif-switch')) document.getElementById('notif-switch').classList.toggle('on', settings.notifications);
+    if (document.getElementById('sound-switch')) document.getElementById('sound-switch').classList.toggle('on', settings.sounds);
+
+    // 3. Загружаем нужную категорию и обновляем счетчик BP на экране
+    selectCategory(activeCat, true);
+
     // 5. Рендеринг всех модулей
     try {
         // Установим дефолтный экран, если он не был сохранен
         const lastView = localStorage.getItem('lastView') || 'farm';
         switchMainView(lastView);
         
-        buildFeed(); 
-        
+        renderAchievements();
         if (typeof renderSkills === 'function') renderSkills();
-        if (typeof renderInventory === 'function') renderInventory();
-        if (typeof updateFinanceUI === 'function') updateFinanceUI();
         
         console.log("Приложение успешно инициализировано");
     } catch (e) {

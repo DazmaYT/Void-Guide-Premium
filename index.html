@@ -51,11 +51,10 @@
 </div>
 
 <section id="farm-section">
-<div id="farm-section">
     <div class="dashboard">
         <div class="dash-grid">
             <div class="dash-item"><span class="lbl">Нафармлено BP</span><span class="val cyan" id="stat-bp">0</span></div>
-            <div class="dash-item"><span class="lbl">Активных часов</span><span class="val" id="stat-hours">0</span></div>
+            <div class="dash-item"><span class="lbl">Активность</span><span class="val" id="stat-hours">00:00:00</span></div>
             <div class="dash-item" style="grid-column: span 2;"><span class="lbl">Текущий тип множителя</span><span class="val orange" id="stat-mult-text">Базовый (х1)</span></div>
         </div>  
         <div class="mult-selector-wrapper">
@@ -91,11 +90,6 @@
     <button class="btn-reset-session" onclick="resetSession()">↺ Сбросить Сессию</button>
 </div>
 
-
-    
-</div>
-</div>
-
     <div class="category-scroller">
         <button class="cat-tab active" id="tab-easy" onclick="selectCategory('easy')">🟢 Простые</button>
         <button class="cat-tab" id="tab-medium" onclick="selectCategory('medium')">🟡 Средние</button>
@@ -105,8 +99,8 @@
     </div>
 <button class="btn-reset-tasks" onclick="resetAllDoneTasks()">↺ Сброс заданий</button>
     <div class="feed-container" id="feed-box"></div>
-</div>
 </section>
+
 <div id="skills-section" style="display: none;">
     <div class="feed-container" id="skills-container" style="padding: 16px;"></div>
 </div>
@@ -115,71 +109,8 @@
     <button class="nav-node active" id="nav-farm" onclick="switchMainView('farm')"><span class="ico">🌌</span>Фарм</button>
     <button class="nav-node" id="nav-achievements" onclick="switchMainView('achievements')"><span class="ico">🏆</span>Достижения</button>
     <button class="nav-node" id="nav-skills" onclick="switchMainView('skills')"><span class="ico">⏳</span>Навыки</button>
-    <button class="nav-node" id="nav-reseller" onclick="switchMainView('reseller')"><span class="ico">💰</span>Калькулятор</button>
     <button class="nav-node" id="nav-timers" onclick="switchMainView('timers')"><span class="ico">⏱️</span>Таймеры</button>
 </div>
-<section id="reseller-section" style="display: none;">
-    <div class="sub-nav" style="justify-content: center; width: 100%;">
-        <button class="sub-tab active" onclick="selectResellTab('reseller', this)">Перекуп</button>
-        <button class="sub-tab" onclick="selectResellTab('rent', this)">Аренда</button>
-        <button class="sub-tab" onclick="selectResellTab('realty', this)">Недвижимость</button>
-        <button class="sub-tab" onclick="selectResellTab('spank', this)">SPANK</button>
-        <button class="sub-tab" onclick="selectResellTab('crafts', this)">Крафты</button>
-    </div>
-
-    <div id="resell-content-container">
-        <div id="tab-reseller" class="tab-content">
-            <div class="card">
-                <h3 class="section-title">➕ Добавить товар</h3>
-                <input type="text" id="item-name" placeholder="Название товара" class="full-input">
-                
-                <div class="custom-dropdown">
-                    <div class="dropdown-selected" onclick="toggleInvDropdown()">
-                        <span id="selected-text">Выберите категорию</span>
-                        <span class="arrow">▼</span>
-                    </div>
-                    <div class="dropdown-options" id="dropdown-options">
-                        <div onclick="selectInvCategory('Предметы', '📦')">📦 Предметы</div>
-                        <div onclick="selectInvCategory('Одежда и аксессуары', '👕')">👕 Одежда</div>
-                        <div onclick="selectInvCategory('Сумки и рюкзаки', '🎒')">🎒 Сумки</div>
-                        <div onclick="selectInvCategory('Транспорт', '🚗')">🚗 Транспорт</div>
-                        <div onclick="selectInvCategory('Квартиры', '🏠')">🏠 Квартиры</div>
-                        <div onclick="selectInvCategory('Дома', '🏠')">🏠 Дома</div>
-                        <div onclick="selectInvCategory('Бизнесы', '🏟️')">🏟️ Бизнесы</div>
-                        <div onclick="selectInvCategory('Другое', '...')">... Другое</div>
-                    </div>
-                </div>
-                <input type="number" id="item-price" placeholder="$ Цена" class="full-input">
-                <input type="text" id="item-comment" placeholder="Комментарий к товару" class="full-input">
-                <button class="add-main-btn" onclick="addNewItem()">+ Добавить</button>
-            </div>
-
-            <div class="card" id="finance-section">
-                <h3 class="section-title">💰 Финансы</h3>
-<div class="period-tabs">
-    <button class="sub-tab" onclick="setPeriod('today')">Сегодня</button>
-    <button class="sub-tab" onclick="setPeriod('week')">Неделя</button>
-    <button class="sub-tab" onclick="setPeriod('month')">Месяц</button>
-    <button class="sub-tab" onclick="setPeriod('all')">Все время</button>
-</div>
-                <div class="stats-grid">
-                    <div class="stat-box green"><span class="label">ДОХОД</span><span class="value" id="stat-income">$ 0</span></div>
-                    <div class="stat-box red"><span class="label">РАСХОД</span><span class="value" id="stat-expense">$ 0</span></div>
-                </div>
-                <button class="add-main-btn" style="background:#ff0000" onclick="resetFinance()">🗑️ Сбросить</button>
-            </div>
-
-            <div class="card">
-                <h3>📜 Инвентарь <small id="inv-count">(0)</small></h3>
-                <div id="inventory-list" ></div>
-            </div>
-        </div>
-
-        <div id="tab-rent" class="tab-content" style="display:none;">
-            
-        </div>
-    </div>
-</section>
 
 
 
@@ -206,7 +137,6 @@
     <div id="achievements-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;"></div>
 </section>
 
-</section>
 
 <div id="modal-global" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(5px); z-index:20000; align-items:center; justify-content:center;">
     <div style="background:#11152c; padding:25px; border-radius:18px; border:1px solid #6d4aff; text-align:center; width: 85%; max-width: 320px;">
@@ -230,9 +160,3 @@
 
 </body>
 </html>
-
-
-
-
-
-

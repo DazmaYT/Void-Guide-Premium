@@ -24,6 +24,10 @@
             50% { transform: scale(1.02); }
             100% { transform: scale(1); }
         }
+        @keyframes finish-flash {
+            from { box-shadow: 0 0 5px var(--accent-color); border-color: var(--accent-color); }
+            to { box-shadow: 0 0 20px rgba(64, 224, 208, 0.8); border-color: var(--accent-color); transform: scale(1.02); }
+        }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(64, 224, 208, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(64, 224, 208, 0); } 100% { box-shadow: 0 0 0 0 rgba(64, 224, 208, 0); } }
         :root {
             --bg-main: #040509;
@@ -483,17 +487,17 @@
 .task-desc {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+    transition: all 0.3s ease;
     opacity: 0;
     font-size: 12px;
     color: var(--text-muted);
     padding: 0 4px;
 }
 .task-card.expanded .task-desc {
-    max-height: 100px; /* Достаточно для текста описания */
+    max-height: 300px; /* Увеличено, чтобы вместить текст и поле заметки */
     opacity: 1;
     margin-top: 10px;
-    padding: 8px 4px;
+    padding: 10px 4px;
     border-top: 1px solid rgba(255,255,255,0.05);
 }
 .exec-btn {
@@ -626,6 +630,27 @@
     margin: 10px 16px;
     border-radius: 16px;
     border: var(--border-style);
+    cursor: pointer;
+}
+
+.skill-desc {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    opacity: 0;
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.skill-card.expanded .skill-desc {
+    max-height: 500px;
+    opacity: 1;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .skill-bar-container {
@@ -1620,7 +1645,6 @@
 }
 
 
-.task-card.expanded .task-desc { display: block !important; }
 
 
 
