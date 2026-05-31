@@ -1816,3 +1816,122 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); 
 }
 
+/* Линия только в заданиях */
+.feed-item .task-line { 
+    height: 1px; 
+    width: 100%; 
+    background: linear-gradient(90deg, #40E0D0, transparent); 
+    margin: 10px 0; 
+}
+
+/* Премиум кнопка только в заданиях */
+.feed-item .btn-premium { 
+    background: linear-gradient(135deg, #6d4aff, #40E0D0); 
+    border: none; 
+    padding: 6px 14px; 
+    border-radius: 8px; 
+    color: #fff; 
+    font-weight: bold; 
+    font-size: 11px; 
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(64, 224, 208, 0.3);
+}
+
+/* Текст BP только в заданиях */
+.feed-item .bp-text { 
+    font-size: 10px; 
+    color: #40E0D0; 
+    text-align: center; 
+    font-weight: bold; 
+    margin-top: 4px; 
+}
+
+.ach-card-gta {
+    position: relative; /* Обязательно для позиционирования абсолютного элемента внутри */
+    background: #161a22;
+    border: 1px solid #2a3344;
+    padding: 15px;
+    border-radius: 4px;
+    color: white;
+    border-left: 4px solid #e74c3c;
+}
+
+.ach-reward-badge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    color: #f1c40f; /* Золотистый цвет */
+    font-size: 11px;
+    font-weight: bold;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.ach-card-gta.active-done {
+    border-color: #3ae374; /* Зеленая рамка при выполнении */
+    background: #1c222d;
+}
+
+.ach-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.ach-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    background: #2a3344;
+    border: none;
+    color: white;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.ach-card-gta.active-done .ach-btn {
+    background: #c23616; /* Красный цвет для отмены */
+}
+
+.ach-card-gta.done {
+    border-left: 4px solid #12d1f3; /* Золотая полоска слева как на скрине */
+    background: #1c1f26;
+}
+
+.ach-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.ach-card-gta[style*="opacity:0.5"] {
+    border-style: dashed;
+    border-color: #444;
+}
+
+.ach-title { font-weight: bold; font-size: 14px; }
+.ach-desc { font-size: 11px; color: #888; }
+.ach-stats { font-size: 12px; margin-top: 10px; text-align: right; font-weight: bold; }
+.done .ach-stats { color: #12d1f3; }
+
+.ach-filter-nav .sub-tab {
+    flex: 1;
+    padding: 10px;
+    background: #161a22;
+    border: 1px solid #2a3344;
+    color: #888;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.ach-filter-nav .sub-tab.active {
+    background: #6d4aff;
+    color: white;
+    border-color: #6d4aff;
+}

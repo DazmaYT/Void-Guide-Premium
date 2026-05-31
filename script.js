@@ -107,6 +107,27 @@ const defaultTimers = [
     { id: 15, name: "Эпсилон", duration: 7200, remaining: 7200, running: false, icon: "🧘" },
     { id: 16, name: "Дрессировка", duration: 930, remaining: 930, running: false, icon: "🐕" }
 ];
+
+const achievementsConfig = [
+    { id: "1", title: "Дружелюбный сосед", desc: "Пожать руку незнакомцам 1000 раз.", goal: 1000, reward: 35, status: "available",isSystem: false },
+    { id: "2", title: "Игровой маньяк", desc: "Отыграть на сервере за день 15 часов.", goal: 15, reward: 25, status: "available",isSystem: false },
+    { id: "3", title: "Приятный отдых", desc: "Выпить 100 бутылок алкоголя.", goal: 100, reward: 25, status: "available",isSystem: false },
+    { id: "4", title: "Сторожила сервера", desc: "Отыграть на сервере 1000 часов.", goal: 100, reward: 25, status: "available",isSystem: false },
+    { id: "5", title: "Ветеран войны", desc: "Совершить 200 убийств на каптах или бизварах.", goal: 200, reward: 25, status: "available",isSystem: false },
+    { id: "6", title: "Я сажал фиалки, честно!", desc: "Получите 5000 травы в теплице.", goal: 5000, reward: 50, status: "available",isSystem: false },
+    { id: "7", title: "Пабло Аналгобар", desc: "Получите 1000 анальгетиков в лаборатории.", goal: 1000, reward: 25, status: "available",isSystem: false },
+    { id: "8", title: "Транжира", desc: "Потратить 1000000$ на покупках одежды.", goal: 1000000, reward: 25, status: "available",isSystem: false },
+
+    { id: "9", title: "За проезд передаём", desc: "Оплатите поездку на автобусе 1000 раз на разных рейсах.", goal: 1000, reward: 1, status: "available",isSystem: false },
+
+    { id: "10", title: "Заслуженный строитель", desc: "Сделать 1000 действий на стройке.", goal: 1000, reward: 50, status: "available",isSystem: false },
+    { id: "11", title: "Каменный проныра", desc: "Перетаскать 1000 камней на шахте.", goal: 1000, reward: 50, status: "available",isSystem: false },
+    { id: "12", title: "Я раньше почему злой был", desc: "Доставить 1000 почтовых отправлений.", goal: 1000, reward: 50, status: "available",isSystem: false },
+    { id: "13", title: "Король дорог", desc: "Сделать 100 перевозок груза, работая дальнобойщиком.", goal: 100, reward: 25, status: "available",isSystem: false },
+    { id: "14", title: "Добрый самаритянин", desc: "5 раз помочь пострадавшим NPC в дорожных авариях с починкой авто.", goal: 5, reward: 25, status: "available",isSystem: false },
+];
+
+
         let savedTimers = JSON.parse(localStorage.getItem('myTimers'));
         let savedInventory = JSON.parse(localStorage.getItem('myInventory')) || [];
         let autoRun = JSON.parse(localStorage.getItem('timerAutoRun')) || false;
@@ -118,15 +139,20 @@ const defaultTimers = [
         let totalBP = parseInt(localStorage.getItem('totalBP')) || 0;
         let activeCat = localStorage.getItem('activeCat') || 'easy';
         let timerEndTime = null;
-        // Новые состояния переключателей
         let hasServerMod = false;
         let hasVipMod = false;
-        let mult = 1; // Изначально оба выключены = х1
+        let mult = 1; 
         const TOTAL_TIME = 3 * 60 * 60;
         let timeClock = TOTAL_TIME;
         let runningOnline = false;
         let clockInterval = null;
-        let lastTickTime = null;
+        let lastTickTime = Date.now();
+        let achievementsDone = []; 
+        let currentAchFilter = 'available';
+        let settings = {
+        notifications: true,
+        sounds: true
+        };
 
 
         // Перехватчик изменений currentTime
@@ -197,7 +223,7 @@ function changeSkill(id, diff) {
 
 // --- УПРАВЛЕНИЕ ВИДАМИ ---
 function switchMainView(view) {
-    const sections = ['farm', 'skills', 'reseller', 'timers'];
+    const sections = ['farm', 'skills', 'reseller', 'timers', 'achievements'];
     
     // 1. Переключаем секции
     sections.forEach(s => {
@@ -214,13 +240,14 @@ function switchMainView(view) {
 
     // 2. Обновляем заголовок
     const titleEl = document.getElementById('page-title');
-    const titles = { farm: "ФАРМ BP", skills: "НАВЫКИ", reseller: "КАЛЬКУЛЯТОР", timers: "ТАЙМЕРЫ" };
+    const titles = { farm: "ФАРМ BP", skills: "НАВЫКИ", reseller: "КАЛЬКУЛЯТОР", timers: "ТАЙМЕРЫ", achievements: "ДОСТИЖЕНИЯ" };
     if (titleEl && titles[view]) {
         titleEl.innerText = titles[view];
     }
 
     // 3. Дополнительная отрисовка при переключении
     if (view === 'timers') renderTimers();
+    if (view === 'achievements') renderAchievements('active');
 }
 
 function calcResell() {
@@ -286,6 +313,8 @@ function updateCategoryStats() {
 // Функция для раскрытия описания
 function buildFeed() {
     const box = document.getElementById('feed-box');
+    
+    // Структура контейнеров
     box.innerHTML = `
         <div id="active-items" class="task-section"><h3>🟢 Активные</h3></div>
         <div id="inactive-items" class="task-section"><h3>🔴 Неактивные</h3></div>
@@ -297,26 +326,19 @@ function buildFeed() {
     db.filter(q => q.cat === activeCat).forEach(q => {
         const isDone = trackingDone[q.id];
         const card = document.createElement('div');
-        card.className = `task-card ${isDone ? 'done' : ''}`;
         
-        // Drag & Drop атрибуты
+        // ВАЖНО: добавили класс 'feed-item' для изоляции стилей
+        card.className = `task-card feed-item ${isDone ? 'done' : ''}`;
+        
+        // Drag & Drop
         card.draggable = true;
         card.dataset.id = q.id;
-        card.ondragstart = (e) => {
-            e.dataTransfer.setData('text/plain', q.id);
-            card.classList.add('dragging');
-        };
+        card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', q.id); card.classList.add('dragging'); };
         card.ondragend = () => card.classList.remove('dragging');
         card.ondragover = (e) => e.preventDefault();
-        card.ondrop = (e) => {
-            e.preventDefault();
-            const sourceId = parseInt(e.dataTransfer.getData('text/plain'));
-            moveTaskInDb(sourceId, q.id);
-        };
+        card.ondrop = (e) => { e.preventDefault(); const sourceId = parseInt(e.dataTransfer.getData('text/plain')); moveTaskInDb(sourceId, q.id); };
 
-        const toggleBtn = `<button class="toggle-btn" onclick="toggleTaskStatus(${q.id}); event.stopPropagation();">
-            ${q.active ? '✕' : '✔'}
-        </button>`;
+        const toggleBtn = `<button class="toggle-btn" onclick="toggleTaskStatus(${q.id}); event.stopPropagation();">${q.active ? '✕' : '✔'}</button>`;
 
         let rightSide = '';
         if (!q.active) {
@@ -325,25 +347,28 @@ function buildFeed() {
             rightSide = `<button class="reset-btn" onclick="resetTask(${q.id}, event)">↺</button>`;
         } else if (q.type === 'counter') {
             rightSide = `
-                <div class="counter-box" onclick="event.stopPropagation()" style="display:flex; align-items:center; gap:8px;">
-                    <button class="cnt-btn" onclick="stepCount(${q.id}, -1, ${q.max}, ${q.reward})">−</button>
-                    <span class="cnt-val" style="font-weight:bold;">${trackingVal[q.id] || 0}/${q.max}</span>
-                    <button class="cnt-btn" onclick="stepCount(${q.id}, 1, ${q.max}, ${q.reward})">+</button>
+                <div class="counter-box" onclick="event.stopPropagation()" style="display:flex; flex-direction:column; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button class="cnt-btn" onclick="stepCount(${q.id}, -1, ${q.max}, ${q.reward})">−</button>
+                        <span class="cnt-val" style="font-weight:bold;">${trackingVal[q.id] || 0}/${q.max}</span>
+                        <button class="cnt-btn" onclick="stepCount(${q.id}, 1, ${q.max}, ${q.reward})">+</button>
+                    </div>
+                    <div class="bp-text">+${q.reward * mult} BP</div>
                 </div>
-                <div style="font-size:10px; color:#2ecc71; text-align:center;">+${q.reward * mult} BP</div>
             `;
         } else {
-            rightSide = `<button class="cnt-btn" onclick="finishTask(${q.id}, ${q.reward}, event)">+${q.reward * mult} BP</button>`;
+            rightSide = `<button class="btn-premium" onclick="finishTask(${q.id}, ${q.reward}, event)">+${q.reward * mult} BP</button>`;
         }
 
         card.innerHTML = `
             <div class="task-row" style="display:flex; align-items:center; gap:10px;">
                 ${toggleBtn}
-                <div class="task-meta" onclick="this.closest('.task-card').classList.toggle('expanded')" style="flex-grow:1; cursor:pointer;">
+                <div class="task-meta" onclick="this.closest('.task-card').classList.toggle('expanded'); this.closest('.task-card').querySelector('.task-desc').style.display = this.closest('.task-card').classList.contains('expanded') ? 'block' : 'none';" style="flex-grow:1; cursor:pointer;">
                     ${q.icon} ${q.name}
                 </div>
                 <div class="right-side">${rightSide}</div>
             </div>
+            <div class="task-line"></div>
             <div class="task-desc" style="display:none; padding:10px; border-top:1px solid #333; margin-top:10px;">
                 <p style="margin:0 0 10px 0; font-size: 13px;">${q.desc}</p>
                 <input type="text" placeholder="📝 Заметка..." value="${q.note || ''}" 
@@ -357,7 +382,6 @@ function buildFeed() {
         else inactiveBox.appendChild(card);
     });
 }
-
 
 function moveTaskInDb(sourceId, targetId) {
     const fromIndex = db.findIndex(q => q.id === sourceId);
@@ -589,27 +613,31 @@ function updateUI() {
 const finishSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
 
 function startTimerInterval() {
-    // 1. Очищаем старый интервал, чтобы не плодить их
     if (timerInterval) clearInterval(timerInterval);
     
-    // 2. Запускаем новый
+    lastTickTime = Date.now(); // Фиксируем время старта
+
     timerInterval = setInterval(() => {
-        if (currentTime > 0) {
-            currentTime--;
-            updateUI(); // Здесь обновляется и цифры, и полоса
-            saveData();
-        } else {
-            // Если таймер дошел до 0
-            clearInterval(timerInterval);
-            timerInterval = null;
+        const now = Date.now();
+        const delta = Math.floor((now - lastTickTime) / 1000); // Сколько секунд реально прошло
+        
+        if (delta >= 1) {
+            lastTickTime = now;
             
-            // Если включен авто-рестарт
-            if (autoRun) {
-                console.log("Авто-запуск таймера...");
-                currentTime = totalTime; // Сброс на полное время
-                startTimerInterval();    // Рекурсивный запуск
+            if (currentTime > 0) {
+                currentTime = Math.max(0, currentTime - delta); // Вычитаем прошедшее время
+                updateUI();
+                saveData();
             } else {
-                handleTimerComplete();
+                clearInterval(timerInterval);
+                timerInterval = null;
+                
+                if (autoRun) {
+                    currentTime = totalTime;
+                    startTimerInterval();
+                } else {
+                    handleTimerComplete();
+                }
             }
         }
     }, 1000);
@@ -671,6 +699,30 @@ function runTimerLogic() {
     }, 1000);
 }
 
+function handleTimerEnd() {
+    // 1. Останавливаем интервал, чтобы код не крутился вхолостую
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+
+    // 2. Сбрасываем переменные
+    currentTime = 0;
+    appState.timerEndTime = null; 
+    
+    // 3. Обновляем визуальную часть
+    updateDisplay();
+    
+    // 4. Сохраняем состояние (чтобы таймер не «воскрес» после перезагрузки)
+    saveData(); 
+    
+    // 5. Уведомляем пользователя
+    sendNotification("⏰ Время вышло!");
+    playSound();
+    
+    console.log("Таймер успешно завершен");
+}
+
 // Функция для сохранения "в БД"
 function saveToDB() {
     // Добавляем текущее время таймера в объект состояния
@@ -707,10 +759,7 @@ function resetSession() {
     showToast("↺ Таймер сброшен");
 }
 
-/**
- * Полный сброс приложения: очистка хранилища, 
- * сброс переменных и перезагрузка интерфейса.
- */
+
 function hardReset() {
     const modal = document.getElementById('confirm-modal');
     if (modal) modal.style.display = 'flex';
@@ -764,10 +813,19 @@ function executeHardReset() {
     location.reload();
 }
 
-function toggleSetting(settingName) {
-    const el = document.getElementById(settingName + '-switch');
-    el.classList.toggle('on');
-    localStorage.setItem('setting_' + settingName, el.classList.contains('on'));
+function toggleSetting(type) {
+    settings[type] = !settings[type]; // Инвертируем (true -> false, false -> true)
+    
+    // Обновляем UI (добавляем/убираем класс .on)
+    const element = document.getElementById(`${type === 'notifications' ? 'notif' : 'sound'}-switch`);
+    element.classList.toggle('on', settings[type]);
+    
+    // Вибрация для подтверждения
+    if (window.Telegram?.WebApp.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+    }
+    
+    saveData(); // Сохраняем сразу
 }
 
 // Открытие слайд-меню
@@ -1091,30 +1149,25 @@ function updateFinanceUI() {
 }
 // Функция для открытия модалки
 function resetAllDoneTasks() {
-    // 1. Показываем модальное окно через функцию showModal, которую мы создавали
     showModal("Сброс прогресса", "Вы уверены, что хотите сбросить все задания?", () => {
-        
-        // 2. Очищаем объекты в памяти
+        // Обнуляем все данные
         trackingDone = {};
         trackingVal = {};
+        achievementsDone = [];
+        totalBP = 0; 
         
-        // 3. ПРИНУДИТЕЛЬНО удаляем данные из хранилища браузера
-        localStorage.removeItem('trackingDone');
-        localStorage.removeItem('trackingVal');
+        // Сразу сохраняем обнуленное состояние
+        saveData(); 
         
-        // 4. Обязательно вызываем сохранение
-        if (typeof saveData === 'function') {
-            saveData(); 
-        }
-        
-        // 5. Перерисовываем интерфейс
+        // Перерисовываем интерфейс
         if (typeof buildFeed === 'function') buildFeed();
-        if (typeof updateFinanceUI === 'function') updateFinanceUI();
+        if (typeof renderAchievements === 'function') renderAchievements();
         
-        // 6. Уведомляем пользователя
-        if (typeof showToast === 'function') {
-            showToast("🔄 Прогресс сброшен");
-        }
+        // Прямое обновление текста на экране
+        const bpElement = document.getElementById('stat-bp');
+        if (bpElement) bpElement.innerText = "0";
+        
+        showToast("🔄 Прогресс полностью сброшен");
     });
 }
 
@@ -1324,26 +1377,20 @@ function showToast(message) {
     }, 2500);
 }
 
-function resetTimer() {
-    // 1. Останавливаем
-    clearInterval(timerInterval);
-    timerInterval = null;
+function resetTimer(id) {
+    // 1. Находим конкретный таймер
+    const t = timers.find(x => x.id === id);
+    if (!t) return;
+
+    // 2. Сбрасываем его параметры
+    t.remaining = t.duration; // Возвращаем к начальной длительности
+    t.running = false;        // Останавливаем
     
-    // 2. Сбрасываем значения
-    currentTime = 0;
-    totalTime = 0;
+    // 3. Сохраняем и перерисовываем
+    saveTimers(); // Убедитесь, что эта функция у вас есть (или используйте saveData)
+    renderTimers();
     
-    // 3. Сбрасываем UI (полоса уйдет в 0 благодаря updateUI)
-    const bar = document.getElementById('time-bar');
-    if (bar) bar.style.width = "0%";
-    
-    const input = document.getElementById('time-input');
-    if (input) input.value = "00:00:00";
-    
-    const btn = document.getElementById('time-btn');
-    if (btn) btn.innerText = "СТАРТ";
-    
-    saveData();
+    showToast("🔄 Таймер сброшен");
 }
 
 function toggleTimer(id) {
@@ -1522,13 +1569,126 @@ let changed = false;
 
 
 
+
+
+
+
+
+
+function checkAchievements() {
+    achievementsConfig.forEach(ach => {
+        // Если уже выполнено - пропускаем
+        if (achievementsDone.includes(ach.id)) return;
+
+        // Получаем текущее значение (динамически через window[ach.key])
+        const currentValue = window[ach.key] || 0;
+
+        if (currentValue >= ach.goal) {
+            achievementsDone.push(ach.id);
+            saveData(); // Сохраняем прогресс
+            showToast(`🏆 Достижение: ${ach.title}!`);
+            renderAchievements(); // Обновляем UI
+        }
+    });
+}
+
+
+function setAchFilter(filter, btn) {
+    currentAchFilter = filter;
+    document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderAchievements();
+}
+
+function renderAchievements() {
+    const container = document.getElementById('achievements-list');
+    const counter = document.getElementById('ach-counter');
+    if (!container) return;
+
+    // 1. Фильтруем данные
+    const filtered = achievementsConfig.filter(a => a.status === currentAchFilter);
+    
+    // 2. Считаем выполненные только внутри этой категории
+    const doneInCategory = filtered.filter(a => achievementsDone.includes(a.id)).length;
+    
+    if (counter) {
+        counter.innerText = `Выполнено в разделе: ${doneInCategory} / ${filtered.length}`;
+    }
+
+container.innerHTML = filtered.map(ach => {
+    const isDone = achievementsDone.includes(ach.id);
+    const val = window[ach.key] || 0;
+    // Предполагаем, что у вас в конфигурации есть поле reward
+    const rewardValue = ach.reward || 0; 
+
+    return `
+        <div class="ach-card-gta ${isDone ? 'done' : ''}">
+            <div class="ach-reward-badge">+${rewardValue} BP</div>
+            
+            <div class="ach-top">
+                <span style="font-size: 20px;">${isDone ? '🎖️' : '🎯'}</span>
+                <div class="ach-title">${ach.title}</div>
+            </div>
+            <div class="ach-desc">${ach.desc}</div>
+            <div class="ach-stats">${isDone ? 'ВЫПОЛНЕНО' : val + ' / ' + ach.goal}</div>
+            
+            <button class="ach-btn" onclick="${isDone ? `cancelAch('${ach.id}')` : `completeAch('${ach.id}')`}"
+                    style="${isDone ? 'background:#c23616;' : ''}">
+                ${isDone ? 'Отмена' : 'Выполнить'}
+            </button>
+        </div>
+    `;
+}).join('');
+}
+
+
+function completeAch(id) {
+    if (!achievementsDone.includes(id)) {
+        achievementsDone.push(id);
+        saveData(); // Сохраняем только факт выполнения
+        renderAchievements(); 
+    }
+}
+
+function cancelAch(id) {
+    achievementsDone = achievementsDone.filter(achId => achId !== id);
+    saveData();
+    renderAchievements();
+}
+
+
+
+
+function playSound() {
+    if (settings.sounds) {
+        // Создаем объект аудио (файл должен лежать в папке проекта)
+        const audio = new Audio('notification.mp3'); 
+        audio.play().catch(e => console.log("Звук заблокирован браузером"));
+    }
+}
+
+function sendNotification(msg) {
+    if (settings.notifications) {
+        // 1. Показываем нативный попап Telegram
+        if (window.Telegram?.WebApp) {
+            window.Telegram.WebApp.showPopup({
+                title: '⏰ Таймер',
+                message: msg,
+                buttons: [{ type: 'ok', text: 'Понятно' }]
+            });
+            
+            // 2. Вибрация
+            window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+        }
+    }
+}
+
+
+
+
+
 // Единая функция сохранения
 function saveData() {
-    // Проверка: если основные данные пусты, не сохраняем, чтобы не затереть рабочую базу
-    if (!db || db.length === 0) {
-        console.warn("Данные БД пусты, сохранение отменено!");
-        return; 
-    }
 
     const dataToSave = {
         timers: timers,
@@ -1536,8 +1696,11 @@ function saveData() {
         financeData: financeData,
         inventory: inventory,
         db: db,
+        skillsDb: skillsDb,
         trackingDone: trackingDone,
         trackingVal: trackingVal,
+        achievementsDone: achievementsDone,
+        settings: settings,
         timerState: {
             currentTime: currentTime,
             totalTime: totalTime,
@@ -1546,9 +1709,11 @@ function saveData() {
     };
     localStorage.setItem('voidGuideData', JSON.stringify(dataToSave));
 }
+localStorage.getItem('voidGuideData')
 
 function loadData() {
     const saved = localStorage.getItem('voidGuideData');
+
     if (!saved) {
         console.log("Данных нет, создаю дефолтную базу...");
         saveData(); // Инициализируем начальное состояние
@@ -1564,9 +1729,11 @@ function loadData() {
         financeData  = p.financeData ?? [];
         inventory    = p.inventory ?? [];
         db           = p.db ?? db; 
+        skillsDb     = p.skillsDb ?? skillsDb;
         trackingDone = p.trackingDone ?? {};
         trackingVal  = p.trackingVal ?? {};
-        
+        achievementsDone = p.achievementsDone ?? [];
+        settings = p.settings ?? { notifications: true, sounds: true };
         if (p.timerState) {
             currentTime = p.timerState.currentTime ?? 0;
             totalTime   = p.timerState.totalTime ?? 0;
@@ -1583,7 +1750,8 @@ window.onload = () => {
     // 1. Инициализация Telegram WebApp
     if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
+        window.Telegram.WebApp.expand(); // Развернуть на весь экран
+        window.Telegram.WebApp.enableClosingConfirmation();     
     }
 
     // 2. Загрузка данных
@@ -1600,7 +1768,14 @@ window.onload = () => {
     }
     
     updateUI();
+    renderAchievements();
+    renderSkills();
+    buildFeed();
 
+    if (document.getElementById('achievements-list')) {
+        renderAchievements();
+    }
+    
     // 5. Рендеринг всех модулей
     try {
         // Установим дефолтный экран, если он не был сохранен
