@@ -134,8 +134,8 @@ const achievementsConfig = [
         let totalTime = 0; 
         let currentTime = 0;
         let timerInterval = null;
-        let timers = (savedTimers && savedTimers.length > 0) ? savedTimers : [...defaultTimers];
-        let inventory = savedInventory;
+        let timers = JSON.parse(localStorage.getItem('myTimers')) || [...defaultTimers];
+        let inventory = JSON.parse(localStorage.getItem('myInventory')) || [];
         let totalBP = parseInt(localStorage.getItem('totalBP')) || 0;
         let activeCat = localStorage.getItem('activeCat') || 'easy';
         let timerEndTime = null;
@@ -147,12 +147,9 @@ const achievementsConfig = [
         let runningOnline = false;
         let clockInterval = null;
         let lastTickTime = Date.now();
-        let achievementsDone = []; 
+        let achievementsDone = JSON.parse(localStorage.getItem('achievementsDone')) || [];
         let currentAchFilter = 'available';
-        let settings = {
-        notifications: true,
-        sounds: true
-        };
+        let settings = JSON.parse(localStorage.getItem('settings')) || { notifications: true, sounds: true };
         let appState = { timerEndTime: null };
 
 
@@ -170,7 +167,7 @@ Object.defineProperty(window, 'currentTime', {
 
 
 function vibrate(type) {
-    if (window.Telegram?.WebApp?.HapticFeedback) {
+    if (window.Telegram?.WebApp?.HapticFeedback && window.Telegram.WebApp.isVersionAtLeast('6.1')) {
         Telegram.WebApp.HapticFeedback.impactOccurred('medium');
     }
 }
@@ -702,6 +699,7 @@ function runTimerLogic() {
 
 // Используйте эту функцию вместо старых handleTimerComplete
 function handleTimerEnd() {
+    console.log("handleTimerEnd запущен!"); // <--- Если это сообщение есть в консоли, значит код работает
     if (timerInterval) {
         clearInterval(timerInterval);
         timerInterval = null;
@@ -1252,6 +1250,7 @@ function handleTimerComplete() {
     
     // Звуковой индикатор
     finishSound.play().catch(e => console.log("Автовоспроизведение заблокировано браузером"));
+// Удален дубликат функции handleTimerComplete
 
     if (autoRun) {
         // Мгновенный перезапуск
@@ -1260,7 +1259,7 @@ function handleTimerComplete() {
         showToast("🔄 Авто-перезапуск сессии");
     } else {
         document.getElementById('time-btn').innerText = "СТАРТ";
-        showToast("✅ Время вышло!");
+        sendNotification("✅ Время сессии вышло!");
     }
     updateUI();
 }
@@ -1529,6 +1528,7 @@ let changed = false;
             // Если время вышло
             if (t.remaining === 0) {
                 t.running = false; 
+                sendNotification(`⏰ Таймер "${t.name}" завершен!`);
                 
                 const card = document.querySelector(`[data-id="${t.id}"]`);
                 if (card) {
@@ -1657,20 +1657,38 @@ function cancelAch(id) {
 
 function playSound() {
     if (settings.sounds) {
-        const audio = new Audio('notification.mp3');
-        audio.play().catch(e => console.log("Звук заблокирован браузером"));
+        const audio = new Audio('notification.mp3'); // Убедитесь, что файл существует
+        audio.play().catch(e => console.log("Звук заблокирован: требуется клик пользователя"));
     }
 }
 
 function sendNotification(msg) {
     if (settings.notifications) {
+        // 1. Системное уведомление (появится как баннер сверху)
+        if ("Notification" in window && Notification.permission === "granted") {
+            try {
+                new Notification("⏰ Void Guide", { 
+                    body: msg, 
+                    icon: "favicon.ico" 
+                });
+            } catch (e) {
+                console.log("Notification API error:", e);
+            }
+        }
+
+        // 2. Инструменты Telegram
         if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.showPopup({
-                title: '⏰ Таймер',
-                message: msg,
-                buttons: [{ type: 'ok', text: 'Понятно' }]
-            });
-            window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+            // Вибрация (Haptic Feedback)
+            if (window.Telegram.WebApp.HapticFeedback && window.Telegram.WebApp.isVersionAtLeast('6.1')) {
+                window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+            }
+            
+            // Алерт внутри приложения
+            if (window.Telegram.WebApp.isVersionAtLeast('6.2')) {
+                window.Telegram.WebApp.showAlert(msg);
+            } else {
+                showToast(msg);
+            }
         }
     }
 }
@@ -1745,7 +1763,14 @@ window.onload = () => {
     if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand(); // Развернуть на весь экран
-        window.Telegram.WebApp.enableClosingConfirmation();     
+        if (window.Telegram.WebApp.isVersionAtLeast('6.2')) {
+            window.Telegram.WebApp.enableClosingConfirmation();     
+        }
+    }
+
+    // Запрос разрешений на уведомления при старте
+    if ("Notification" in window && Notification.permission === "default") {
+        Notification.requestPermission();
     }
 
     // 2. Загрузка данных
