@@ -516,6 +516,9 @@ function updateCategoryStats() {
 
     const elBPProgress = document.getElementById('stat-bp-progress');
     if (elBPProgress) elBPProgress.innerText = `${earnedBP} / ${totalPossibleBP}`;
+
+    const elTotalBP = document.getElementById('stat-bp');
+    if (elTotalBP) elTotalBP.innerText = totalBP;
 }
 
         let trackingDone = {};
@@ -545,10 +548,25 @@ function buildFeed() {
         // Drag & Drop
         card.draggable = true;
         card.dataset.id = q.id;
-        card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', q.id); card.classList.add('dragging'); };
-        card.ondragend = () => card.classList.remove('dragging');
-        card.ondragover = (e) => e.preventDefault();
-        card.ondrop = (e) => { e.preventDefault(); const sourceId = parseInt(e.dataTransfer.getData('text/plain')); moveTaskInDb(sourceId, q.id); };
+        card.ondragstart = (e) => { 
+            e.dataTransfer.setData('text/plain', q.id); 
+            card.classList.add('dragging'); 
+        };
+        card.ondragend = () => {
+            card.classList.remove('dragging');
+            document.querySelectorAll('.task-card').forEach(c => c.classList.remove('drag-over'));
+        };
+        card.ondragover = (e) => { 
+            e.preventDefault(); 
+            card.classList.add('drag-over'); 
+        };
+        card.ondragleave = () => card.classList.remove('drag-over');
+        card.ondrop = (e) => { 
+            e.preventDefault(); 
+            card.classList.remove('drag-over');
+            const sourceId = parseInt(e.dataTransfer.getData('text/plain')); 
+            moveTaskInDb(sourceId, q.id); 
+        };
 
         const toggleBtn = `<button class="toggle-btn" onclick="toggleTaskStatus(${q.id}); event.stopPropagation();">${q.active ? '✕' : '✔'}</button>`;
 
@@ -654,8 +672,10 @@ function finishTask(id, reward, event) {
     saveData();
     
     // 3. ПЕРЕРИСОВЫВАЕМ ИНТЕРФЕЙС (обязательно!)
-    buildFeed();      
-    updateFinanceUI(); // <--- Эта функция отвечает за вывод BP на экран
+    buildFeed();
+    updateCategoryStats();
+    updateFinanceUI();
+    vibrate('success');
 }
 
 // Инициализация (вызывать при старте)
@@ -767,12 +787,14 @@ function controlOnline() {
         // Останавливаем
         clearInterval(timerInterval);
         timerInterval = null;
+        appState.timerEndTime = null;
         if(btn) btn.innerText = "СТАРТ";
     } else {
         // Запускаем
         if (currentTime <= 0) currentTime = totalTime; 
         
         if (currentTime > 0) {
+            appState.timerEndTime = Date.now() + (currentTime * 1000);
             startTimerInterval();
             if(btn) btn.innerText = "СТОП";
         }
@@ -827,31 +849,35 @@ const finishSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_
 function startTimerInterval() {
     if (timerInterval) clearInterval(timerInterval);
     
-    lastTickTime = Date.now(); // Фиксируем время старта
-
     timerInterval = setInterval(() => {
+        if (!appState.timerEndTime) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            return;
+        }
+
         const now = Date.now();
-        const delta = Math.floor((now - lastTickTime) / 1000); // Сколько секунд реально прошло
+        const remaining = Math.round((appState.timerEndTime - now) / 1000);
         
-        if (delta >= 1) {
-            lastTickTime = now;
-            
-            if (currentTime > 0) {
-                currentTime = Math.max(0, currentTime - delta); // Вычитаем прошедшее время
-                updateUI();
-                saveData();
+        if (remaining > 0) {
+            currentTime = remaining;
+            updateUI();
+        } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            appState.timerEndTime = null;
+            currentTime = 0;
+            updateUI();
+
+            if (autoRun && totalTime > 0) {
+                currentTime = totalTime;
+                appState.timerEndTime = Date.now() + (totalTime * 1000);
+                startTimerInterval();
             } else {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                
-                if (autoRun) {
-                    currentTime = totalTime;
-                    startTimerInterval();
-                } else {
-                    handleTimerComplete();
-                }
+                handleTimerEnd();
             }
         }
+        saveData();
     }, 1000);
 }
 
@@ -903,13 +929,14 @@ function handleTimerEnd() {
     currentTime = 0;
     appState.timerEndTime = null;
     
-    updateDisplay(); // Обновление интерфейса
+    updateUI(); 
+    const btn = document.getElementById('time-btn');
+    if(btn) btn.innerText = "СТАРТ";
+    
     saveData(); 
     
     sendNotification("⏰ Время вышло!");
     playSound();
-    
-    console.log("Таймер успешно завершен");
 }
 
 // Функция для сохранения "в БД"
@@ -1909,12 +1936,10 @@ window.onload = () => {
 // 4. Возобновление таймера
     // Если есть время окончания в будущем — запускаем нашу точную логику
     if (appState.timerEndTime && appState.timerEndTime > Date.now()) {
-        console.log("Возобновление точного таймера...");
-        runTimerLogic(); 
+        startTimerInterval(); 
     } 
     // Если время вышло, пока приложение было закрыто
     else if (appState.timerEndTime && appState.timerEndTime <= Date.now()) {
-        console.log("Время таймера вышло в оффлайне");
         handleTimerEnd(); // Ваша функция завершения
     }
     

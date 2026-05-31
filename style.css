@@ -377,6 +377,11 @@
     border-color: #0095cf;
 }
 
+/* Индикатор места при перетаскивании заданий */
+.task-card.drag-over {
+    border-top: 3px solid #40e0d0 !important;
+}
+
 .task-card.done {
     border-color: rgba(0, 240, 255, 0.15) !important;
     background: rgba(0, 240, 255, 0.01);
