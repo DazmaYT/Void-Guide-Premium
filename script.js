@@ -578,7 +578,7 @@ function buildFeed() {
                 <div class="task-meta" onclick="this.closest('.task-card').classList.toggle('expanded'); this.closest('.task-card').querySelector('.task-desc').style.display = this.closest('.task-card').classList.contains('expanded') ? 'block' : 'none';" style="flex-grow:1; cursor:pointer;">
                     ${q.icon} ${q.name}
                 </div>
-                <div class="right-side">${rightSide}</div>
+                <div class="task-right">${rightSide}</div>
             </div>
             <div class="task-line"></div>
             <div class="task-desc" style="display:none; padding:10px; border-top:1px solid #333; margin-top:10px;">
