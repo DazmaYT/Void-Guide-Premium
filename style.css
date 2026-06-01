@@ -2015,3 +2015,380 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     color: white;
     border-color: #6d4aff;
 }
+
+/* Стили для сводной карточки навыков */
+.skills-summary-card {
+    display: flex;
+    gap: 12px;
+    margin: 10px 16px 20px 16px;
+    background: linear-gradient(135deg, var(--bg-card) 0%, #111322 100%);
+    border: var(--border-style);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+.summary-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.summary-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+.summary-value {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--text-main);
+}
+
+/* Стили для раздела Игры */
+#games-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 16px;
+}
+
+.game-card {
+    background: var(--bg-card);
+    border: var(--border-style);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.game-card.locked {
+    opacity: 0.7;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.game-icon {
+    font-size: 32px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-input);
+    border-radius: 12px;
+}
+
+.game-info { flex: 1; }
+.game-name { font-weight: 800; font-size: 15px; margin-bottom: 2px; }
+.game-desc-short { font-size: 11px; color: var(--text-muted); }
+
+.status-badge {
+    font-size: 9px;
+    font-weight: 900;
+    background: rgba(109, 74, 255, 0.15);
+    color: var(--void-neon);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--void-neon);
+}
+
+.play-btn {
+    background: var(--void-neon);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 11px;
+    cursor: pointer;
+}
+.summary-value.cyan {
+    color: var(--void-accent);
+    text-shadow: 0 0 10px var(--void-glow);
+}
+
+/* Стили для игрового оверлея */
+#game-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-main); z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+}
+.game-window {
+    width: 95%; max-width: 400px; height: 90vh;
+    background: var(--bg-card); border-radius: 24px; border: var(--border-style);
+    display: flex; flex-direction: column; padding: 20px; position: relative;
+}
+.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.exit-btn { background: #ff4a4a22; border: 1px solid #ff4a4a; color: #ff4a4a; padding: 6px 12px; border-radius: 8px; font-weight: bold; }
+.score-display { font-weight: 900; color: var(--void-accent); }
+
+.match3-grid {
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;
+    background: var(--bg-input); padding: 8px; border-radius: 12px;
+    aspect-ratio: 1/1;
+}
+.m3-cell {
+    aspect-ratio: 1/1; background: rgba(255,255,255,0.03);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; cursor: pointer; transition: all 0.2s;
+}
+.m3-cell.selected { background: var(--void-neon); transform: scale(0.9); box-shadow: 0 0 10px var(--void-neon); }
+
+/* Анимация исчезновения в Три в ряд */
+.m3-pop {
+    animation: m3PopAnim 0.4s forwards;
+    z-index: 10;
+}
+
+@keyframes m3PopAnim {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.7; filter: brightness(2); }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+/* Красивая кнопка спина для слотов */
+.slots-spin-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #ff00cc 0%, #3333ff 100%);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-weight: 900;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255, 0, 204, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.slots-spin-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 0 30px rgba(51, 51, 255, 0.6);
+}
+
+.game-footer { display: flex; gap: 10px; margin-top: auto; padding-top: 20px; }
+.game-footer button { flex: 1; padding: 12px; border-radius: 12px; font-weight: bold; border: var(--border-style); background: var(--bg-input); color: white; }
+
+.history-panel {
+    position: absolute; bottom: 80px; left: 20px; right: 20px;
+    background: #11152c; border: var(--border-style); border-radius: 16px;
+    padding: 15px; z-index: 101; animation: slideUp 0.3s ease;
+}
+/* Обновленный вид карточек игр */
+.game-preview-card {
+    background: var(--bg-card);
+    border: var(--border-style);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+.game-image-placeholder {
+    height: 120px;
+    background: linear-gradient(45deg, #1a1f3c, #0d0f1a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    position: relative;
+}
+.game-image-overlay {
+    position: absolute; bottom: 0; width: 100%; height: 50%;
+    background: linear-gradient(to top, var(--bg-card), transparent);
+}
+.game-body { padding: 16px; }
+.game-name-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.game-name { font-size: 18px; font-weight: 900; color: var(--text-main); }
+.game-description { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+.game-start-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--void-neon);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 15px var(--void-glow-purple);
+}
+}
+.history-row { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+/* Стили для Теста Медика */
+.medic-window {
+    background: linear-gradient(135deg, #0a0d1a 0%, #05070f 100%);
+    padding: 20px;
+}
+.medic-quiz-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+.med-q-box {
+    background: var(--bg-input);
+    border: 1px solid var(--void-neon);
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: 0 0 30px rgba(109, 74, 255, 0.15);
+    position: relative;
+}
+.med-a-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+.med-opt-btn {
+    background: #161b33;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    padding: 18px 20px;
+    color: var(--text-main);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.med-opt-btn.correct { background: #2ecc71 !important; border-color: #2ecc71; color: #fff; box-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
+.med-opt-btn.wrong { background: #e74c3c !important; border-color: #e74c3c; color: #fff; box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
+.med-result {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%;
+}
+.med-percent { font-size: 48px; font-weight: 900; color: var(--void-accent); text-shadow: 0 0 15px var(--void-glow); margin: 10px 0; }
+
+/* Таймер медика */
+.med-timer-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.med-timer-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--void-accent);
+    box-shadow: 0 0 10px var(--void-accent);
+    transition: width 0.1s linear;
+}
+
+/* История и кнопка возврата */
+.med-history-mini {
+    width: 100%;
+    margin: 20px 0;
+    background: rgba(0,0,0,0.2);
+    border-radius: 12px;
+    padding: 10px;
+}
+.med-hist-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.med-hist-row:last-child { border: none; }
+.med-hist-row .red { color: #ff4a4a; }
+
+.med-return-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #1e2237 0%, #111322 100%);
+    border: 1px solid var(--void-neon);
+    color: white;
+    border-radius: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+/* Стили для Слотов 777 */
+.slots-window {
+    background: linear-gradient(180deg, #1a0b2e 0%, #05050a 100%);
+}
+
+.slots-machine {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.reels-container {
+    display: flex;
+    gap: 15px;
+    background: #000;
+    padding: 20px;
+    border-radius: 20px;
+    border: 3px solid var(--void-neon);
+    box-shadow: 0 0 30px var(--void-glow-purple);
+}
+
+.reel {
+    width: 80px;
+    height: 100px;
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    color: #000;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+.slots-msg {
+    font-size: 18px;
+    font-weight: 800;
+    text-align: center;
+    color: var(--text-main);
+    min-height: 24px;
+    text-shadow: 0 0 10px var(--void-neon);
+}
+
+.slots-controls {
+    padding: 20px 0;
+}
+
+/* Анимация вращения барабанов */
+.reel-spinning {
+    animation: reelBlur 0.1s infinite linear;
+    filter: blur(2px);
+}
+
+@keyframes reelBlur {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(5px); }
+}
+
+/* Стили для конфетти */
+.confetti {
+    position: absolute;
+    top: -20px;
+    z-index: 10005;
+    border-radius: 2px;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0); opacity: 1; }
+    100% { transform: translateY(90vh) rotate(720deg); opacity: 0; }
+}

@@ -229,6 +229,30 @@ let skillsDb = [
     }
 ];
 
+const medicQuestions = [
+    { q: "Артериальное кровотечение", a: "Жгут выше раны" },
+    { q: "Венозное кровотечение", a: "Жгут ниже раны" },
+    { q: "Огнестрел", a: "Повязка антисептическая" },
+    { q: "Ожог кислотой", a: "Щелочной раствор" },
+    { q: "Ожог щелочью", a: "Кислотный раствор" },
+    { q: "Ожог термический", a: "Холодный компресс" },
+    { q: "Обморожение", a: "Тепло" },
+    { q: "Недостаточность", a: "Таблетка" },
+    { q: "Перелом", a: "Наложить шину" },
+    { q: "Растяжение", a: "Тугая повязка" },
+    { q: "Ушиб", a: "Лед / холодный компресс" },
+    { q: "Вывих", a: "Наложить шину" },
+    { q: "Рана", a: "Повязка антисептическая" }
+];
+
+const gamesDb = [
+    { id: 'roulette', name: "Рулетка 5RP", icon: "🎡", desc: "Испытай свою удачу в фирменной рулетке.", status: "soon" },
+    { id: 'match3', name: "Три в ряд", icon: "🧩", desc: "Собирай кристаллы в ряд и получай бонусы.", status: "active" },
+    { id: 'fishing', name: "Мини-рыбалка", icon: "🎣", desc: "Симулятор ловли редкой рыбы.", status: "soon" },
+    { id: 'medic', name: "Тест медика", icon: "🏥", desc: "Проверь свои знания медицины.", status: "active" },
+    { id: 'slots', name: "Слоты 777", icon: "🎰", desc: "Крути барабаны и сорви куш!", status: "active" }
+];
+
 const defaultTimers = [
     { id: 1, name: "Почта", duration: 600, remaining: 600, running: false, icon: "✉️", enabled: true },
     { id: 2, name: "Организация", duration: 7200, remaining: 7200, running: false, icon: "🏢", enabled: true },
@@ -414,7 +438,25 @@ function vibrate(type) {
 // --- ОТРИСОВКА НАВЫКОВ ---
 function renderSkills() {
     const container = document.getElementById('skills-container');
-    container.innerHTML = skillsDb.map(s => {
+    
+    // Расчет статистики для всех навыков
+    const totalRemaining = skillsDb.reduce((acc, s) => acc + Math.max(0, s.goals.length - s.level), 0);
+    const totalCost = totalRemaining * 500000;
+
+    const summaryHtml = `
+        <div class="skills-summary-card">
+            <div class="summary-item">
+                <span class="summary-label">ОСТАЛОСЬ УРОВНЕЙ</span>
+                <span class="summary-value">${totalRemaining}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">СТОИМОСТЬ ПРОКАЧКИ</span>
+                <span class="summary-value cyan">${totalCost.toLocaleString('ru-RU')} $</span>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = summaryHtml + skillsDb.map(s => {
         const isMax = s.level >= s.goals.length;
         const currentGoal = isMax ? s.goals[s.goals.length - 1] : s.goals[s.level];
         const percent = isMax ? 100 : Math.min(100, (s.done / currentGoal) * 100);
@@ -468,9 +510,487 @@ function updateStatHours() {
     }
 }
 
+// --- ОТРИСОВКА ИГР ---
+function renderGames() {
+    const container = document.getElementById('games-container');
+    if (!container) return console.error("Контейнер games-container не найден в HTML!");
+
+    container.innerHTML = gamesDb.map(g => `
+        <div class="game-preview-card ${g.status === 'soon' ? 'locked' : ''}">
+            <div class="game-image-placeholder">
+                ${g.icon}
+                <div class="game-image-overlay"></div>
+            </div>
+            <div class="game-body">
+                <div class="game-name-row">
+                    <span class="game-name">${g.name}</span>
+                    ${g.status === 'soon' ? '<span class="status-badge">СКОРО</span>' : ''}
+                </div>
+                <p class="game-description">${g.desc}</p>
+                ${g.status !== 'soon' ? `<button class="game-start-btn" onclick="openGame('${g.id}')">ИГРАТЬ</button>` : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+// --- ЛОГИКА ТРИ В РЯД ---
+let match3State = { score: 0, history: JSON.parse(localStorage.getItem('match3_history')) || [] };
+
+function openGame(id) {
+    if (id === 'medic') return initMedicTest();
+    if (id === 'slots') return initSlots();
+    if (id !== 'match3') return showToast("Эта игра еще в разработке!");
+
+    const overlay = document.createElement('div');
+    overlay.id = 'game-overlay';
+    overlay.innerHTML = `
+        <div class="game-window">
+            <div class="game-header">
+                <button class="exit-btn" onclick="closeGame()">✕ Выход</button>
+                <div class="game-title">Кристаллы Void</div>
+                <div class="score-display">СЧЕТ: <span id="m3-score">0</span></div>
+            </div>
+            <div id="match3-board" class="match3-grid"></div>
+            <div class="game-footer">
+                <button class="history-btn" onclick="toggleMatch3History()">📊 История</button>
+            </div>
+            <div id="m3-history-panel" class="history-panel" style="display:none"></div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    initMatch3();
+}
+
+function closeGame() {
+    const score = match3State.score;
+    if (score > 0) {
+        match3State.history.unshift({ score, date: new Date().toLocaleString('ru-RU') });
+        match3State.history = match3State.history.slice(0, 10);
+        localStorage.setItem('match3_history', JSON.stringify(match3State.history));
+    }
+    document.getElementById('game-overlay').remove();
+    match3State.score = 0;
+}
+
+function initMatch3() {
+    const board = document.getElementById('match3-board');
+    const icons = ['💎', '🔮', '💠', '🌟', '🍎'];
+    const size = 8;
+    let grid = Array.from({ length: size * size }, () => icons[Math.floor(Math.random() * icons.length)]);
+    let selected = null;
+
+    function renderBoard() {
+        board.innerHTML = '';
+        grid.forEach((icon, i) => {
+            const cell = document.createElement('div');
+            cell.className = 'm3-cell' + (selected === i ? ' selected' : '');
+            cell.innerHTML = icon;
+            cell.onclick = () => handleCellClick(i);
+            board.appendChild(cell);
+        });
+    }
+
+    function checkMatches() {
+        let toRemove = new Set();
+        // Горизонтальные
+        for (let r = 0; r < size; r++) {
+            for (let c = 0; c < size - 2; c++) {
+                let i = r * size + c;
+                if (grid[i] && grid[i] === grid[i+1] && grid[i] === grid[i+2]) {
+                    toRemove.add(i); toRemove.add(i+1); toRemove.add(i+2);
+                }
+            }
+        }
+        // Вертикальные
+        for (let c = 0; c < size; c++) {
+            for (let r = 0; r < size - 2; r++) {
+                let i = r * size + c;
+                if (grid[i] && grid[i] === grid[i+size] && grid[i] === grid[i+size*2]) {
+                    toRemove.add(i); toRemove.add(i+size); toRemove.add(i+size*2);
+                }
+            }
+        }
+        return Array.from(toRemove);
+    }
+
+    async function handleCellClick(idx) {
+        vibrate('light');
+        if (selected === null) {
+            selected = idx;
+            renderBoard();
+        } else {
+            const sIdx = selected;
+            const tIdx = idx;
+            const isNeighbor = (Math.abs(sIdx - tIdx) === 1 && Math.floor(sIdx/size) === Math.floor(tIdx/size)) || 
+                               Math.abs(sIdx - tIdx) === size;
+
+            if (isNeighbor) {
+                // Меняем местами
+                [grid[sIdx], grid[tIdx]] = [grid[tIdx], grid[sIdx]];
+                
+                const matches = checkMatches();
+                if (matches.length > 0) {
+                    await processMatches();
+                } else {
+                    // Если нет совпадений, возвращаем назад
+                    [grid[sIdx], grid[tIdx]] = [grid[tIdx], grid[sIdx]];
+                    showToast("❌ Нет совпадения!");
+                }
+            }
+            selected = null;
+            renderBoard();
+        }
+    }
+
+    async function processMatches() {
+        let matches = checkMatches();
+        while (matches.length > 0) {
+            match3State.score += matches.length * 10;
+            document.getElementById('m3-score').innerText = match3State.score;
+            
+            // Анимация исчезновения: добавляем класс перед удалением
+            matches.forEach(i => {
+                const cell = board.children[i];
+                if (cell) cell.classList.add('m3-pop');
+            });
+
+            // Ждем завершения анимации
+            await new Promise(r => setTimeout(r, 400));
+
+            // Удаляем и "схлопываем" (упрощенная гравитация)
+            matches.forEach(i => grid[i] = null);
+            
+            renderBoard();
+            await new Promise(r => setTimeout(r, 300));
+
+            // Падение сверху
+            for (let c = 0; c < size; c++) {
+                let emptyPos = -1;
+                for (let r = size - 1; r >= 0; r--) {
+                    let i = r * size + c;
+                    if (grid[i] === null) {
+                        if (emptyPos === -1) emptyPos = r;
+                    } else if (emptyPos !== -1) {
+                        grid[emptyPos * size + c] = grid[i];
+                        grid[i] = null;
+                        emptyPos--;
+                    }
+                }
+                // Заполняем пустоту новыми
+                for (let r = size - 1; r >= 0; r--) {
+                    if (grid[r * size + c] === null) grid[r * size + c] = icons[Math.floor(Math.random() * icons.length)];
+                }
+            }
+            renderBoard();
+            matches = checkMatches();
+            await new Promise(r => setTimeout(r, 300));
+        }
+    }
+
+    renderBoard();
+}
+
+function toggleMatch3History() {
+    const panel = document.getElementById('m3-history-panel');
+    if (panel.style.display === 'none') {
+        panel.innerHTML = '<h4>Последние игры</h4>' + match3State.history.map(h => `
+            <div class="history-row"><span>${h.date}</span> <b>${h.score}</b></div>
+        `).join('');
+        panel.style.display = 'block';
+    } else {
+        panel.style.display = 'none';
+    }
+}
+
+// --- ЛОГИКА ТЕСТА МЕДИКА ---
+let medicGameState = { 
+    current: 0, 
+    score: 0, 
+    questions: [], 
+    timer: null, 
+    timeLeft: 15,
+    history: JSON.parse(localStorage.getItem('medic_history')) || []
+};
+
+function initMedicTest() {
+    medicGameState.current = 0;
+    medicGameState.score = 0;
+    medicGameState.questions = [...medicQuestions].sort(() => Math.random() - 0.5);
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'game-overlay';
+    overlay.innerHTML = `
+        <div class="game-window medic-window">
+            <div class="game-header">
+                <button class="exit-btn" onclick="clearInterval(medicGameState.timer); document.getElementById('game-overlay').remove()">✕ Выход</button>
+                <div class="game-title">Квалификация EMS</div>
+                <div class="score-display"><span id="med-current">1</span> / ${medicGameState.questions.length}</div>
+            </div>
+            <div class="med-timer-container"><div id="med-timer-fill" class="med-timer-fill"></div></div>
+            <div class="medic-quiz-body">
+                <div id="med-question-box" class="med-q-box"></div>
+                <div id="med-answers-grid" class="med-a-grid"></div>
+            </div>
+            <div id="med-feedback" class="med-feedback"></div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    renderMedicQuestion();
+}
+
+function startMedicTimer() {
+    clearInterval(medicGameState.timer);
+    medicGameState.timeLeft = 15;
+    const fill = document.getElementById('med-timer-fill');
+    
+    medicGameState.timer = setInterval(() => {
+        medicGameState.timeLeft -= 0.1;
+        if (fill) fill.style.width = (medicGameState.timeLeft / 15 * 100) + '%';
+        
+        if (medicGameState.timeLeft <= 0) {
+            clearInterval(medicGameState.timer);
+            const qData = medicGameState.questions[medicGameState.current];
+            checkMedicAnswer(null, qData.a, null); // Время вышло - неверно
+        }
+    }, 100);
+}
+
+function renderMedicQuestion() {
+    if (!document.getElementById('game-overlay')) return;
+    
+    const qData = medicGameState.questions[medicGameState.current];
+    document.getElementById('med-current').innerText = medicGameState.current + 1;
+    document.getElementById('med-question-box').innerText = qData.q;
+    
+    const answersGrid = document.getElementById('med-answers-grid');
+    answersGrid.innerHTML = '';
+    
+    // Запуск таймера для нового вопроса
+    startMedicTimer();
+    
+    // Формируем список из 1 правильного и 3 случайных неправильных ответов
+    let options = [qData.a];
+    const allPossibleAnswers = Array.from(new Set(medicQuestions.map(m => m.a))).filter(a => a !== qData.a);
+    
+    while (options.length < 4 && allPossibleAnswers.length > 0) {
+        const randomIdx = Math.floor(Math.random() * allPossibleAnswers.length);
+        options.push(allPossibleAnswers.splice(randomIdx, 1)[0]);
+    }
+    options.sort(() => Math.random() - 0.5); // Перемешиваем кнопки
+    
+    options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'med-opt-btn';
+        btn.innerText = opt;
+        btn.onclick = () => checkMedicAnswer(opt, qData.a, btn);
+        answersGrid.appendChild(btn);
+    });
+}
+
+function checkMedicAnswer(selected, correct, btn) {
+    clearInterval(medicGameState.timer);
+    const buttons = document.querySelectorAll('.med-opt-btn');
+    buttons.forEach(b => b.disabled = true);
+    
+    if (selected === correct) {
+        btn.classList.add('correct');
+        medicGameState.score++;
+        vibrate('success');
+    } else if (btn) {
+        btn.classList.add('wrong');
+        buttons.forEach(b => {
+            if (b.innerText === correct) b.classList.add('correct');
+        });
+        vibrate('warning');
+    }
+    
+    setTimeout(() => {
+        medicGameState.current++;
+        if (medicGameState.current < medicGameState.questions.length) {
+            renderMedicQuestion();
+        } else {
+            finishMedicTest();
+        }
+    }, 1500);
+}
+
+function finishMedicTest() {
+    clearInterval(medicGameState.timer);
+    const body = document.querySelector('.medic-quiz-body');
+    const percent = Math.round((medicGameState.score / medicGameState.questions.length) * 100);
+    
+    // Сохранение в историю
+    const entry = {
+        percent: percent,
+        score: medicGameState.score,
+        total: medicGameState.questions.length,
+        date: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+    };
+    medicGameState.history.unshift(entry);
+    medicGameState.history = medicGameState.history.slice(0, 5);
+    localStorage.setItem('medic_history', JSON.stringify(medicGameState.history));
+
+    body.innerHTML = `
+        <div class="med-result">
+            <div style="font-size: 60px; margin-bottom: 20px;">${percent >= 80 ? '🩺' : '🚑'}</div>
+            <h2 style="margin:0; font-size: 24px;">ТЕСТ ЗАВЕРШЕН</h2>
+            <p style="color: var(--text-muted); margin: 10px 0;">Правильных ответов: <b>${medicGameState.score}</b> из ${medicGameState.questions.length}</p>
+            <div class="med-percent">${percent}%</div>
+            <p style="padding: 0 20px; font-size: 13px;">${percent >= 80 ? 'Поздравляем! Вы готовы к службе в EMS.' : 'Недостаточно знаний. Повторите протоколы.'}</p>
+            
+            <div class="med-history-mini">
+                ${medicGameState.history.map(h => `
+                    <div class="med-hist-row">
+                        <span>${h.date}</span>
+                        <span class="${h.percent >= 80 ? 'cyan' : 'red'}">${h.percent}%</span>
+                    </div>
+                `).join('')}
+            </div>
+
+            <button class="med-return-btn" onclick="document.getElementById('game-overlay').remove()">ВЕРНУТЬСЯ В МЕНЮ</button>
+        </div>
+    `;
+}
+
+// --- ЛОГИКА СЛОТОВ 777 ---
+let slotsState = { 
+    spinning: false, 
+    history: JSON.parse(localStorage.getItem('slots_history')) || [] 
+};
+
+function initSlots() {
+    const overlay = document.createElement('div');
+    overlay.id = 'game-overlay';
+    overlay.innerHTML = `
+        <div class="game-window slots-window">
+            <div class="game-header">
+                <button class="exit-btn" onclick="document.getElementById('game-overlay').remove()">✕ Выход</button>
+                <div class="game-title">JACKPOT 777</div>
+            </div>
+            
+            <div class="slots-machine">
+                <div class="reels-container">
+                    <div id="reel1" class="reel">7️⃣</div>
+                    <div id="reel2" class="reel">7️⃣</div>
+                    <div id="reel3" class="reel">7️⃣</div>
+                </div>
+                <div id="slots-result-text" class="slots-msg">Удачи!</div>
+            </div>
+
+            <div class="slots-controls">
+                <button id="spin-btn" class="slots-spin-btn" onclick="spinSlots()">ИСПЫТАТЬ УДАЧУ</button>
+            </div>
+
+            <div class="game-footer">
+                <button class="history-btn" onclick="toggleSlotsHistory()">📊 История</button>
+            </div>
+            <div id="slots-history-panel" class="history-panel" style="display:none"></div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+}
+
+async function spinSlots() {
+    if (slotsState.spinning) return;
+
+    slotsState.spinning = true;
+    const spinBtn = document.getElementById('spin-btn');
+    spinBtn.disabled = true;
+    spinBtn.innerText = "КРУТИМ...";
+    document.getElementById('slots-result-text').innerText = "🎰 Барабаны крутятся...";
+
+    vibrate('light');
+    const symbols = ['🍒', '🍋', '🍊', '🍇', '🔔', '💎', '7️⃣'];
+    const reels = [document.getElementById('reel1'), document.getElementById('reel2'), document.getElementById('reel3')];
+    
+    let spins = 20;
+    // Добавляем класс анимации вращения
+    reels.forEach(r => r.classList.add('reel-spinning'));
+
+    const interval = setInterval(() => {
+        reels.forEach(r => {
+            r.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        });
+        spins--;
+        if (spins <= 0) {
+            clearInterval(interval);
+            reels.forEach(r => r.classList.remove('reel-spinning'));
+            finalizeSlots(reels);
+        }
+    }, 100);
+}
+
+function finalizeSlots(reels) {
+    const finalSymbols = reels.map(r => r.innerText);
+    let msg = "Повезет в следующий раз!";
+
+    if (finalSymbols[0] === finalSymbols[1] && finalSymbols[1] === finalSymbols[2]) {
+        const sym = finalSymbols[0];
+        if (sym === '7️⃣') { 
+            msg = "🤑 КОЛОССАЛЬНЫЙ ДЖЕКПОТ!"; 
+            triggerJackpotEffects();
+        }
+        else if (sym === '💎') { msg = "💎 БРИЛЛИАНТОВЫЙ ВЫИГРЫШ!"; }
+        else { msg = "🔥 ТРИ В РЯД!"; }
+        vibrate('success');
+    } else if (finalSymbols[0] === finalSymbols[1] || finalSymbols[1] === finalSymbols[2] || finalSymbols[0] === finalSymbols[2]) {
+        msg = "💵 Хорошая попытка!";
+        vibrate('medium');
+    }
+
+    document.getElementById('slots-result-text').innerText = msg;
+    
+    slotsState.history.unshift({ 
+        res: finalSymbols.join(' '), 
+        date: new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'}) 
+    });
+    slotsState.history = slotsState.history.slice(0, 10);
+    localStorage.setItem('slots_history', JSON.stringify(slotsState.history));
+
+    slotsState.spinning = false;
+    const spinBtn = document.getElementById('spin-btn');
+    spinBtn.disabled = false;
+    spinBtn.innerText = "ИСПЫТАТЬ УДАЧУ";
+}
+
+function triggerJackpotEffects() {
+    // Звук победы
+    const winSound = new Audio('https://actions.google.com/sounds/v1/cartoon/clapping_and_cheering_short.ogg');
+    winSound.play().catch(e => console.log("Sound blocked"));
+
+    // Эффект конфетти
+    const overlay = document.getElementById('game-overlay');
+    for (let i = 0; i < 60; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.width = (Math.random() * 10 + 5) + 'px';
+        confetti.style.height = (Math.random() * 10 + 5) + 'px';
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+        overlay.appendChild(confetti);
+        
+        // Удаляем элемент после завершения анимации
+        setTimeout(() => confetti.remove(), 4000);
+    }
+}
+
+function toggleSlotsHistory() {
+    const panel = document.getElementById('slots-history-panel');
+    if (panel.style.display === 'none') {
+        panel.innerHTML = '<h4>Последние спины</h4>' + slotsState.history.map(h => `
+            <div class="history-row"><span>${h.date}</span> <b>${h.res}</b></div>
+        `).join('');
+        panel.style.display = 'block';
+    } else {
+        panel.style.display = 'none';
+    }
+}
+
 // --- УПРАВЛЕНИЕ ВИДАМИ ---
 function switchMainView(view) {
-    const sections = ['farm', 'skills', 'timers', 'achievements'];
+    const sections = ['farm', 'skills', 'timers', 'achievements', 'games'];
     
     // 1. Переключаем секции
     sections.forEach(s => {
@@ -482,7 +1002,13 @@ function switchMainView(view) {
 
     // 2. Обновляем заголовок
     const titleEl = document.getElementById('page-title');
-    const titles = { farm: "ФАРМ BP", skills: "НАВЫКИ", timers: "ТАЙМЕРЫ", achievements: "ДОСТИЖЕНИЯ" };
+    const titles = { 
+        farm: "ФАРМ BP", 
+        skills: "НАВЫКИ", 
+        timers: "ТАЙМЕРЫ", 
+        achievements: "ДОСТИЖЕНИЯ",
+        games: "ИГРЫ"
+    };
     if (titleEl && titles[view]) {
         titleEl.innerText = titles[view];
     }
@@ -490,6 +1016,10 @@ function switchMainView(view) {
     // 3. Дополнительная отрисовка при переключении
     if (view === 'timers') renderTimers();
     if (view === 'achievements') renderAchievements('active');
+    if (view === 'games') { renderGames(); }
+    if (view === 'skills') renderSkills();
+
+    localStorage.setItem('lastView', view);
 }
 
 function updateSkill(id, type, diff) {
