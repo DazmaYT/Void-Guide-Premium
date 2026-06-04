@@ -230,19 +230,19 @@ let skillsDb = [
 ];
 
 const medicQuestions = [
-    { q: "Артериальное кровотечение", a: "Жгут выше раны", img: "img/ems/arterial.png" },
-    { q: "Венозное кровотечение", a: "Жгут ниже раны", img: "img/ems/venous.png" },
-    { q: "Огнестрел", a: "Повязка антисептическая", img: "img/ems/gunshot.png" },
-    { q: "Ожог кислотой", a: "Щелочной раствор", img: "img/ems/acid_burn.png" },
-    { q: "Ожог щелочью", a: "Кислотный раствор", img: "img/ems/alkali_burn.png" },
-    { q: "Ожог термический", a: "Холодный компресс", img: "img/ems/thermal_burn.png" },
-    { q: "Обморожение", a: "Тепло", img: "img/ems/frostbite.png" },
-    { q: "Недостаточность", a: "Таблетка", img: "img/ems/heart.png" },
-    { q: "Перелом", a: "Наложить шину", img: "img/ems/fracture.png" },
-    { q: "Растяжение", a: "Тугая повязка", img: "img/ems/sprain.png" },
-    { q: "Ушиб", a: "Лед / холодный компресс", img: "img/ems/bruise.png" },
-    { q: "Вывих", a: "Наложить шину", img: "img/ems/dislocation.png" },
-    { q: "Рана", a: "Повязка антисептическая", img: "img/ems/wound.png" }
+    { q: "Артериальное кровотечение", a: "Жгут выше раны" },
+    { q: "Венозное кровотечение", a: "Жгут ниже раны" },
+    { q: "Огнестрел", a: "Повязка антисептическая" },
+    { q: "Ожог кислотой", a: "Щелочной раствор" },
+    { q: "Ожог щелочью", a: "Кислотный раствор" },
+    { q: "Ожог термический", a: "Холодный компресс" },
+    { q: "Обморожение", a: "Тепло" },
+    { q: "Недостаточность", a: "Таблетка" },
+    { q: "Перелом", a: "Наложить шину" },
+    { q: "Растяжение", a: "Тугая повязка" },
+    { q: "Ушиб", a: "Лед / холодный компресс" },
+    { q: "Вывих", a: "Наложить шину" },
+    { q: "Рана", a: "Повязка антисептическая" }
 ];
 
 const gamesDb = [
@@ -510,55 +510,6 @@ function updateStatHours() {
     }
 }
 
-// Функция для отображения модального окна подписки
-function showSubscriptionModal() {
-    const modalHtml = `
-        <div id="subscription-modal-overlay" class="modal-active">
-            <div class="subscription-modal-card">
-                <h2 style="color:white;">ДОСТУП ОГРАНИЧЕН</h2>
-                <p style="color:#888;">Для использования Void Guide необходимо подписаться на наш канал.</p>
-                <a href="https://t.me/VoidNewsGuid" target="_blank" style="background:#6d4aff; color:white; padding:12px 24px; border-radius:12px; text-decoration:none; font-weight:bold; margin-top:20px; display:inline-block;">ПОДПИСАТЬСЯ</a>
-                <button class="btn-confirm" style="margin-top: 15px; background: #40E0D0; color: #000;" onclick="retrySubscriptionCheck()">ПРОВЕРИТЬ ПОДПИСКУ</button>
-            </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-}
-
-// Функция для повторной проверки подписки
-async function retrySubscriptionCheck() {
-    showToast("Проверяем подписку...");
-    const isSubscribed = await checkSubscription();
-    if (isSubscribed) {
-        document.getElementById('subscription-modal-overlay').remove();
-        location.reload(); // Перезагружаем страницу для полной инициализации приложения
-    } else {
-        showToast("Вы еще не подписаны на канал.");
-    }
-}
-
-async function checkSubscription() {
-    const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-    const botToken = "8963992215:AAG6fSdZyf1KZ5z6ITwRQ6TpPwCsZGPeLss";
-    const channelId = "@VoidNewsGuid"; 
-
-    if (!userId) return true; // Если запуск не из телеграма, пропускаем (для тестов)
-
-    try {
-        const response = await fetch(`https://api.telegram.org/bot${botToken}/getChatMember?chat_id=${channelId}&user_id=${userId}`);
-        const data = await response.json();
-
-        if (data.ok) {
-            const status = data.result.status;
-            return ["member", "administrator", "creator"].includes(status);
-        }
-        return false;
-    } catch (error) {
-        console.error("Ошибка проверки подписки:", error);
-        return false;
-    }
-}
-
 // --- ОТРИСОВКА ИГР ---
 function renderGames() {
     const container = document.getElementById('games-container');
@@ -809,11 +760,7 @@ function renderMedicQuestion() {
     
     const qData = medicGameState.questions[medicGameState.current];
     document.getElementById('med-current').innerText = medicGameState.current + 1;
-
-    document.getElementById('med-question-box').innerHTML = `
-        ${qData.img ? `<img src="${qData.img}" class="med-q-img" onerror="this.style.display='none'">` : ''}
-        <div class="med-q-text">${qData.q}</div>
-    `;
+    document.getElementById('med-question-box').innerText = qData.q;
     
     const answersGrid = document.getElementById('med-answers-grid');
     answersGrid.innerHTML = '';
@@ -1852,6 +1799,10 @@ function toggleAutoRun() {
 }
 
 
+
+
+// Удален дубликат.
+
 function updateTimeFromInput(val) {
     const parts = val.split(':');
     if (parts.length === 3) {
@@ -2366,7 +2317,7 @@ function loadData() {
     }
 }
 
-window.onload = async () => { // Сделаем onload асинхронным
+window.onload = () => {
     // 1. Инициализация Telegram WebApp
     if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.ready();
@@ -2379,13 +2330,6 @@ window.onload = async () => { // Сделаем onload асинхронным
     // Запрос разрешений на уведомления при старте
     if ("Notification" in window && Notification.permission === "default") {
         Notification.requestPermission();
-    }
-
-    // Проверка подписки
-    const isSubscribed = await checkSubscription();
-    if (!isSubscribed) {
-        showSubscriptionModal(); // Показываем модальное окно, если не подписан
-        return; // Прекращаем дальнейшую инициализацию приложения
     }
 
     // 2. Загрузка данных
