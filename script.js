@@ -71,17 +71,19 @@ let skillsDb = [
         id: 'strength', 
         name: "💪 Сила", 
         level: 0, 
-        done: 0, 
+        done: 0,
         goals: [100, 200, 300, 400, 500],
-        desc: "● Улучшается рельеф мышц<br>● Увеличивается скорость бега и плавания на 4% за каждый уровень<br>● Увеличивается скорость копания лопатой, лазания по лестницам и продолжительность дыхания под водой"
+        desc: "● Улучшается рельеф мышц<br>● Увеличивается скорость бега и плавания на 4% за каждый уровень<br>● Увеличивается скорость копания лопатой, лазания по лестницам и продолжительность дыхания под водой",
+        costPerLevel: 500000
     },
     { 
         id: 'shooting', 
         name: "🎯 Стрельба", 
         level: 0, 
-        done: 0, 
+        done: 0,
         goals: [5, 5, 5, 5, 5, 15, 15, 15, 15, 20],
-        desc: "● Уменьшение разброса<br>● Доступ к двум анимациям стрельбы с пистолетов"
+        desc: "● Уменьшение разброса<br>● Доступ к двум анимациям стрельбы с пистолетов",
+        costPerLevel: 500000
     },
     { 
         id: 'cooking', 
@@ -89,7 +91,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [50, 100, 150, 200, 250], 
-        desc: "● Доступ к новым видам блюд каждый уровень"
+        desc: "● Доступ к новым видам блюд каждый уровень",
+        costPerLevel: 500000
     },
     { 
         id: 'fishing', 
@@ -97,7 +100,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [25, 75, 200, 400, 600, 1000], 
-        desc: "● 3, 4, 5, 6 уровни — новые виды рыб"
+        desc: "● 3, 4, 5, 6 уровни — новые виды рыб",
+        costPerLevel: 500000
     },
     { 
         id: 'hunting', 
@@ -105,7 +109,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [100, 150, 200, 250, 300], 
-        desc: "● Каждый уровень увеличивается минимальное качество шкур<br>● Появляется шанс сохранить прочность разделочного ножа"
+        desc: "● Каждый уровень увеличивается минимальное качество шкур<br>● Появляется шанс сохранить прочность разделочного ножа",
+        costPerLevel: 500000
     },
     { 
         id: 'treasure', 
@@ -113,7 +118,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [100, 200, 300, 400, 500], 
-        desc: "● Каждый уровень уменьшение шанса найти хлам<br>● Прибавка по 10% к цене сдачи сокровищ за каждый уровень"
+        desc: "● Каждый уровень уменьшение шанса найти хлам<br>● Прибавка по 10% к цене сдачи сокровищ за каждый уровень",
+        costPerLevel: 500000
     },
     { 
         id: 'farming', 
@@ -121,7 +127,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [500, 500, 1000, 1000, 1500], 
-        desc: "● Увеличение оплаты каждый уровень<br>● 2 уровень — доступ к трактору для прополки<br>● 3 уровень — доступ к посадке пшеницы и сбору на комбайне<br>● 5 уровень — доступ к самолёту для распыления химикатов"
+        desc: "● Увеличение оплаты каждый уровень<br>● 2 уровень — доступ к трактору для прополки<br>● 3 уровень — доступ к посадке пшеницы и сбору на комбайне<br>● 5 уровень — доступ к самолёту для распыления химикатов",
+        costPerLevel: 500000
     },
     { 
         id: 'builder', 
@@ -129,7 +136,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [1500, 2250, 3000, 3750, 4500], 
-        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе на грузоподъёмнике"
+        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе на грузоподъёмнике",
+        costPerLevel: 500000
     },
     { 
         id: 'miner', 
@@ -137,15 +145,17 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [1000, 1500, 2000, 2500, 3000], 
-        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе на бульдозере"
+        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе на бульдозере",
+        costPerLevel: 500000
     },
     { 
         id: 'port', 
         name: "🚢 Порт", 
-        level: 0, 
+        level: 0,
         done: 0,
         goals: [1500, 2250, 3000, 3750, 4500], 
-        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе на контейнерном погрузчике"
+        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе на контейнерном погрузчике",
+        costPerLevel: 500000
     },
     { 
         id: 'taxi', 
@@ -153,7 +163,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [100, 200, 300, 400, 500], 
-        desc: "● Постепенное улучшение авто техническим тюнингом каждый уровень<br>● 1 уровень — доступ к BF Olivia A7<br>● 2 уровень — доступ к Benefactor Schafter<br>● 3 уровень — доступ к Enus Deit<br>● 4 уровень — доступ к Benefactor E-Series 63 W213<br>● 5 уровень — доступ к Benefactor S-series W223"
+        desc: "● Постепенное улучшение авто техническим тюнингом каждый уровень<br>● 1 уровень — доступ к BF Olivia A7<br>● 2 уровень — доступ к Benefactor Schafter<br>● 3 уровень — доступ к Enus Deit<br>● 4 уровень — доступ к Benefactor E-Series 63 W213<br>● 5 уровень — доступ к Benefactor S-series W223",
+        costPerLevel: 500000
     },
     { 
         id: 'diver', 
@@ -161,7 +172,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [85, 170, 255, 340, 425], 
-        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе в озере Сэнди-Шорс<br>● 5 уровень — доступ к работе на батискафе"
+        desc: "● Увеличение оплаты каждый уровень<br>● 3 уровень — доступ к работе в озере Сэнди-Шорс<br>● 5 уровень — доступ к работе на батискафе",
+        costPerLevel: 500000
     },
     { 
         id: 'collector', 
@@ -169,7 +181,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [40, 80, 120, 160, 200], 
-        desc: "● Увеличение оплаты каждый уровень"
+        desc: "● Увеличение оплаты каждый уровень",
+        costPerLevel: 500000
     },
     { 
         id: 'bus', 
@@ -177,7 +190,8 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [35, 75, 105, 135, 175], 
-        desc: "● Увеличение оплаты каждый уровень<br>● Новые маршруты каждый уровень"
+        desc: "● Увеличение оплаты каждый уровень<br>● Новые маршруты каждый уровень",
+        costPerLevel: 500000
     },
     { 
         id: 'mechanic', 
@@ -185,23 +199,26 @@ let skillsDb = [
         level: 0, 
         done: 0,
         goals: [40, 80, 120, 160, 200], 
-        desc: "● Постепенное улучшение авто техническим тюнингом каждый уровень<br>● 5 уровень — возможность работы на машине-эвакуаторе"
+        desc: "● Постепенное улучшение авто техническим тюнингом каждый уровень<br>● 5 уровень — возможность работы на машине-эвакуаторе",
+        costPerLevel: 500000
     },
     { 
         id: 'fire', 
         name: "🚒 Пожарный", 
         level: 0, 
         done: 0,
-        goals: [250, 500, 750, 1000, 1250], 
-        desc: "● Увеличение оплаты каждый уровень"
+        goals: [250, 500, 750, 1000, 1250],
+        desc: "● Увеличение оплаты каждый уровень",
+        costPerLevel: 500000
     },
     { 
         id: 'truck', 
         name: "🚛 Дальнобойщик", 
         level: 0, 
         done: 0,
-        goals: [40, 80, 120, 160, 200], 
-        desc: "● Увеличение оплаты каждый уровень"
+        goals: [40, 80, 120, 160, 200],
+        desc: "● Увеличение оплаты каждый уровень",
+        costPerLevel: 500000
     },
     { 
         id: 'courier', 
@@ -209,7 +226,8 @@ let skillsDb = [
         level: 0, 
         done: 0, 
         goals: [100, 200, 300, 400, 500], 
-        desc: "● Увеличение оплаты каждый уровень<br>● 5 уровень — появляется нумерация оптимального маршрута"
+        desc: "● Увеличение оплаты каждый уровень<br>● 5 уровень — появляется нумерация оптимального маршрута",
+        costPerLevel: 500000
     },
     { 
         id: 'post', 
@@ -217,38 +235,38 @@ let skillsDb = [
         level: 0, 
         done: 0, 
         goals: [140, 280, 420, 560, 700], 
-        desc: "● Увеличение оплаты за посылки на почте на 100$ за каждый уровень<br>● 5 уровень — доступ к работе на своём велосипеде или мотоцикле"
+        desc: "● Увеличение оплаты за посылки на почте на 100$ за каждый уровень<br>● 5 уровень — доступ к работе на своём велосипеде или мотоцикле",
+        costPerLevel: 500000
     },
     { 
         id: 'contractor', 
         name: "📋 Подрядчик", 
         level: 0, 
         done: 0, 
-        goals: [10, 20, 30, 40, 50], 
-        desc: "● +2% к шансу закрытия контракта за каждый уровень"
+        goals: [10, 20, 30, 40, 50],
+        desc: "● +2% к шансу закрытия контракта за каждый уровень",
+        costPerLevel: 500000
     }
 ];
 
 const medicQuestions = [
-    { q: "Артериальное кровотечение", a: "Жгут выше раны" },
-    { q: "Венозное кровотечение", a: "Жгут ниже раны" },
-    { q: "Огнестрел", a: "Повязка антисептическая" },
-    { q: "Ожог кислотой", a: "Щелочной раствор" },
-    { q: "Ожог щелочью", a: "Кислотный раствор" },
-    { q: "Ожог термический", a: "Холодный компресс" },
-    { q: "Обморожение", a: "Тепло" },
-    { q: "Недостаточность", a: "Таблетка" },
-    { q: "Перелом", a: "Наложить шину" },
-    { q: "Растяжение", a: "Тугая повязка" },
-    { q: "Ушиб", a: "Лед / холодный компресс" },
-    { q: "Вывих", a: "Наложить шину" },
-    { q: "Рана", a: "Повязка антисептическая" }
+    { q: "Артериальное кровотечение", a: "Жгут выше раны", img: "img/med/rv1.png" },
+    { q: "Венозное кровотечение", a: "Жгут ниже раны", img: "img/med/rv.png" },
+    { q: "Огнестрел", a: "Повязка антисептическая", img: "img/med/ognestrel.png" },
+    { q: "Ожог кислотой", a: "Щелочной раствор", img: "img/med/is.png" },
+    { q: "Ожог щелочью", a: "Кислотный раствор", img: "img/med/shhh.png" },
+    { q: "Ожог термический", a: "Холодный компресс", img: "img/med/term.png" },
+    { q: "Обморожение", a: "Тепло", img: "img/med/zzz.png" },
+    { q: "Недостаточность", a: "Таблетка", img: "img/med/ned.png" },
+    { q: "Перелом", a: "Наложить шину", img: "img/med/vivih.png" },
+    { q: "Растяжение", a: "Тугая повязка", img: "img/med/rastaszenie.png" },
+    { q: "Ушиб", a: "Лед / холодный компресс", img: "img/med/ushib.png" },
+    { q: "Вывих", a: "Наложить шину", img: "img/med/vivih.png" },
+    { q: "Рана", a: "Повязка антисептическая", img: "img/med/rana.png" }
 ];
 
 const gamesDb = [
-    { id: 'roulette', name: "Рулетка 5RP", icon: "🎡", desc: "Испытай свою удачу в фирменной рулетке.", status: "soon" },
     { id: 'match3', name: "Три в ряд", icon: "🧩", desc: "Собирай кристаллы в ряд и получай бонусы.", status: "active" },
-    { id: 'fishing', name: "Мини-рыбалка", icon: "🎣", desc: "Симулятор ловли редкой рыбы.", status: "soon" },
     { id: 'medic', name: "Тест медика", icon: "🏥", desc: "Проверь свои знания медицины.", status: "active" },
     { id: 'slots', name: "Слоты 777", icon: "🎰", desc: "Крути барабаны и сорви куш!", status: "active" }
 ];
@@ -409,6 +427,7 @@ const achievementsConfig = [
         let runningOnline = false;
         let clockInterval = null;
         let lastTickTime = Date.now();
+        let globalSkillCost = parseInt(localStorage.getItem('globalSkillCost')) || 500000;
         let achievementsDone = JSON.parse(localStorage.getItem('achievementsDone')) || [];
         let currentAchFilter = 'available';
         let totalActiveSeconds = 0;
@@ -441,13 +460,21 @@ function renderSkills() {
     
     // Расчет статистики для всех навыков
     const totalRemaining = skillsDb.reduce((acc, s) => acc + Math.max(0, s.goals.length - s.level), 0);
-    const totalCost = totalRemaining * 500000;
+    // Общая стоимость рассчитывается на основе введенной глобальной стоимости за один уровень
+    const totalCost = totalRemaining * globalSkillCost;
 
     const summaryHtml = `
         <div class="skills-summary-card">
             <div class="summary-item">
                 <span class="summary-label">ОСТАЛОСЬ УРОВНЕЙ</span>
                 <span class="summary-value">${totalRemaining}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">СТОИМОСТЬ УРОВНЯ</span>
+                <div style="display:flex; gap:4px; align-items:center;">
+                    <input type="number" id="global-skill-cost-input" value="${globalSkillCost}" class="mini-input" style="flex:1;">
+                    <button class="set-btn" onclick="updateGlobalSkillCost()">OK</button>
+                </div>
             </div>
             <div class="summary-item">
                 <span class="summary-label">СТОИМОСТЬ ПРОКАЧКИ</span>
@@ -489,8 +516,10 @@ function renderSkills() {
 </div>
             </div>
             <div class="set-row" onclick="event.stopPropagation()">
-                <input type="number" id="input-${s.id}" placeholder="Ввод" class="mini-input">
-                <button class="set-btn" onclick="setDone('${s.id}')">SET</button>
+                <div style="display:flex; gap:4px; flex:1;">
+                    <input type="number" id="input-${s.id}" placeholder="Опыт" class="mini-input">
+                    <button class="set-btn" onclick="setDone('${s.id}')">SET</button>
+                </div>
             </div>
         </div>`;
     }).join('');
@@ -760,7 +789,13 @@ function renderMedicQuestion() {
     
     const qData = medicGameState.questions[medicGameState.current];
     document.getElementById('med-current').innerText = medicGameState.current + 1;
-    document.getElementById('med-question-box').innerText = qData.q;
+    
+    const qBox = document.getElementById('med-question-box');
+    qBox.innerHTML = ''; 
+    if (qData.img) {
+        qBox.innerHTML += `<img src="${qData.img}" class="med-q-img" onerror="this.style.display='none'">`;
+    }
+    qBox.innerHTML += `<div>${qData.q}</div>`;
     
     const answersGrid = document.getElementById('med-answers-grid');
     answersGrid.innerHTML = '';
@@ -1670,6 +1705,21 @@ function setDone(id) {
     }
 }
 
+function updateGlobalSkillCost() {
+    const input = document.getElementById('global-skill-cost-input');
+    const val = parseInt(input?.value);
+    
+    if (!isNaN(val) && val >= 0) {
+        globalSkillCost = val;
+        localStorage.setItem('globalSkillCost', globalSkillCost);
+        renderSkills();
+        saveData();
+        showToast("Стоимость уровня обновлена!");
+    } else {
+        showToast("Введите корректную сумму!");
+    }
+}
+
 function showModal(title, text, onConfirm) {
     const modal = document.getElementById('modal-global');
     const titleEl = document.getElementById('modal-title');
@@ -2267,6 +2317,7 @@ function saveData() {
         hasServerMod: hasServerMod,
         hasVipMod: hasVipMod,
         achievementsDone: achievementsDone,
+        globalSkillCost: globalSkillCost, // Сохраняем глобальную стоимость
         settings: settings,
         timerState: {
             currentTime: currentTime,
@@ -2303,6 +2354,7 @@ function loadData() {
         hasVipMod = p.hasVipMod ?? false;
         totalActiveSeconds = p.totalActiveSeconds ?? 0;
         achievementsDone = p.achievementsDone ?? [];
+        globalSkillCost = p.globalSkillCost ?? 500000; // Загружаем глобальную стоимость
         settings = p.settings ?? { notifications: true, sounds: true };
     if (p.timerState) {
             currentTime = p.timerState.currentTime ?? 0;
@@ -2380,6 +2432,24 @@ window.onload = () => {
         renderAchievements();
         if (typeof renderSkills === 'function') renderSkills();
         
+        // Инъекция промокода и кнопки поддержки в меню
+        const menuContent = document.querySelector('.menu-content');
+        if (menuContent) {
+            const promoHtml = `
+                <div class="setting-item" style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05);">
+                    <span>ПРОМОКОД</span>
+                    <span style="color: var(--void-accent); font-weight: 800; letter-spacing: 1px;">VOID</span>
+                </div>
+                <div style="padding: 10px 0;">
+                    <button class="add-main-btn support-author-btn" onclick="window.open('https://www.donationalerts.com/r/void_guid', '_blank')">
+                        🍩 ПОДДЕРЖАТЬ АВТОРА
+                    </button>
+                </div>
+            `;
+            const resetBtn = menuContent.querySelector('.reset-btn-hard');
+            if (resetBtn) resetBtn.insertAdjacentHTML('beforebegin', promoHtml);
+        }
+
         console.log("Приложение успешно инициализировано");
     } catch (e) {
         console.error("Ошибка инициализации:", e);
