@@ -2438,7 +2438,7 @@ window.onload = () => {
             const promoHtml = `
                 <div class="setting-item" style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05);">
                     <span>ПРОМОКОД</span>
-                    <span style="color: var(--void-accent); font-weight: 800; letter-spacing: 1px;">VOIDS</span>
+                    <span style="color: var(--void-accent); font-weight: 800; letter-spacing: 1px;"><a href="">VOIDS</a></span>
                 </div>
                 <div style="padding: 10px 0;">
                     <button class="add-main-btn support-author-btn" onclick="window.open('https://www.donationalerts.com/r/creaper98', '_blank')">

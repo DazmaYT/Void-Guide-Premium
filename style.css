@@ -1872,6 +1872,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     flex-direction: column; /* Элементы идут друг под другом */
     height: 100%;           /* Занимает всю высоту меню */
     padding-bottom: 20px;   /* Отступ снизу */
+    flex: 1;              /* Растягивается, чтобы занять все доступное пространство */
+    overflow-y: auto;
 }
 
 .reset-btn-hard { 
@@ -1895,10 +1897,19 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 }
 
 .slide-menu {
-    position: fixed; top: 0; right: -100%; width: 280px; height: 100%;
-    background: var(--bg-card); border-left: var(--border);
+    position: fixed; 
+    top: 0; 
+    right: -100%; 
+    width: 280px; 
+    height: 100%;
+    background: var(--bg-card); 
+    border-left: var(--border);
     transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 9999; padding: 20px; display: flex; flex-direction: column;
+    z-index: 9999; 
+    padding: 20px; 
+    display: flex; 
+    flex-direction: column;
+    box-sizing: border-box; /* Важно, чтобы padding не ломал ширину */
 }
 .slide-menu.active { right: 0; }
 
@@ -2497,4 +2508,22 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     margin-right: auto;
     object-fit: contain;
     border: 1px solid rgba(109, 74, 255, 0.3);
+}
+
+a {
+    color: var(--void-neon);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.banner {
+    flex-shrink: 0; /* Баннер не будет сжиматься */
+    margin-top: auto; /* Прижимает баннер к низу .slide-menu */
+    width: 100%;
+}
+
+.banner img {
+  width: 100%;
+  display: block;         /* Убирает лишний отступ снизу у картинки */
+  border-radius: 12px;
 }
