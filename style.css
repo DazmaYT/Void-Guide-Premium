@@ -700,6 +700,10 @@
 .note-area {
     margin-top: 8px;
     width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 0 5px;
 }
 
 .note-input-field {
@@ -1942,7 +1946,13 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     border-radius: 12px;
     color: white;
     margin-bottom: 12px;
+    margin: 0 10px 12px 10px;
     border-left: 4px solid #e74c3c;
+    
+    box-sizing: border-box;
+    width: auto;
+    width: calc(100% - 20px);
+    word-wrap: break-word;
 }
 
 .ach-reward-badge {
@@ -1962,11 +1972,20 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     background: #1c222d;
 }
 
+#achievements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+}
+
 .ach-head {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 10px;
+    flex-wrap: wrap; /* Позволяет иконке и заголовку переноситься */
     font-weight: 600;
 }
 
@@ -1997,6 +2016,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     align-items: center;
     gap: 12px;
     margin-bottom: 8px;
+    flex-wrap: wrap;
 }
 
 .ach-card-gta[style*="opacity:0.5"] {
@@ -2008,6 +2028,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     font-weight: bold; 
     font-size: 14px; 
     flex: 1;
+    min-width: 0; /* Позволяет тексту сжиматься */
     padding-right: 45px; /* Отступ, чтобы текст не заезжал под бейдж с BP */
 }
 .ach-desc { font-size: 11px; color: #888; }
@@ -2028,15 +2049,43 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     background: #6d4aff;
     color: white;
     border-color: #6d4aff;
+    animation: none; /* Убираем пульсацию с активного фильтра, чтобы не отвлекало */
 }
 
 /* Адаптация раздела достижений для мобильных экранов */
 @media (max-width: 480px) {
+    .skills-summary-card {
+        flex-direction: column;
+        gap: 12px;
+        gap: 10px;
+        margin: 10px 4px 20px 4px; /* Еще меньше отступы на очень узких экранах */
+    }
+    .summary-item {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        gap: 8px;
+    }
+    .summary-item div[style*="display:flex"] {
+        width: auto;
+        flex: 1;
+        width: 100%;
+        flex: none;
+        justify-content: flex-end;
+        max-width: 180px;
+        max-width: none;
+    }
     .ach-card-gta {
         padding: 12px;
-        margin-left: 2px;
-        margin-right: 2px;
+        margin: 0 4px 10px 4px; /* Согласовал отступы с карточками фарма */
+        margin: 0 5px 10px 5px;
         border-radius: 10px;
+        box-sizing: border-box;
+        width: auto; /* Гарантирует, что не выйдет за пределы */
+        width: calc(100% - 10px);
     }
     .ach-title {
         font-size: 13px;
@@ -2067,12 +2116,16 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     border-radius: 16px;
     padding: 16px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    flex-wrap: wrap; 
+    justify-content: center;
+    margin: 10px 10px 20px 10px; /* Уменьшил боковые отступы */
 }
 .summary-item {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 120px;
     text-align: center;
 }
 .summary-label {
