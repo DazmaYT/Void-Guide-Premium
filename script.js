@@ -2441,7 +2441,7 @@ window.onload = () => {
                     <span style="color: var(--void-accent); font-weight: 800; letter-spacing: 1px;">VOID</span>
                 </div>
                 <div style="padding: 10px 0;">
-                    <button class="add-main-btn support-author-btn" onclick="window.open('https://www.donationalerts.com/r/void_guid', '_blank')">
+                    <button class="add-main-btn support-author-btn" onclick="window.open('https://www.donationalerts.com/r/creaper98', '_blank')">
                         🍩 ПОДДЕРЖАТЬ АВТОРА
                     </button>
                 </div>
