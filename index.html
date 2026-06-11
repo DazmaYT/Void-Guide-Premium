@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Void Guide • Premium</title>
+    <title>Void Guide • Premium</title>  
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
     // Инициализация WebApp
@@ -127,14 +127,16 @@
 
 
 <!-- Контейнер раздела -->
-<section id="achievements-section" style="display: none; padding: 16px;">
+<section id="achievements-section" style="display: none; padding: 16px; width: 100%; box-sizing: border-box;">
     <div class="ach-filter-nav" style="display: flex; gap: 10px; margin-bottom: 20px;">
         <button class="sub-tab active" onclick="setAchFilter('available', this)">Выполнимые</button>
         <button class="sub-tab" onclick="setAchFilter('locked', this)">Недоступные</button>
         <button class="sub-tab" onclick="setAchFilter('hidden', this)">Скрытые</button>
     </div>
+    
     <div id="ach-counter" style="text-align: center; margin-bottom: 20px; color: #777; font-weight: bold;"></div>
-    <div id="achievements-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;"></div>
+    
+    <div id="achievements-list"></div>
 </section>
 
 
