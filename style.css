@@ -2526,3 +2526,122 @@ a {
   display: block;         /* Убирает лишний отступ снизу у картинки */
   border-radius: 12px;
 }
+
+/* СТИЛИ ДЛЯ ИСТОРИИ (КАЛЕНДАРЯ) BP */
+.history-date-group {
+    margin-bottom: 24px;
+}
+.history-date-header {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    padding-left: 4px;
+    border-left: 2px solid var(--void-neon);
+}
+.history-item {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.history-info {
+    display: flex;
+    flex-direction: column;
+}
+.history-bp-val {
+    font-weight: 800;
+    color: var(--void-accent);
+    font-family: monospace;
+}
+
+/* СТИЛИ КАЛЕНДАРЯ */
+.calendar-wrapper {
+    background: var(--bg-card);
+    border: 1px solid rgba(109, 74, 255, 0.2);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.calendar-header span {
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--void-accent);
+}
+.cal-btn {
+    background: var(--bg-input);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+}
+.cal-weekday {
+    font-size: 9px;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.cal-day {
+    aspect-ratio: 1/1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: 0.2s;
+}
+.cal-day:hover { background: rgba(255,255,255,0.05); }
+.cal-day.has-data { color: var(--void-accent); font-weight: 800; border-bottom: 2px solid var(--void-neon); }
+.cal-day.selected { background: var(--void-neon); color: white; border-color: var(--void-accent); }
+.cal-day.today { border: 1px solid var(--void-accent); }
+.cal-day.other-month { opacity: 0.2; cursor: default; }
+
+/* ИТОГОВАЯ КАРТОЧКА В ИСТОРИИ */
+.history-summary-card {
+    background: linear-gradient(135deg, rgba(109, 74, 255, 0.2) 0%, rgba(0, 240, 255, 0.1) 100%);
+    border: 1px solid rgba(109, 74, 255, 0.3);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.4s ease-out;
+}
+.summary-all-label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    font-weight: 800;
+}
+.summary-all-val {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--void-accent);
+    text-shadow: 0 0 15px var(--void-glow);
+}

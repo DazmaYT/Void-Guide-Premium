@@ -421,6 +421,9 @@ const achievementsConfig = [
         let timerEndTime = null;
         let hasServerMod = false;
         let hasVipMod = false;
+        let bpHistory = JSON.parse(localStorage.getItem('bpHistory')) || [];
+        let calendarViewDate = new Date(); 
+        let selectedHistoryDateString = new Date().toLocaleDateString('ru-RU');
         let mult = 1; 
         const TOTAL_TIME = 3 * 60 * 60;
         let timeClock = TOTAL_TIME;
@@ -447,6 +450,134 @@ Object.defineProperty(window, 'currentTime', {
     }
 });
 
+/**
+ * Логирует получение BP
+ * @param {number} amount - количество
+ * @param {string} name - название активности
+ * @param {string} cat - категория
+ */
+function logBPEntry(amount, name, cat) {
+    if (amount <= 0) return;
+    const entry = {
+        id: Date.now() + Math.random(),
+        timestamp: Date.now(),
+        amount: amount,
+        name: name,
+        cat: cat
+    };
+    bpHistory.unshift(entry);
+    // Храним последние 200 записей
+    if (bpHistory.length > 200) bpHistory.pop();
+    saveData();
+}
+
+function renderHistory() {
+    const container = document.getElementById('history-section');
+    if (!container) return;
+
+    // Считаем общую сумму всех полученных BP из истории
+    const totalAllTime = bpHistory.reduce((s, i) => s + i.amount, 0);
+
+    container.innerHTML = `
+        <div class="history-summary-card">
+            <span class="summary-all-label">ОБЩИЙ СЧЕТ BP (ЗА ВСЁ ВРЕМЯ)</span>
+            <span class="summary-all-val">${totalAllTime.toLocaleString('ru-RU')} BP</span>
+        </div>
+        <div class="calendar-wrapper">
+            <div class="calendar-header">
+                <button class="cal-btn" onclick="changeCalMonth(-1)">←</button>
+                <span id="cal-month-title"></span>
+                <button class="cal-btn" onclick="changeCalMonth(1)">→</button>
+            </div>
+            <div class="calendar-grid" id="cal-grid"></div>
+        </div>
+        <div id="history-details-list"></div>
+    `;
+    
+    renderCalendar();
+    renderHistoryDetails();
+}
+
+function renderCalendar() {
+    const grid = document.getElementById('cal-grid');
+    const title = document.getElementById('cal-month-title');
+    if (!grid || !title) return;
+
+    const year = calendarViewDate.getFullYear();
+    const month = calendarViewDate.getMonth();
+    title.innerText = new Intl.DateTimeFormat('ru-RU', { month: 'long', year: 'numeric' }).format(calendarViewDate);
+
+    grid.innerHTML = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(d => `<div class="cal-weekday">${d}</div>`).join('');
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const todayStr = new Date().toLocaleDateString('ru-RU');
+
+    const daysWithData = new Set(bpHistory.map(item => new Date(item.timestamp).toLocaleDateString('ru-RU')));
+
+    for (let i = 0; i < startOffset; i++) {
+        grid.innerHTML += `<div class="cal-day other-month"></div>`;
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dateObj = new Date(year, month, d);
+        const dateStr = dateObj.toLocaleDateString('ru-RU');
+        const isSelected = selectedHistoryDateString === dateStr;
+        const isToday = todayStr === dateStr;
+        const hasData = daysWithData.has(dateStr);
+
+        const dayEl = document.createElement('div');
+        dayEl.className = `cal-day ${isSelected ? 'selected' : ''} ${isToday ? 'today' : ''} ${hasData ? 'has-data' : ''}`;
+        dayEl.innerText = d;
+        dayEl.onclick = () => {
+            selectedHistoryDateString = dateStr;
+            renderCalendar();
+            renderHistoryDetails();
+        };
+        grid.appendChild(dayEl);
+    }
+}
+
+function changeCalMonth(delta) {
+    calendarViewDate.setMonth(calendarViewDate.getMonth() + delta);
+    renderCalendar();
+}
+
+function renderHistoryDetails() {
+    const listContainer = document.getElementById('history-details-list');
+    if (!listContainer) return;
+
+    const filtered = bpHistory.filter(item => new Date(item.timestamp).toLocaleDateString('ru-RU') === selectedHistoryDateString);
+    const totalDay = filtered.reduce((s, i) => s + i.amount, 0);
+
+    if (filtered.length === 0) {
+        listContainer.innerHTML = `
+            <div class="history-date-header">${selectedHistoryDateString}</div>
+            <div style="text-align:center; color:var(--text-muted); padding: 40px 0;">
+                Записей не найдено
+            </div>`;
+        return;
+    }
+
+    listContainer.innerHTML = `
+        <div class="history-date-header" style="display:flex; justify-content:space-between;">
+            <span>${selectedHistoryDateString}</span>
+            <span style="color:var(--void-accent)">Всего: ${totalDay} BP</span>
+        </div>
+        ${filtered.map(item => {
+            const time = new Date(item.timestamp).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            return `
+            <div class="history-item">
+                <div class="history-info">
+                    <span style="font-size:13px; font-weight:600;">${item.name}</span>
+                    <span style="font-size:10px; color:var(--text-muted);">${time} • ${item.cat}</span>
+                </div>
+                <div class="history-bp-val">+${item.amount} BP</div>
+            </div>`;
+        }).join('')}
+    `;
+}
 
 function vibrate(type) {
     if (window.Telegram?.WebApp?.HapticFeedback && window.Telegram.WebApp.isVersionAtLeast('6.1')) {
@@ -1025,7 +1156,7 @@ function toggleSlotsHistory() {
 
 // --- УПРАВЛЕНИЕ ВИДАМИ ---
 function switchMainView(view) {
-    const sections = ['farm', 'skills', 'timers', 'achievements', 'games'];
+    const sections = ['farm', 'skills', 'timers', 'achievements', 'games', 'history'];
     
     // 1. Переключаем секции
     sections.forEach(s => {
@@ -1042,7 +1173,8 @@ function switchMainView(view) {
         skills: "НАВЫКИ", 
         timers: "ТАЙМЕРЫ", 
         achievements: "ДОСТИЖЕНИЯ",
-        games: "ИГРЫ"
+        games: "ИГРЫ",
+        history: "ИСТОРИЯ BP"
     };
     if (titleEl && titles[view]) {
         titleEl.innerText = titles[view];
@@ -1053,6 +1185,7 @@ function switchMainView(view) {
     if (view === 'achievements') renderAchievements('active');
     if (view === 'games') { renderGames(); }
     if (view === 'skills') renderSkills();
+    if (view === 'history') renderHistory();
 
     localStorage.setItem('lastView', view);
 }
@@ -1250,11 +1383,14 @@ function finishTask(id, reward, event) {
     // 1. Обновляем значение
     trackingDone[id] = true;
     totalBP += reward;
-    
+
+    // Логируем
+    const q = db.find(x => x.id === id);
+    logBPEntry(reward * mult, q ? q.name : "Задание", q ? q.cat : "фарм");
+
     // 2. Сохраняем в localStorage
     saveData();
     
-    // 3. ПЕРЕРИСОВЫВАЕМ ИНТЕРФЕЙС (обязательно!)
     buildFeed();
     updateCategoryStats();
     vibrate('success');
@@ -1455,6 +1591,7 @@ const finishSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_
 
 function startTimerInterval() {
     if (timerInterval) clearInterval(timerInterval);
+    lastTickTime = Date.now();
     
     timerInterval = setInterval(() => {
         if (!appState.timerEndTime) {
@@ -1464,17 +1601,31 @@ function startTimerInterval() {
         }
 
         const now = Date.now();
-        const remaining = Math.round((appState.timerEndTime - now) / 1000);
+        const delta = Math.floor((now - lastTickTime) / 1000);
         
-        if (remaining > 0) {
-            currentTime = remaining;
+        if (delta >= 1) {
+            const remaining = Math.round((appState.timerEndTime - now) / 1000);
             
-            // Считаем активность только когда таймер реально идет
-            totalActiveSeconds++;
+            // Логика бонуса: +2 BP за каждые 3 часа (10800 сек)
+            const prevCycles = Math.floor(totalActiveSeconds / 10800);
+            totalActiveSeconds += delta;
+            const currentCycles = Math.floor(totalActiveSeconds / 10800);
+
+            if (currentCycles > prevCycles) {
+                const bonus = (currentCycles - prevCycles) * 2;
+                totalBP += bonus;
+                showToast(`🏆 Бонус: +${bonus} BP за 3 часа в игре!`);
+                logBPEntry(bonus, "Бонус за онлайн", "online");
+                updateCategoryStats();
+            }
+
+            lastTickTime = now;
             updateStatHours();
 
-            updateUI();
-        } else {
+            if (remaining > 0) {
+                currentTime = remaining;
+                updateUI();
+            } else {
             clearInterval(timerInterval);
             timerInterval = null;
             appState.timerEndTime = null;
@@ -1490,6 +1641,7 @@ function startTimerInterval() {
                 startTimerInterval();
             } else {
                 handleTimerEnd();
+            }
             }
         }
         saveData();
@@ -1759,6 +1911,7 @@ function resetAllDoneTasks() {
         trackingVal = {};
         achievementsDone = [];
         totalBP = 0; 
+        bpHistory = [];
         
         // Сразу сохраняем обнуленное состояние
         saveData(); 
@@ -2237,6 +2390,9 @@ function completeAch(id) {
     if (!achievementsDone.includes(id)) {
         achievementsDone.push(id);
         saveData(); // Сохраняем только факт выполнения
+        
+        const ach = achievementsConfig.find(a => a.id === id);
+        if (ach) logBPEntry(ach.reward, ach.title, "достижение");
         renderAchievements(); 
     }
 }
@@ -2318,6 +2474,7 @@ function saveData() {
         hasVipMod: hasVipMod,
         achievementsDone: achievementsDone,
         globalSkillCost: globalSkillCost, // Сохраняем глобальную стоимость
+        bpHistory: bpHistory,
         settings: settings,
         timerState: {
             currentTime: currentTime,
@@ -2355,6 +2512,7 @@ function loadData() {
         totalActiveSeconds = p.totalActiveSeconds ?? 0;
         achievementsDone = p.achievementsDone ?? [];
         globalSkillCost = p.globalSkillCost ?? 500000; // Загружаем глобальную стоимость
+        bpHistory = p.bpHistory ?? [];
         settings = p.settings ?? { notifications: true, sounds: true };
     if (p.timerState) {
             currentTime = p.timerState.currentTime ?? 0;
