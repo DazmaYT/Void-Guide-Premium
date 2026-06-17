@@ -455,15 +455,17 @@ Object.defineProperty(window, 'currentTime', {
  * @param {number} amount - количество
  * @param {string} name - название активности
  * @param {string} cat - категория
+ * @param {number|string} taskId - ID задания
  */
-function logBPEntry(amount, name, cat) {
+function logBPEntry(amount, name, cat, taskId = null) {
     if (amount <= 0) return;
     const entry = {
         id: Date.now() + Math.random(),
         timestamp: Date.now(),
         amount: amount,
         name: name,
-        cat: cat
+        cat: cat,
+        taskId: taskId
     };
     bpHistory.unshift(entry);
     // Храним последние 200 записей
@@ -1361,14 +1363,28 @@ function stepCount(id, diff, max, reward) {
 function resetTask(id, event) {
     if (event) event.stopPropagation();
     
-    // Сбрасываем статус
-    trackingDone[id] = false;
-    trackingVal[id] = 0;
-    
+    const today = new Date().toLocaleDateString('ru-RU');
     // Вычитаем Reward из общего BP
     const q = db.find(x => x.id === id);
     if (q) {
-        totalBP = Math.max(0, totalBP - q.reward);
+        // Удаляем запись из истории за сегодня, чтобы очистить календарь
+        const originalHistoryLength = bpHistory.length;
+        bpHistory = bpHistory.filter(item => !(
+            item.taskId === id && 
+            new Date(item.timestamp).toLocaleDateString('ru-RU') === today
+        ));
+
+        // Если мы действительно что-то удалили из истории, вычитаем BP
+        if (bpHistory.length < originalHistoryLength) {
+            totalBP = Math.max(0, totalBP - q.reward);
+        }
+    }
+
+    // Сбрасываем статус в UI
+    trackingDone[id] = false;
+    trackingVal[id] = 0;
+    
+    if (document.getElementById('stat-bp')) {
         document.getElementById('stat-bp').innerText = totalBP;
     }
     
@@ -1380,13 +1396,26 @@ function resetTask(id, event) {
 function finishTask(id, reward, event) {
     if (event) event.stopPropagation();
     
+    const today = new Date().toLocaleDateString('ru-RU');
+    
+    // ПРОВЕРКА: было ли это задание уже выполнено сегодня в истории?
+    const alreadyDoneToday = bpHistory.some(item => 
+        item.taskId === id && 
+        new Date(item.timestamp).toLocaleDateString('ru-RU') === today
+    );
+
+    if (alreadyDoneToday) {
+        showToast("⚠️ Это задание уже есть в календаре за сегодня!");
+        return;
+    }
+
     // 1. Обновляем значение
     trackingDone[id] = true;
     totalBP += reward;
 
     // Логируем
     const q = db.find(x => x.id === id);
-    logBPEntry(reward * mult, q ? q.name : "Задание", q ? q.cat : "фарм");
+    logBPEntry(reward * mult, q ? q.name : "Задание", q ? q.cat : "фарм", id);
 
     // 2. Сохраняем в localStorage
     saveData();
@@ -2476,6 +2505,7 @@ function saveData() {
         globalSkillCost: globalSkillCost, // Сохраняем глобальную стоимость
         bpHistory: bpHistory,
         settings: settings,
+        lastResetDate: new Date().toLocaleDateString('ru-RU'),
         timerState: {
             currentTime: currentTime,
             totalTime: totalTime,
@@ -2514,6 +2544,15 @@ function loadData() {
         globalSkillCost = p.globalSkillCost ?? 500000; // Загружаем глобальную стоимость
         bpHistory = p.bpHistory ?? [];
         settings = p.settings ?? { notifications: true, sounds: true };
+
+        // ПРОВЕРКА НОВОГО ДНЯ
+        const today = new Date().toLocaleDateString('ru-RU');
+        if (p.lastResetDate && p.lastResetDate !== today) {
+            console.log("Новый день! Сбрасываю ежедневные задания...");
+            trackingDone = {};
+            trackingVal = {};
+        }
+
     if (p.timerState) {
             currentTime = p.timerState.currentTime ?? 0;
             totalTime   = p.timerState.totalTime ?? 0;
