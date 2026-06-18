@@ -113,8 +113,8 @@
     <button class="nav-node" id="nav-achievements" onclick="switchMainView('achievements')"><span class="ico">🏆</span>Достижения</button>
     <button class="nav-node" id="nav-skills" onclick="switchMainView('skills')"><span class="ico">⏳</span>Навыки</button>
     <button class="nav-node" id="nav-timers" onclick="switchMainView('timers')"><span class="ico">⏱️</span>Таймеры</button>
-    <button class="nav-node" id="nav-games" onclick="switchMainView('games')"><span class="ico">🎮</span>Игры</button>
     <button class="nav-node" id="nav-history" onclick="switchMainView('history')"><span class="ico">📚</span>История</button>
+    <button class="nav-node" id="nav-games" onclick="switchMainView('games')"><span class="ico">🎮</span>Игры</button>
     </div>
 
 
@@ -129,7 +129,24 @@
 </section>
 
 
-
+<div id="add-entry-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Добавить запись в историю</h3>
+            <button class="close-modal-btn" onclick="closeAddEntryModal()">✕</button>
+        </div>
+        <div class="modal-tabs">
+            <button id="modal-tab-tasks" class="modal-tab active" onclick="selectModalTab('tasks')">Задания</button>
+            <button id="modal-tab-achievements" class="modal-tab" onclick="selectModalTab('achievements')">Достижения</button>
+        </div>
+        <div id="modal-tasks-list" class="modal-list">
+            <!-- Задания будут отрисовываться здесь -->
+        </div>
+        <div id="modal-achievements-list" class="modal-list" style="display: none;">
+            <!-- Достижения будут отрисовываться здесь -->
+        </div>
+    </div>
+</div>
 
 <!-- Контейнер раздела -->
 <section id="achievements-section" style="display: none; padding: 16px; width: 100%; box-sizing: border-box;">
@@ -164,10 +181,10 @@
     <div id="games-container"></div>
 </section>
 
-
 <section id="history-section" style="display: none;">
 <div id="history-section" style="display:none;"></div>
 </section>
+
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="script.js"></script>
