@@ -44,13 +44,6 @@
             --bg-body: #0a0e17;
             --text-color: #fff;
         }
-        body.light {
-            /* СВЕТЛАЯ ТЕМА */
-            --bg-main: #eef2f7;
-            --bg-card: #ffffff;
-            --text-main: #1a1a1a;
-            --border-style: 1px solid rgba(0, 0, 0, 0.1);
-        }
         body {
         background-color: var(--bg-main);
             color: var(--text-main);
@@ -387,9 +380,13 @@
 }
 
 .task-card.done {
-    border-color: rgba(0, 240, 255, 0.15) !important;
-    background: rgba(0, 240, 255, 0.01);
-    opacity: 0.6;
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.12) 0%, rgba(0, 119, 255, 0.02) 100%) !important;
+    border-color: rgba(0, 240, 255, 0.25) !important;
+    border-left: 4px solid var(--void-accent) !important; /* Сохраняем акцентную полосу слева */
+    color: var(--text-muted);
+    opacity: 0.8;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 15px rgba(0, 240, 255, 0.05);
 }
 .task-row {
     display: flex;
@@ -415,6 +412,18 @@
     flex-shrink: 0;
 }
 
+/* Ensure specific elements within a done task remain clickable if needed */
+.task-card.done .task-meta,
+.task-card.done .toggle-btn,
+.task-card.done .reset-btn {
+    pointer-events: auto; /* Re-enable clicks for these elements */
+}
+
+/* Visually mute the toggle button and reset button if they are part of a done task */
+.task-card.done .toggle-btn,
+.task-card.done .reset-btn {
+    color: var(--text-muted);
+}
 /* Контейнер для прогресса и награды */
 .task-info-col {
     display: flex;
@@ -701,7 +710,7 @@
     margin-top: 8px;
     width: 100%;
     max-width: 600px;
-    margin: 0 auto;
+    margin: 8px 0 0 0; /* Выравнивание по левому краю */
     box-sizing: border-box;
     padding: 0 5px;
 }
@@ -1627,7 +1636,7 @@
 }
 
 /* Состояние выполненного задания */
-.task-card.done { border: 2px solid #2ecc71 !important; opacity: 0.7; }
+.task-card.done {border-style: 1px solid rgba(109, 74, 255, 0.2); border-left: 4px solid var(--void-accent) !important; opacity: 0.8; }
 
 /* Стиль кнопки (вместо "некрасивого крестика") */
 .toggle-btn {
@@ -1919,12 +1928,14 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); 
 }
 
-/* Линия только в заданиях */
+/* Линия-разделитель в заданиях */
 .feed-item .task-line { 
-    height: 1px; 
+    height: 2px; 
     width: 100%; 
-    background: linear-gradient(90deg, #40E0D0, transparent); 
-    margin: 10px 0; 
+    background: linear-gradient(90deg, var(--void-accent), transparent); 
+    margin: 8px 0 0 0; 
+    opacity: 0.6;
+    border-radius: 1px;
 }
 
 /* Премиум кнопка только в заданиях */
@@ -2770,4 +2781,16 @@ a {
 
 .modal-add-btn:hover {
     background: #5a3aff;
+}
+
+/* Стили для неактивного элемента в модальном окне */
+.modal-list-item.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(1);
+    background: rgba(255, 255, 255, 0.02);
+}
+.modal-list-item.disabled .modal-add-btn {
+    background: #333;
+    cursor: not-allowed;
 }

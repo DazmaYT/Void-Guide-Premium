@@ -477,13 +477,10 @@ function renderHistory() {
     const container = document.getElementById('history-section');
     if (!container) return;
 
-    // Считаем общую сумму всех полученных BP из истории
-    const totalAllTime = bpHistory.reduce((s, i) => s + i.amount, 0);
-
     container.innerHTML = `
         <div class="history-summary-card">
             <span class="summary-all-label">ОБЩИЙ СЧЕТ BP (ЗА ВСЁ ВРЕМЯ)</span>
-            <span class="summary-all-val">${totalAllTime.toLocaleString('ru-RU')} BP</span>
+            <span class="summary-all-val">${totalBP.toLocaleString('ru-RU')} BP</span>
         </div>
         <div class="calendar-wrapper">
             <div class="calendar-header">
@@ -595,6 +592,15 @@ function renderHistoryDetails() {
     const listContainer = document.getElementById('history-details-list');
     if (!listContainer) return;
 
+    // Считаем сумму всех записей из истории ДИНАМИЧЕСКИ (не зависит от global totalBP)
+    const totalBPHistory = bpHistory.reduce((sum, item) => sum + item.amount, 0);
+
+    // Обновляем общую сумму в карточке на странице истории
+    const elSummaryVal = document.querySelector('.history-summary-card .summary-all-val');
+    if (elSummaryVal) {
+        elSummaryVal.innerText = `${totalBPHistory.toLocaleString('ru-RU')} BP`;
+    }
+
     const filtered = bpHistory.filter(item => new Date(item.timestamp).toLocaleDateString('ru-RU') === selectedHistoryDateString);
     const totalDay = filtered.reduce((s, i) => s + i.amount, 0);
 
@@ -602,7 +608,8 @@ function renderHistoryDetails() {
         <div class="history-date-header" style="display:flex; justify-content:space-between; align-items:center;">
             <span>${selectedHistoryDateString}</span>
             <div style="display:flex; align-items:center; gap:10px;">
-                <span style="color:var(--void-accent)">Всего: ${totalDay} BP</span>
+                <span style="color:var(--text-muted); font-size:11px;">За всё время: ${totalBPHistory.toLocaleString('ru-RU')} BP</span>
+                <span style="color:var(--void-accent)">За день: ${totalDay} BP</span>
                 <button class="small-btn" onclick="openAddEntryModal()" style="padding:2px 8px; font-size:10px; border:1px solid var(--void-accent);">+ ADD</button>
             </div>
         </div>
@@ -631,6 +638,59 @@ function renderHistoryDetails() {
     }
     listContainer.innerHTML = html;
 }
+
+ 
+function deleteHistoryEntry(entryId) {
+    const idx = bpHistory.findIndex(item => item.id === entryId);
+    if (idx === -1) return;
+
+    const deletedEntry = bpHistory[idx];
+    
+    // Так как мы отключили изменение глобального totalBP, 
+    // мы просто удаляем запись из истории, не затрагивая основной счетчик.
+    bpHistory.splice(idx, 1);
+
+    // Синхронизация статусов с выполненными заданиями
+    const entryDateString = new Date(deletedEntry.timestamp).toLocaleDateString('ru-RU');
+    const today = new Date().toLocaleDateString('ru-RU');
+
+    if (deletedEntry.cat === "фарм" && deletedEntry.taskId !== null) {
+        // Проверяем, остались ли еще выполнения этого же задания за эту же дату
+        const remainingTask = bpHistory.some(item => 
+            item.taskId === deletedEntry.taskId &&
+            item.cat === "фарм" &&
+            new Date(item.timestamp).toLocaleDateString('ru-RU') === entryDateString
+        );
+        // Если это было последнее выполнение за сегодня, сбрасываем галочку выполнения в виджете
+        if (!remainingTask && entryDateString === today) {
+            trackingDone[deletedEntry.taskId] = false;
+            trackingVal[deletedEntry.taskId] = 0;
+            // Если у вас на главной обновляется список заданий, раскомментируйте строчку ниже:
+            // buildFeed(); 
+        }
+    } else if (deletedEntry.cat === "достижение" && deletedEntry.taskId !== null) {
+        const remainingAch = bpHistory.some(item => 
+            item.taskId === deletedEntry.taskId && item.cat === "достижение"
+        );
+        // Если достижение удалено из истории, убираем его из списка выполненных
+        if (!remainingAch) {
+            achievementsDone = achievementsDone.filter(achId => String(achId) !== String(deletedEntry.taskId));
+            // renderAchievements(); // Обновит список достижений, если нужно
+        }
+    }
+
+    saveData();
+    renderHistoryDetails();
+    renderCalendar();
+    // updateCategoryStats(); // Обновит статистику категорий, если есть такая функция
+    
+    // Всплывающее уведомление (если используется в вашем проекте)
+    if (typeof showToast === 'function') {
+        showToast("🗑️ Запись удалена");
+    }
+}
+
+
 
 // --- НОВЫЙ ФУНКЦИОНАЛ: МОДАЛЬНОЕ ОКНО ДЛЯ ДОБАВЛЕНИЯ ЗАПИСЕЙ В ИСТОРИЮ ---
 function openAddEntryModal() {
@@ -670,42 +730,58 @@ function renderModalTasks() {
     const listContainer = document.getElementById('modal-tasks-list');
     if (!listContainer) return;
 
-    listContainer.innerHTML = db.map(task => `
-        <div class="modal-list-item">
+    listContainer.innerHTML = db.map(task => {
+        const alreadyAdded = bpHistory.some(item => 
+            item.taskId === task.id && 
+            item.cat === "фарм" && 
+            new Date(item.timestamp).toLocaleDateString('ru-RU') === selectedHistoryDateString
+        );
+        
+        // Если задание выполнено в выбранный день — блокируем кнопку
+        const btnAttr = alreadyAdded ? 'disabled' : `onclick="addSelectedEntryToHistory(${task.id}, 'task')"`;
+        const btnText = alreadyAdded ? 'Выполнено' : 'Добавить';
+        const disabledClass = alreadyAdded ? 'disabled' : '';
+
+        return `
+        <div class="modal-list-item ${disabledClass}">
             <div class="modal-item-info">
                 <span class="modal-item-name">${task.icon} ${task.name}</span>
                 <span class="modal-item-reward">+${task.reward} BP</span>
             </div>
             <button class="modal-add-btn" onclick="addSelectedEntryToHistory(${task.id}, 'task')">Добавить</button>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
 function renderModalAchievements() {
     const listContainer = document.getElementById('modal-achievements-list');
     if (!listContainer) return;
 
-    listContainer.innerHTML = achievementsConfig.map(ach => `
-        <div class="modal-list-item">
+    listContainer.innerHTML = achievementsConfig.map(ach => {
+        const alreadyDone = bpHistory.some(item => 
+            item.taskId === ach.id && item.cat === "достижение"
+        );
+        return `
+        <div class="modal-list-item ${alreadyDone ? 'disabled' : ''}">
             <div class="modal-item-info">
                 <span class="modal-item-name">${ach.title}</span>
                 <span class="modal-item-reward">+${ach.reward} BP</span>
             </div>
             <button class="modal-add-btn" onclick="addSelectedEntryToHistory('${ach.id}', 'achievement')">Добавить</button>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
 function addSelectedEntryToHistory(id, type) {
     let entryName, entryAmount, entryCat, entryTaskId;
 
     if (type === 'task') {
-        const task = db.find(t => t.id === id);
+        const task = db.find(t => t.id === Number(id));
         if (!task) return;
 
         // Проверка: Не добавлено ли уже это задание на выбранную дату?
         const alreadyAdded = bpHistory.some(item => 
-            item.taskId === id && 
+            item.taskId === Number(id) && 
             item.cat === "фарм" && 
             new Date(item.timestamp).toLocaleDateString('ru-RU') === selectedHistoryDateString
         );
@@ -725,12 +801,12 @@ function addSelectedEntryToHistory(id, type) {
             trackingDone[task.id] = true;
         }
     } else if (type === 'achievement') {
-        const ach = achievementsConfig.find(a => a.id === id);
+        const ach = achievementsConfig.find(a => String(a.id) === String(id));
         if (!ach) return;
 
         // Проверка: Не выполнено ли уже это достижение (вообще в истории)?
         const alreadyInHistory = bpHistory.some(item => 
-            item.taskId === ach.id && item.cat === "достижение"
+            item.taskId === String(ach.id) && item.cat === "достижение"
         );
         if (alreadyInHistory) {
             showToast("⚠️ Это достижение уже выполнено!");
@@ -750,9 +826,9 @@ function addSelectedEntryToHistory(id, type) {
         return;
     }
 
-    // Превращаем строку даты (DD.MM.YYYY) в объект Date для получения таймстампа
+    // Превращаем строку даты (DD.MM.YYYY) в объект Date в рамках локального времени (полночь)
     const parts = selectedHistoryDateString.split('.');
-    const dateObj = new Date(parts[2], parts[1] - 1, parts[0], 12, 0, 0);
+    const dateObj = new Date(parts[2], parts[1] - 1, parts[0]);
 
     const entry = {
         id: Date.now() + Math.random(),
@@ -762,16 +838,23 @@ function addSelectedEntryToHistory(id, type) {
         cat: entryCat,
         taskId: entryTaskId
     };
+    
     bpHistory.unshift(entry);
-    totalBP += entryAmount;
+    
     saveData();
     renderHistoryDetails();
     renderCalendar();
     updateCategoryStats();
-    renderAchievements(); // Обновляем достижения, если добавили ачивку
-    buildFeed(); // Обновляем задания, если добавили задание
+    renderAchievements(); 
+    buildFeed(); 
     closeAddEntryModal();
     showToast(`✅ Добавлено: ${entryName} (+${entryAmount} BP)`);
+}
+
+function vibrate(type) {
+    if (window.Telegram?.WebApp?.HapticFeedback && window.Telegram.WebApp.isVersionAtLeast('6.1')) {
+        Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    }
 }
 
 function vibrate(type) {
@@ -1428,8 +1511,11 @@ function updateCategoryStats() {
     const elBPProgress = document.getElementById('stat-bp-progress');
     if (elBPProgress) elBPProgress.innerText = `${earnedBP} / ${totalPossibleBP}`;
 
+    // Общий счет за ВСЕ время
     const elTotalBP = document.getElementById('stat-bp');
-    if (elTotalBP) elTotalBP.innerText = totalBP * mult;
+    if (elTotalBP) {
+        elTotalBP.innerText = totalBP.toLocaleString('ru-RU');
+    }
 }
 
         let trackingDone = {};
@@ -1439,8 +1525,9 @@ function updateCategoryStats() {
 // Функция для раскрытия описания
 function buildFeed() {
     const box = document.getElementById('feed-box');
+    if (!box) return;
     
-    // Структура контейнеров
+    // Структура контейнеров для активных и неактивных
     box.innerHTML = `
         <div id="active-items" class="task-section"><h3>🟢 Активные</h3></div>
         <div id="inactive-items" class="task-section"><h3>🔴 Неактивные</h3></div>
@@ -1453,31 +1540,16 @@ function buildFeed() {
         const isDone = trackingDone[q.id];
         const card = document.createElement('div');
         
-        // ВАЖНО: добавили класс 'feed-item' для изоляции стилей
         card.className = `task-card feed-item ${isDone ? 'done' : ''}`;
-        
-        // Drag & Drop
         card.draggable = true;
         card.dataset.id = q.id;
-        card.ondragstart = (e) => { 
-            e.dataTransfer.setData('text/plain', q.id); 
-            card.classList.add('dragging'); 
-        };
-        card.ondragend = () => {
-            card.classList.remove('dragging');
-            document.querySelectorAll('.task-card').forEach(c => c.classList.remove('drag-over'));
-        };
-        card.ondragover = (e) => { 
-            e.preventDefault(); 
-            card.classList.add('drag-over'); 
-        };
+
+        // Drag & Drop логика
+        card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', q.id); card.classList.add('dragging'); };
+        card.ondragend = () => { card.classList.remove('dragging'); document.querySelectorAll('.task-card').forEach(c => c.classList.remove('drag-over')); };
+        card.ondragover = (e) => { e.preventDefault(); card.classList.add('drag-over'); };
         card.ondragleave = () => card.classList.remove('drag-over');
-        card.ondrop = (e) => { 
-            e.preventDefault(); 
-            card.classList.remove('drag-over');
-            const sourceId = parseInt(e.dataTransfer.getData('text/plain')); 
-            moveTaskInDb(sourceId, q.id); 
-        };
+        card.ondrop = (e) => { e.preventDefault(); card.classList.remove('drag-over'); const sourceId = parseInt(e.dataTransfer.getData('text/plain')); moveTaskInDb(sourceId, q.id); };
 
         const toggleBtn = `<button class="toggle-btn" onclick="toggleTaskStatus(${q.id}); event.stopPropagation();">${q.active ? '✕' : '✔'}</button>`;
 
@@ -1512,10 +1584,11 @@ function buildFeed() {
             <div class="task-line"></div>
             <div class="task-desc">
                 <p style="margin:0 0 10px 0; font-size: 13px;">${q.desc}</p>
-                <input type="text" placeholder="📝 Заметка..." value="${q.note || ''}" 
-                       oninput="saveNote(${q.id}, this.value)" class="note-input-field" 
-                       onclick="event.stopPropagation()" 
-                       style="width:100%; padding:8px; background:#121620; border:1px solid #333; border-radius:6px; color:#fff;">
+                <div class="note-area">
+                    <input type="text" placeholder="📝 Заметка..." value="${q.note || ''}" 
+                           oninput="saveNote(${q.id}, this.value)" class="note-input-field" 
+                           onclick="event.stopPropagation()">
+                </div>
             </div>
         `;
 
@@ -2133,7 +2206,7 @@ function resetAllDoneTasks() {
         trackingVal = {};
         achievementsDone = [];
         totalBP = 0; 
-        bpHistory = [];
+
         
         // Сразу сохраняем обнуленное состояние
         saveData(); 
